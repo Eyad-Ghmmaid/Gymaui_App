@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Gymaui_App.Views.CreatePlanPage"
+             Title="Create Weekly Plan"
+             BackgroundColor="#0D0D0D"
+             Padding="0">
+
+    <Grid RowDefinitions="auto,*,auto" ColumnDefinitions="*">
+        
+        <!-- Progress Header -->
+        <VerticalStackLayout Grid.Row="0" Padding="16" Spacing="8" BackgroundColor="#1A1A1A">
+            <Label x:Name="StepLabel" Text="Step 1: Plan Name" 
+                   FontSize="16" FontAttributes="Bold" TextColor="#FFFFFF" />
+            <ProgressBar x:Name="ProgressBar" 
+                         Progress="0.33" 
+                         ProgressColor="#E8FF47" 
+                         BackgroundColor="#2A2A2A" />
+        </VerticalStackLayout>
+
+        <!-- Content Area -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout x:Name="ContentArea" Padding="16" Spacing="16" BackgroundColor="#0D0D0D">
+                <!-- Step 1: Plan Name -->
+                <VerticalStackLayout x:Name="Step1Content" Spacing="12">
+                    <Label Text="Give your plan a name" 
+                           FontSize="14" TextColor="#FFFFFF" />
+                    <Entry x:Name="PlanNameEntry" 
+                           Placeholder="e.g., Beginner's Workout" 
+                           PlaceholderColor="#8A8A8A"
+                           TextColor="#FFFFFF"
+                           BackgroundColor="#1A1A1A" />
+                </VerticalStackLayout>
+
+                <!-- Step 2: Select Training Days -->
+                <VerticalStackLayout x:Name="Step2Content" IsVisible="False" Spacing="12">
+                    <Label Text="Select your training days" 
+                           FontSize="14" TextColor="#FFFFFF" />
+                    <FlexLayout x:Name="DaysFlexLayout" 
+                                Wrap="Wrap" 
+                                JustifyContent="Start" 
+                                AlignItems="Center"/>
+                </VerticalStackLayout>
+
+                <!-- Step 3: Add Exercises -->
+                <VerticalStackLayout x:Name="Step3Content" IsVisible="False" Spacing="12">
+                    <Label Text="Add exercises for each training day" 
+                           FontSize="14" TextColor="#FFFFFF" />
+                    <CollectionView x:Name="DaysExercisesCollection" 
+                                    SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="12" 
+                                        Margin="0,0,0,8" 
+                                        BackgroundColor="#1A1A1A" 
+                                        Stroke="#2A2A2A" 
+                                        StrokeThickness="1">
+                                    <VerticalStackLayout Spacing="8">
+                                        <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                                            <Label Text="{Binding DayName}" 
+                                                   FontSize="16" 
+                                                   FontAttributes="Bold" 
+                                                   TextColor="#E8FF47"
+                                                   VerticalOptions="Center" />
+                                            <Button Text="+ Add Exercise" 
+                                                    x:Name="AddExerciseBtn"
+                                                    CommandParameter="{Binding DayOfWeek}"
+                                                    Clicked="OnAddExerciseToDayClicked"
+                                                    BackgroundColor="#8A8A8A" 
+                                                    TextColor="#000000" 
+                                                    FontSize="12"
+                                                    Padding="8,4"
+                                                    HorizontalOptions="End" />
+                                        </HorizontalStackLayout>
+                                        <CollectionView ItemsSource="{Binding Exercises}" 
+                                                        SelectionMode="None">
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <HorizontalStackLayout Padding="8" Spacing="8">
+                                                        <Label Text="{Binding Name}" 
+                                                               TextColor="#FFFFFF" 
+                                                               VerticalOptions="Center"
+                                                               HorizontalOptions="FillAndExpand" />
+                                                        <Button Text="?" 
+                                                                CommandParameter="{Binding Id}"
+                                                                Clicked="OnRemoveExerciseClicked"
+                                                                BackgroundColor="#FF6B6B" 
+                                                                TextColor="#FFFFFF"
+                                                                Padding="4,0"
+                                                                FontSize="14" />
+                                                    </HorizontalStackLayout>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Buttons -->
+        <HorizontalStackLayout Grid.Row="2" 
+                               Padding="16" 
+                               Spacing="8" 
+                               BackgroundColor="#1A1A1A">
+            <Button x:Name="BackButton" 
+                    Text="Back" 
+                    Clicked="OnBackClicked"
+                    BackgroundColor="#8A8A8A" 
+                    TextColor="#000000" 
+                    FontAttributes="Bold"
+                    HorizontalOptions="FillAndExpand" />
+            <Button x:Name="NextButton" 
+                    Text="Next" 
+                    Clicked="OnNextClicked"
+                    BackgroundColor="#E8FF47" 
+                    TextColor="#000000" 
+                    FontAttributes="Bold"
+                    HorizontalOptions="FillAndExpand" />
+        </HorizontalStackLayout>
+    </Grid>
+
+</ContentPage>

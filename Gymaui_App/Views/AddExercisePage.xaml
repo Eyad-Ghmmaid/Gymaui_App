@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:Gymaui_App.Controls"
+             x:Class="Gymaui_App.Views.AddExercisePage"
+             Title="Add Exercise"
+             BackgroundColor="#0D0D0D"
+             Padding="0">
+
+    <Grid RowDefinitions="auto,*" ColumnDefinitions="*">
+        
+        <!-- Custom Header with Back Button -->
+        <controls:CustomHeader 
+            Grid.Row="0"
+            Title="➕ Übung Hinzufügen"
+            ShowBackButton="True" />
+
+        <!-- Content -->
+        <ScrollView Grid.Row="1">
+            <Grid Padding="16" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*" BackgroundColor="#0D0D0D">
+                <Label Text="Name" Grid.Row="0" TextColor="#FFFFFF" FontAttributes="Bold" />
+                <Entry x:Name="NameEntry" Grid.Row="1" Placeholder="Übungsname" BackgroundColor="#1A1A1A" TextColor="#FFFFFF" PlaceholderColor="#8A8A8A" />
+
+                <Label Text="Ziel-Wiederholungen" Grid.Row="2" TextColor="#FFFFFF" FontAttributes="Bold" Margin="0,12,0,0" />
+                <Entry x:Name="RepsEntry" Grid.Row="3" Keyboard="Numeric" Placeholder="z.B. 8" BackgroundColor="#1A1A1A" TextColor="#FFFFFF" PlaceholderColor="#8A8A8A" />
+
+                <Label Text="Ziel-Sätze" Grid.Row="4" TextColor="#FFFFFF" FontAttributes="Bold" Margin="0,12,0,0" />
+                <Entry x:Name="SetsEntry" Grid.Row="5" Keyboard="Numeric" Placeholder="z.B. 3" BackgroundColor="#1A1A1A" TextColor="#FFFFFF" PlaceholderColor="#8A8A8A" />
+
+                <Label Text="YouTube URL" Grid.Row="6" TextColor="#FFFFFF" FontAttributes="Bold" Margin="0,12,0,0" />
+                <Entry x:Name="YouTubeEntry" Grid.Row="7" Keyboard="Url" Placeholder="https://..." BackgroundColor="#1A1A1A" TextColor="#FFFFFF" PlaceholderColor="#8A8A8A" />
+
+                <Label Text="Bild" Grid.Row="8" TextColor="#FFFFFF" FontAttributes="Bold" Margin="0,12,0,0" />
+                <Image x:Name="PreviewImage" Grid.Row="9" HeightRequest="150" Aspect="AspectFill" BackgroundColor="#1A1A1A" />
+
+                <Button Text="📷 Bild aus Galerie" Grid.Row="10" Clicked="OnPickImageClicked" BackgroundColor="#8A8A8A" TextColor="#000000" FontAttributes="Bold" Margin="0,12,0,0" />
+
+                <HorizontalStackLayout Grid.Row="11" Spacing="12" HorizontalOptions="Center" Margin="0,20,0,0">
+                    <Button Text="✓ Speichern" x:Name="SaveButton" Clicked="OnSaveClicked" BackgroundColor="#E8FF47" TextColor="#000000" FontAttributes="Bold" WidthRequest="120" />
+                    <Button Text="✕ Abbrechen" Clicked="OnCancelClicked" BackgroundColor="#8A8A8A" TextColor="#000000" FontAttributes="Bold" WidthRequest="120" />
+                </HorizontalStackLayout>
+            </Grid>
+        </ScrollView>
+    </Grid>
+</ContentPage>

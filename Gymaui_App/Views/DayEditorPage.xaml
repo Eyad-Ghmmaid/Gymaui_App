@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:Gymaui_App.Controls"
+             x:Class="Gymaui_App.Views.DayEditorPage"
+             Title="Day Editor"
+             BackgroundColor="#0D0D0D"
+             Padding="0">
+
+    <Grid RowDefinitions="auto,*" ColumnDefinitions="*">
+        
+        <!-- Custom Header with Back Button -->
+        <controls:CustomHeader 
+            Grid.Row="0"
+            Title="?? Tag Bearbeiten"
+            ShowBackButton="True" />
+
+        <!-- Content -->
+        <Grid Grid.Row="1" Padding="12" BackgroundColor="#0D0D0D" x:Name="ContentGrid" />
+    </Grid>
+
+</ContentPage>

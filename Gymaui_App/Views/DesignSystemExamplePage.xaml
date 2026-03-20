@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Gymaui_App.Views.DesignSystemExamplePage"
+             Title="Design System Example"
+             BackgroundColor="{StaticResource BackgroundDark}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16,20" Spacing="24">
+            
+            <Label Style="{StaticResource LabelHeadline}"
+                   Text="Design System" />
+            <Label Style="{StaticResource LabelSecondary}"
+                   Text="Visueller Ueberblick" />
+
+            <!-- Farben -->
+            <Label Style="{StaticResource LabelTitle}"
+                   Text="Farbpalette" />
+            
+            <Frame Style="{StaticResource CardDefault}">
+                <VerticalStackLayout Spacing="8">
+                    <BoxView BackgroundColor="{StaticResource PrimaryAccent}"
+                             HeightRequest="40"
+                             CornerRadius="4" />
+                    <Label Style="{StaticResource LabelBody}"
+                           Text="Primary Accent #E8FF47" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Buttons -->
+            <Label Style="{StaticResource LabelTitle}"
+                   Text="Buttons" />
+            
+            <Frame Style="{StaticResource CardDefault}">
+                <VerticalStackLayout Spacing="8">
+                    <Button Style="{StaticResource ButtonPrimary}"
+                            Text="Primary Button" />
+                    <Button Style="{StaticResource ButtonSecondary}"
+                            Text="Secondary Button" />
+                    <Button Style="{StaticResource ButtonDanger}"
+                            Text="Danger Button" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Input -->
+            <Label Style="{StaticResource LabelTitle}"
+                   Text="Input Fields" />
+            
+            <Frame Style="{StaticResource CardDefault}">
+                <VerticalStackLayout Spacing="12">
+                    <Entry Style="{StaticResource EntryInput}"
+                           Placeholder="Text Input" />
+                    <Editor Style="{StaticResource EntryInput}"
+                            Placeholder="Multi-line text"
+                            HeightRequest="60" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Typography -->
+            <Label Style="{StaticResource LabelTitle}"
+                   Text="Typografie" />
+            
+            <Frame Style="{StaticResource CardDefault}">
+                <VerticalStackLayout Spacing="12">
+                    <Label Style="{StaticResource LabelHeadline}"
+                           Text="Headline 32px" />
+                    <Label Style="{StaticResource LabelSubHeading}"
+                           Text="SubHeading 18px" />
+                    <Label Style="{StaticResource LabelBody}"
+                           Text="Body 14px Regular Text" />
+                    <Label Style="{StaticResource LabelCaption}"
+                           Text="Caption 11px" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Info -->
+            <Frame Style="{StaticResource CardDefault}">
+                <Label Style="{StaticResource LabelCaption}"
+                       Text="Design System v1.0 - Siehe DESIGN_SYSTEM.md" />
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

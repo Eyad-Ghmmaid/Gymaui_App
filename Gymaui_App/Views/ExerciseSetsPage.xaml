@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:Gymaui_App.Controls"
+             x:Class="Gymaui_App.Views.ExerciseSetsPage"
+             Title="Enter Sets"
+             BackgroundColor="#0D0D0D"
+             Padding="0">
+
+    <Grid RowDefinitions="auto,*" ColumnDefinitions="*">
+        
+        <!-- Custom Header with Back Button -->
+        <controls:CustomHeader 
+            Grid.Row="0"
+            Title="📝 Sätze Erfassen"
+            ShowBackButton="True" />
+
+        <!-- Content -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="12" Spacing="12" BackgroundColor="#0D0D0D">
+                <HorizontalStackLayout Spacing="8">
+                    <Label x:Name="ExerciseNameLabel" FontSize="18" HorizontalOptions="StartAndExpand" TextColor="#FFFFFF" FontAttributes="Bold" />
+                    <Button x:Name="YouTubeButton" Text="🎥 Video" Clicked="OnYouTubeClicked" HorizontalOptions="End" BackgroundColor="#E8FF47" TextColor="#000000" FontAttributes="Bold" />
+                </HorizontalStackLayout>
+
+                <Label Text="Letzte Einträge" FontAttributes="Bold" IsVisible="True" TextColor="#FFFFFF" />
+                <CollectionView x:Name="PreviousLogsCollection" HeightRequest="160" SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Padding="12" Margin="4" BackgroundColor="#1A1A1A" Stroke="#2A2A2A" StrokeThickness="1" StrokeShape="RoundRectangle 8,8,8,8">
+                                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                    <Label Text="{Binding Weight, StringFormat='Gewicht: {0} kg'}" Grid.Column="0" Grid.Row="0" TextColor="#E8FF47" FontAttributes="Bold" />
+                                    <Label Text="{Binding Reps, StringFormat='Wdh: {0}'}" Grid.Column="1" Grid.Row="0" TextColor="#E8FF47" FontAttributes="Bold" />
+                                    <Label Text="{Binding Timestamp, StringFormat='{0:yyyy-MM-dd HH:mm}'}" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" TextColor="#8A8A8A" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <StackLayout x:Name="SetsContainer" Spacing="12" />
+
+                <Button Text="✓ Einträge Speichern" Clicked="OnSaveClicked" BackgroundColor="#E8FF47" TextColor="#000000" FontAttributes="Bold" Margin="0,12,0,0" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

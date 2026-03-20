@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+xmlns:controls="clr-namespace:Gymaui_App.Controls"
+x:Class="Gymaui_App.Views.PlansPage"
+Title="Plans"
+BackgroundColor="#0D0D0D"
+Padding="0">
+
+    <Grid RowDefinitions="auto,*" ColumnDefinitions="*">
+        
+        <!-- Custom Header -->
+        <controls:CustomHeader 
+            Grid.Row="0"
+            Title="Plans"
+            ShowBackButton="False" />
+
+        <!-- Content -->
+        <VerticalStackLayout 
+            Grid.Row="1"
+            Padding="16" 
+            Spacing="16"
+            BackgroundColor="#0D0D0D">
+
+            <!-- Create New Plan Section -->
+            <Border Stroke="#2A2A2A" StrokeThickness="1" Padding="16" StrokeShape="RoundRectangle 8,8,8,8">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="New Plan" 
+                           FontSize="16" 
+                           FontAttributes="Bold"
+                           TextColor="#FFFFFF" />
+                    <StackLayout Orientation="Horizontal" Spacing="8">
+                        <Entry x:Name="NewPlanNameEntry"
+                               Placeholder="Plan name"
+                               PlaceholderColor="#8A8A8A"
+                               TextColor="#FFFFFF"
+                               BackgroundColor="#1A1A1A"
+                               HorizontalOptions="FillAndExpand"/>
+                        <Button Text="Create" 
+                                Clicked="OnCreatePlanClicked"
+                                BackgroundColor="#E8FF47"
+                                TextColor="#000000"
+                                FontAttributes="Bold"
+                                Padding="16,8"
+                                WidthRequest="100"/>
+                    </StackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Plans List -->
+            <Label Text="Your Plans" 
+                   FontSize="16" 
+                   FontAttributes="Bold"
+                   TextColor="#FFFFFF" />
+
+            <CollectionView x:Name="PlansCollection" 
+                            SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Stroke="#2A2A2A" StrokeThickness="1" Padding="16" Margin="0,8,0,0" StrokeShape="RoundRectangle 8,8,8,8">
+                            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="8" RowSpacing="8">
+                                <!-- Plan Name -->
+                                <Label Grid.Column="0" Grid.Row="0"
+                                       Text="{Binding Name}" 
+                                       FontSize="16" 
+                                       FontAttributes="Bold"
+                                       TextColor="#E8FF47" />
+
+                                <!-- Creation Date -->
+                                <Label Grid.Column="0" Grid.Row="1"
+                                       Text="{Binding Created, StringFormat='Created: {0:dd.MM.yyyy}'}" 
+                                       FontSize="12" 
+                                       TextColor="#8A8A8A" />
+
+                                <!-- Is Active Badge -->
+                                <Label Grid.Column="1" Grid.Row="0"
+                                       Text="Active" 
+                                       FontSize="12" 
+                                       TextColor="#E8FF47"
+                                       IsVisible="{Binding IsActive}"
+                                       FontAttributes="Bold"
+                                       VerticalOptions="Center" />
+
+                                <!-- Action Buttons -->
+                                <StackLayout Grid.Column="1" Grid.Row="1"
+                                             Orientation="Horizontal" 
+                                             Spacing="8"
+                                             HorizontalOptions="End">
+                                    <Button Text="Edit" 
+                                            Clicked="OnEditPlanClicked"
+                                            CommandParameter="{Binding Id}"
+                                            BackgroundColor="#8A8A8A"
+                                            TextColor="#000000"
+                                            FontSize="11"
+                                            Padding="8,4"
+                                            CornerRadius="4"/>
+                                    <Button Text="Activate" 
+                                            Clicked="OnSetActiveClicked"
+                                            CommandParameter="{Binding Id}"
+                                            BackgroundColor="#E8FF47"
+                                            TextColor="#000000"
+                                            FontSize="11"
+                                            Padding="8,4"
+                                            CornerRadius="4"
+                                            IsVisible="{Binding IsActive, Converter={StaticResource InvertedBoolConverter}}"/>
+                                    <Button Text="Delete" 
+                                            Clicked="OnDeletePlanClicked"
+                                            CommandParameter="{Binding Id}"
+                                            BackgroundColor="#8A2A2A"
+                                            TextColor="#FFFFFF"
+                                            FontSize="11"
+                                            Padding="8,4"
+                                            CornerRadius="4"/>
+                                </StackLayout>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+
+    </Grid>
+
+</ContentPage>

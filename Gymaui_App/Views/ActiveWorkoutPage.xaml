@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:Gymaui_App.Controls"
+             x:Class="Gymaui_App.Views.ActiveWorkoutPage"
+             Title="Workout"
+             BackgroundColor="#0D0D0D"
+             Padding="0">
+	<Grid RowDefinitions="auto,*" ColumnDefinitions="*">
+
+		<!-- Custom Header -->
+		<controls:CustomHeader
+	            Grid.Row="0"
+	            Title="💪 Workout"
+	            ShowBackButton="False" />
+
+		<!-- Content -->
+		<Grid Grid.Row="1" Padding="12" RowDefinitions="Auto, *" BackgroundColor="#0D0D0D">
+			<Label Text="Aktives Training" FontSize="20" Grid.Row="0" TextColor="#FFFFFF" FontAttributes="Bold" />
+
+			<CollectionView x:Name="ExercisesCollection"
+	                            Grid.Row="1"
+	                            ItemsSource="{Binding Exercises}"
+	                            SelectionMode="Single"
+	                            SelectionChanged="OnExerciseSelected">
+				<CollectionView.ItemTemplate>
+					<DataTemplate>
+						<Border StrokeShape="RoundRectangle 8"
+				                                Stroke="#2A2A2A"
+				                                StrokeThickness="1"
+				                                Padding="12"
+				                                Margin="6"
+				                                BackgroundColor="#1A1A1A">
+							<Grid ColumnDefinitions="60,*,Auto">
+								<Image Source="{Binding ImagePath}"
+								       WidthRequest="48"
+								       HeightRequest="48"
+								       Aspect="AspectFill" />
+								<Label Grid.Column="1"
+								       Text="{Binding Name}"
+								       VerticalOptions="Center"
+								       FontSize="16"
+								       TextColor="#FFFFFF"
+								       FontAttributes="Bold" />
+								<Label Grid.Column="2"
+								       Text="{Binding TargetReps, StringFormat='{0} Reps'}"
+								       VerticalOptions="Center"
+								       TextColor="#E8FF47"
+								       FontAttributes="Bold" />
+							</Grid>
+						</Border>
+					</DataTemplate>
+				</CollectionView.ItemTemplate>
+			</CollectionView>
+		</Grid>
+	</Grid>
+</ContentPage>

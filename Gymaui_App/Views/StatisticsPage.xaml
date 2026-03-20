@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:Gymaui_App.Controls"
+             x:Class="Gymaui_App.Views.StatisticsPage"
+             Title="Statistics"
+             BackgroundColor="#0D0D0D"
+             Padding="0">
+
+    <Grid RowDefinitions="auto,*" ColumnDefinitions="*">
+        
+        <controls:CustomHeader 
+            Grid.Row="0"
+            Title="Statistics"
+            ShowBackButton="False" />
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="12" Spacing="12" BackgroundColor="#0D0D0D">
+                
+                <Label Text="Select Exercise:" FontSize="14" TextColor="#FFFFFF" FontAttributes="Bold" />
+                <Picker x:Name="ExercisePicker" 
+                        Title="Select exercise..."
+                        BackgroundColor="#1A1A1A"
+                        TextColor="#E8FF47"
+                        TitleColor="#8A8A8A"
+                        SelectedIndexChanged="OnExerciseSelected" />
+
+                <HorizontalStackLayout Spacing="12" VerticalOptions="Center" Margin="0,12,0,12">
+                    <Label x:Name="ExerciseNameLabel" 
+                           Text="No exercise selected"
+                           VerticalOptions="Center" 
+                           TextColor="#E8FF47" 
+                           FontAttributes="Bold"
+                           HorizontalOptions="FillAndExpand" />
+                    <Button Text="Refresh" 
+                            Clicked="OnRefreshClicked" 
+                            BackgroundColor="#8A8A8A" 
+                            TextColor="#000000" 
+                            FontSize="12" 
+                            Padding="8"
+                            VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto">
+                    <Border Grid.Column="0" Grid.Row="0"
+                            BackgroundColor="#1A1A1A"
+                            Stroke="#2A2A2A"
+                            StrokeThickness="1"
+                            Padding="12"
+                            StrokeShape="RoundRectangle 8,8,8,8">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Max Weight" FontSize="12" TextColor="#8A8A8A" />
+                            <Label x:Name="MaxWeightLabel" Text="-" FontSize="18" TextColor="#E8FF47" FontAttributes="Bold" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="1" Grid.Row="0"
+                            BackgroundColor="#1A1A1A"
+                            Stroke="#2A2A2A"
+                            StrokeThickness="1"
+                            Padding="12"
+                            StrokeShape="RoundRectangle 8,8,8,8">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Average" FontSize="12" TextColor="#8A8A8A" />
+                            <Label x:Name="AvgWeightLabel" Text="-" FontSize="18" TextColor="#E8FF47" FontAttributes="Bold" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="0" Grid.Row="1"
+                            BackgroundColor="#1A1A1A"
+                            Stroke="#2A2A2A"
+                            StrokeThickness="1"
+                            Padding="12"
+                            StrokeShape="RoundRectangle 8,8,8,8">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Entries" FontSize="12" TextColor="#8A8A8A" />
+                            <Label x:Name="EntryCountLabel" Text="0" FontSize="18" TextColor="#E8FF47" FontAttributes="Bold" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="1" Grid.Row="1"
+                            BackgroundColor="#1A1A1A"
+                            Stroke="#2A2A2A"
+                            StrokeThickness="1"
+                            Padding="12"
+                            StrokeShape="RoundRectangle 8,8,8,8">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Last Entry" FontSize="12" TextColor="#8A8A8A" />
+                            <Label x:Name="LastDateLabel" Text="-" FontSize="16" TextColor="#E8FF47" FontAttributes="Bold" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <Label Text="Weight Progress" FontSize="14" TextColor="#FFFFFF" FontAttributes="Bold" Margin="0,12,0,0" />
+                <Border BackgroundColor="#1A1A1A"
+                        Stroke="#2A2A2A"
+                        StrokeThickness="1"
+                        Padding="0"
+                        StrokeShape="RoundRectangle 8,8,8,8"
+                        HeightRequest="320">
+                    <GraphicsView x:Name="ChartView" HeightRequest="300" />
+                </Border>
+
+                <Label x:Name="NoDataLabel"
+                       Text="No data available. Perform training to see statistics."
+                       FontSize="14"
+                       TextColor="#8A8A8A"
+                       HorizontalTextAlignment="Center"
+                       IsVisible="False"
+                       Margin="0,12,0,0" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

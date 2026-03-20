@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Gymaui_App.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Gymaui_App"
+    xmlns:views="clr-namespace:Gymaui_App.Views"
+    xmlns:controls="clr-namespace:Gymaui_App.Controls"
+    Title="Gymaui_App"
+    BackgroundColor="#0D0D0D">
+
+    <Shell.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="#FFFFFF" />
+            </Style>
+            <Style TargetType="Frame">
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="Padding" Value="8" />
+                <Setter Property="Margin" Value="6" />
+                <Setter Property="HasShadow" Value="True" />
+            </Style>
+        </ResourceDictionary>
+    </Shell.Resources>
+
+    <!-- Tab 1: Home → StartPage -->
+    <TabBar>
+        <ShellContent
+            x:Name="HomeTab"
+            Title="🏠 Home"
+            ContentTemplate="{DataTemplate views:StartPage}"
+            Route="home" />
+
+        <!-- Tab 2: Workout → ActiveWorkoutPage -->
+        <ShellContent
+            x:Name="WorkoutTab"
+            Title="💪 Workout"
+            ContentTemplate="{DataTemplate views:ActiveWorkoutPage}"
+            Route="workout" />
+
+        <!-- Tab 3: Pläne → PlansPage -->
+        <ShellContent
+            x:Name="PlansTab"
+            Title="📋 Plans"
+            ContentTemplate="{DataTemplate views:PlansPage}"
+            Route="plans" />
+
+        <!-- Tab 4: Stats → StatisticsPage -->
+        <ShellContent
+            x:Name="StatsTab"
+            Title="📊 Stats"
+            ContentTemplate="{DataTemplate views:StatisticsPage}"
+            Route="stats" />
+
+        <!-- Tab 5: Exercises → ExerciseListPage -->
+        <ShellContent
+            x:Name="ExercisesTab"
+            Title="🏋️ Exercises"
+            ContentTemplate="{DataTemplate views:ExerciseListPage}"
+            Route="exercises" />
+    </TabBar>
+
+</Shell>

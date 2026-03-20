@@ -1,0 +1,67 @@
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Gymaui_App.Controls.BottomTabBar"
+             Padding="0"
+             HeightRequest="80">
+
+    <Grid RowDefinitions="*,auto" BackgroundColor="Transparent">
+
+        <Grid Grid.Row="1"
+              ColumnDefinitions="*,*,*,*,*"
+              BackgroundColor="#1A1A1A"
+              Padding="0"
+              Margin="0">
+
+            <Button Grid.Column="0" x:Name="HomeTab"
+                    Text="🏠&#10;Home"
+                    Clicked="OnTabClicked"
+                    CommandParameter="0"
+                    BackgroundColor="Transparent"
+                    TextColor="#8A8A8A"
+                    FontSize="12"
+                    Padding="0"
+                    CornerRadius="0"/>
+
+            <Button Grid.Column="1" x:Name="WorkoutTab"
+                    Text="💪&#10;Workout"
+                    Clicked="OnTabClicked"
+                    CommandParameter="1"
+                    BackgroundColor="Transparent"
+                    TextColor="#8A8A8A"
+                    FontSize="12"
+                    Padding="0"
+                    CornerRadius="0"/>
+
+            <Button Grid.Column="2" x:Name="PlansTab"
+                    Text="📋&#10;Pläne"
+                    Clicked="OnTabClicked"
+                    CommandParameter="2"
+                    BackgroundColor="Transparent"
+                    TextColor="#8A8A8A"
+                    FontSize="12"
+                    Padding="0"
+                    CornerRadius="0"/>
+
+            <Button Grid.Column="3" x:Name="StatsTab"
+                    Text="📊&#10;Stats"
+                    Clicked="OnTabClicked"
+                    CommandParameter="3"
+                    BackgroundColor="Transparent"
+                    TextColor="#8A8A8A"
+                    FontSize="12"
+                    Padding="0"
+                    CornerRadius="0"/>
+
+            <Button Grid.Column="4" x:Name="ExercisesTab"
+                    Text="🏋️&#10;Übungen"
+                    Clicked="OnTabClicked"
+                    CommandParameter="4"
+                    BackgroundColor="Transparent"
+                    TextColor="#8A8A8A"
+                    FontSize="12"
+                    Padding="0"
+                    CornerRadius="0"/>
+        </Grid>
+    </Grid>
+
+</ContentView>

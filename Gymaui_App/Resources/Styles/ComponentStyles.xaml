@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- BUTTON STYLES -->
+    <Style TargetType="Button" x:Key="ButtonPrimary">
+        <Setter Property="BackgroundColor" Value="{StaticResource PrimaryAccent}" />
+        <Setter Property="TextColor" Value="{StaticResource BackgroundDark}" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBody}" />
+        <Setter Property="CornerRadius" Value="{StaticResource CornerRadiusPill}" />
+        <Setter Property="Padding" Value="{StaticResource SpaceBase}" />
+        <Setter Property="MinimumHeightRequest" Value="{StaticResource ButtonMinHeight}" />
+        <Setter Property="MinimumWidthRequest" Value="{StaticResource ButtonMinWidth}" />
+        <Setter Property="BorderWidth" Value="0" />
+    </Style>
+
+    <Style TargetType="Button" x:Key="ButtonSecondary">
+        <Setter Property="BackgroundColor" Value="{StaticResource Surface}" />
+        <Setter Property="TextColor" Value="{StaticResource PrimaryAccent}" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBody}" />
+        <Setter Property="CornerRadius" Value="{StaticResource CornerRadiusPill}" />
+        <Setter Property="Padding" Value="{StaticResource SpaceBase}" />
+        <Setter Property="MinimumHeightRequest" Value="{StaticResource ButtonMinHeight}" />
+        <Setter Property="MinimumWidthRequest" Value="{StaticResource ButtonMinWidth}" />
+        <Setter Property="BorderWidth" Value="0" />
+    </Style>
+
+    <Style TargetType="Button" x:Key="ButtonDanger">
+        <Setter Property="BackgroundColor" Value="{StaticResource Danger}" />
+        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBody}" />
+        <Setter Property="CornerRadius" Value="{StaticResource CornerRadiusPill}" />
+        <Setter Property="Padding" Value="{StaticResource SpaceBase}" />
+        <Setter Property="MinimumHeightRequest" Value="{StaticResource ButtonMinHeight}" />
+        <Setter Property="MinimumWidthRequest" Value="{StaticResource ButtonMinWidth}" />
+        <Setter Property="BorderWidth" Value="0" />
+    </Style>
+
+    <Style TargetType="Button" x:Key="ButtonSuccess">
+        <Setter Property="BackgroundColor" Value="{StaticResource Success}" />
+        <Setter Property="TextColor" Value="{StaticResource BackgroundDark}" />
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBody}" />
+        <Setter Property="CornerRadius" Value="{StaticResource CornerRadiusPill}" />
+        <Setter Property="Padding" Value="{StaticResource SpaceBase}" />
+        <Setter Property="MinimumHeightRequest" Value="{StaticResource ButtonMinHeight}" />
+        <Setter Property="MinimumWidthRequest" Value="{StaticResource ButtonMinWidth}" />
+        <Setter Property="BorderWidth" Value="0" />
+    </Style>
+
+    <!-- LABEL STYLES -->
+    <Style TargetType="Label" x:Key="LabelHeadline">
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeHeadline}" />
+        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="FontAttributes" Value="Bold" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="LabelSubHeading">
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSubHeading}" />
+        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="FontAttributes" Value="Bold" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="LabelTitle">
+        <Setter Property="FontFamily" Value="OpenSansSemibold" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeTitle}" />
+        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="FontAttributes" Value="Bold" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="LabelBody">
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBody}" />
+        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="LabelSecondary">
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBody}" />
+        <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="LabelCaption">
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeCaption}" />
+        <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
+    </Style>
+
+    <!-- ENTRY STYLES -->
+    <Style TargetType="Entry" x:Key="EntryInput">
+        <Setter Property="BackgroundColor" Value="{StaticResource Surface2}" />
+        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="PlaceholderColor" Value="{StaticResource TextSecondary}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeBody}" />
+        <Setter Property="MinimumHeightRequest" Value="{StaticResource InputMinHeight}" />
+    </Style>
+
+    <!-- FRAME STYLES (Cards) -->
+    <Style TargetType="Frame" x:Key="CardDefault">
+        <Setter Property="BackgroundColor" Value="{StaticResource Surface}" />
+        <Setter Property="BorderColor" Value="{StaticResource Surface2}" />
+        <Setter Property="CornerRadius" Value="{StaticResource CornerRadiusLarge}" />
+        <Setter Property="Padding" Value="{StaticResource SpaceBase}" />
+        <Setter Property="HasShadow" Value="True" />
+        <Setter Property="Margin" Value="0,8,0,0" />
+    </Style>
+
+    <Style TargetType="Frame" x:Key="CardHighlight">
+        <Setter Property="BackgroundColor" Value="{StaticResource Surface}" />
+        <Setter Property="BorderColor" Value="{StaticResource PrimaryAccent}" />
+        <Setter Property="CornerRadius" Value="{StaticResource CornerRadiusLarge}" />
+        <Setter Property="Padding" Value="{StaticResource SpaceBase}" />
+        <Setter Property="HasShadow" Value="True" />
+        <Setter Property="Margin" Value="0,8,0,0" />
+    </Style>
+
+    <!-- STACKLAYOUT STYLES -->
+    <Style TargetType="StackLayout" x:Key="StackDefault">
+        <Setter Property="Spacing" Value="{StaticResource SpaceBase}" />
+    </Style>
+
+    <!-- LIST ITEM STYLING -->
+    <DataTemplate x:Key="ListItemTemplate">
+        <Frame Style="{StaticResource CardDefault}"
+               Padding="20,16,20,16">
+            <Label Style="{StaticResource LabelBody}" 
+                   Text="{Binding .}" />
+        </Frame>
+    </DataTemplate>
+
+</ResourceDictionary>
