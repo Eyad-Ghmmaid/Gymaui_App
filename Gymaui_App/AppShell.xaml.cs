@@ -1,6 +1,4 @@
 ﻿using Gymaui_App.Views;
-using Microsoft.Maui.Controls;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Gymaui_App
 {
@@ -15,13 +13,15 @@ namespace Gymaui_App
 
             // Disable Shell header - each page has its own custom header
             Shell.SetNavBarIsVisible(this, false);
-            
+
             // Register routes for modal and stack navigation
             Routing.RegisterRoute(nameof(PlanEditorPage), typeof(PlanEditorPage));
             Routing.RegisterRoute(nameof(DayEditorPage), typeof(DayEditorPage));
             Routing.RegisterRoute(nameof(AddExercisePage), typeof(AddExercisePage));
             Routing.RegisterRoute(nameof(ExerciseSetsPage), typeof(ExerciseSetsPage));
+            Routing.RegisterRoute(nameof(WorkoutDetailPage), typeof(WorkoutDetailPage));
             Routing.RegisterRoute("createplan", typeof(CreatePlanPage));
+            Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
         }
 
         // Helper method to navigate to specific tab
@@ -38,9 +38,9 @@ namespace Gymaui_App
                 if (Shell.Current is AppShell shell && !string.IsNullOrEmpty(route))
                 {
                     var items = shell.Items.OfType<ShellContent>();
-                    var targetItem = items.FirstOrDefault(item => 
+                    var targetItem = items.FirstOrDefault(item =>
                         item.Route?.Equals(route, StringComparison.OrdinalIgnoreCase) == true);
-                    
+
                     if (targetItem != null)
                     {
                         shell.CurrentItem = targetItem;

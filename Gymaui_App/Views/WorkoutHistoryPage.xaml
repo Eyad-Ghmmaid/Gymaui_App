@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:Gymaui_App.Controls"
+             x:Class="Gymaui_App.Views.WorkoutHistoryPage"
+             Title="Trainingstage"
+             BackgroundColor="#0D0D0D"
+             Padding="0">
+
+    <Grid RowDefinitions="Auto,*" ColumnDefinitions="*">
+
+        <controls:CustomHeader
+            x:Name="CustomHeader"
+            Grid.Row="0"
+            Title="Trainingstage"
+            ShowBackButton="False" />
+
+        <Grid Grid.Row="1" Padding="12" RowDefinitions="Auto,*" BackgroundColor="#0D0D0D">
+
+            <VerticalStackLayout x:Name="EmptyState"
+                                 Grid.Row="1"
+                                 IsVisible="False"
+                                 VerticalOptions="Center"
+                                 HorizontalOptions="Center"
+                                 Spacing="12">
+                <Label Text="Kein aktiver Trainingsplan"
+                       FontSize="16"
+                       TextColor="#8A8A8A"
+                       HorizontalOptions="Center" />
+                <Label Text="Erstelle einen Plan auf der Pläne-Seite!"
+                       FontSize="13"
+                       TextColor="#8A8A8A"
+                       HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <CollectionView x:Name="DaysCollection"
+                            Grid.Row="1"
+                            SelectionMode="Single"
+                            SelectionChanged="OnDaySelected">
+                <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border StrokeShape="RoundRectangle 12"
+                                    Stroke="#2A2A2A"
+                                    StrokeThickness="1"
+                                    Padding="16"
+                                    Margin="0,6"
+                                    BackgroundColor="#1A1A1A">
+                                <Border.GestureRecognizers>
+                                    <DropGestureRecognizer
+                                        AllowDrop="True"
+                                        DragOver="OnDragOver"
+                                        Drop="OnDrop" />
+                                </Border.GestureRecognizers>
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+
+                                    <Border Grid.Column="0"
+                                            StrokeShape="RoundRectangle 24"
+                                            BackgroundColor="{Binding BadgeColor}"
+                                            WidthRequest="48"
+                                            HeightRequest="48"
+                                            VerticalOptions="Center"
+                                            StrokeThickness="0">
+                                        <Label Text="{Binding DayNumber}"
+                                               FontSize="18"
+                                               FontAttributes="Bold"
+                                               TextColor="#000000"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center" />
+                                    </Border>
+
+                                    <VerticalStackLayout Grid.Column="1"
+                                                         VerticalOptions="Center"
+                                                         Spacing="4">
+                                        <Label Text="{Binding DayName}"
+                                               FontSize="15"
+                                               FontAttributes="Bold"
+                                               TextColor="#FFFFFF" />
+                                        <Label Text="{Binding StatusText}"
+                                               FontSize="13"
+                                               TextColor="#8A8A8A" />
+                                        <Label Text="{Binding ExerciseCountText}"
+                                               FontSize="12"
+                                               TextColor="#E8FF47"
+                                               IsVisible="{Binding HasExercises}" />
+                                    </VerticalStackLayout>
+
+                                    <!-- Drag Handle -->
+                                    <Grid Grid.Column="2"
+                                          WidthRequest="44"
+                                          HeightRequest="48"
+                                          VerticalOptions="Center"
+                                          HorizontalOptions="Center"
+                                          BackgroundColor="Transparent">
+                                        <Grid.GestureRecognizers>
+                                            <DragGestureRecognizer
+                                                CanDrag="True"
+                                                DragStarting="OnDragStarting" />
+                                        </Grid.GestureRecognizers>
+                                        <VerticalStackLayout
+                                            VerticalOptions="Center"
+                                            HorizontalOptions="Center"
+                                            Spacing="4">
+                                            <BoxView HeightRequest="3" WidthRequest="22" Color="#8A8A8A" CornerRadius="2" />
+                                            <BoxView HeightRequest="3" WidthRequest="22" Color="#8A8A8A" CornerRadius="2" />
+                                            <BoxView HeightRequest="3" WidthRequest="22" Color="#8A8A8A" CornerRadius="2" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </Grid>
+</ContentPage>

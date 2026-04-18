@@ -3,20 +3,115 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:Gymaui_App.Controls"
              x:Class="Gymaui_App.Views.PlanEditorPage"
-             Title="Plan Editor"
+             Title="Plan bearbeiten"
              BackgroundColor="#0D0D0D"
              Padding="0">
 
-    <Grid RowDefinitions="auto,*" ColumnDefinitions="*">
-        
-        <!-- Custom Header with Back Button -->
-        <controls:CustomHeader 
+    <Grid RowDefinitions="Auto,Auto,Auto,*,Auto" ColumnDefinitions="*" Padding="0">
+
+        <controls:CustomHeader
+            x:Name="CustomHeader"
             Grid.Row="0"
-            Title="?? Plan Bearbeiten"
+            Title="Plan bearbeiten"
             ShowBackButton="True" />
 
-        <!-- Content -->
-        <Grid Grid.Row="1" Padding="12" BackgroundColor="#0D0D0D" x:Name="ContentGrid" />
+        <VerticalStackLayout Grid.Row="1" Padding="12,12,12,0" Spacing="4">
+            <Label Text="Planname" FontSize="16" FontAttributes="Bold" TextColor="#E8FF47" />
+            <Entry x:Name="PlanNameEntry"
+                   Placeholder="Planname..."
+                   BackgroundColor="#1A1A1A"
+                   TextColor="#FFFFFF"
+                   PlaceholderColor="#8A8A8A" />
+        </VerticalStackLayout>
+
+        <Label Grid.Row="2"
+               Text="Trainingstage und Uebungen"
+               FontSize="16" FontAttributes="Bold"
+               TextColor="#E8FF47"
+               Padding="12,16,12,4" />
+
+        <CollectionView x:Name="TrainingDaysCollection"
+                        Grid.Row="3"
+                        SelectionMode="None"
+                        Margin="12,0">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="8" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border BackgroundColor="#1A1A1A"
+                            Stroke="#2A2A2A"
+                            StrokeThickness="1"
+                            Padding="12"
+                            StrokeShape="RoundRectangle 8">
+                        <Border.GestureRecognizers>
+                            <DropGestureRecognizer
+                                AllowDrop="True"
+                                DragOver="OnDragOver"
+                                Drop="OnDrop" />
+                        </Border.GestureRecognizers>
+                        <Grid RowDefinitions="Auto,Auto"
+                              ColumnDefinitions="*,Auto,Auto"
+                              ColumnSpacing="10" RowSpacing="8">
+
+                            <Label Grid.Row="0" Grid.Column="0"
+                                   Text="{Binding Name}"
+                                   FontSize="14"
+                                   TextColor="#FFFFFF"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center" />
+
+                            <Switch Grid.Row="0" Grid.Column="1"
+                                    IsToggled="{Binding IsTrainingDay}"
+                                    ThumbColor="#E8FF47"
+                                    VerticalOptions="Center" />
+
+                            <!-- Drag Handle -->
+                            <Grid Grid.Row="0" Grid.RowSpan="2" Grid.Column="2"
+                                  WidthRequest="40"
+                                  HeightRequest="44"
+                                  VerticalOptions="Center"
+                                  HorizontalOptions="Center"
+                                  BackgroundColor="Transparent">
+                                <Grid.GestureRecognizers>
+                                    <DragGestureRecognizer
+                                        CanDrag="True"
+                                        DragStarting="OnDragStarting" />
+                                </Grid.GestureRecognizers>
+                                <VerticalStackLayout
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Center"
+                                    Spacing="4">
+                                    <BoxView HeightRequest="3" WidthRequest="22" Color="#8A8A8A" CornerRadius="2" />
+                                    <BoxView HeightRequest="3" WidthRequest="22" Color="#8A8A8A" CornerRadius="2" />
+                                    <BoxView HeightRequest="3" WidthRequest="22" Color="#8A8A8A" CornerRadius="2" />
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                    Text="Uebungen bearbeiten"
+                                    BackgroundColor="#E8FF47"
+                                    TextColor="#000000"
+                                    FontSize="12"
+                                    Padding="8"
+                                    CommandParameter="{Binding Id}"
+                                    Clicked="OnEditDayExercisesClicked" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button x:Name="SaveButton"
+                Grid.Row="4"
+                Text="Speichern"
+                BackgroundColor="#E8FF47"
+                TextColor="#000000"
+                FontAttributes="Bold"
+                CornerRadius="8"
+                Padding="12"
+                Margin="12,8,12,12"
+                Clicked="OnSaveClicked" />
     </Grid>
 
 </ContentPage>

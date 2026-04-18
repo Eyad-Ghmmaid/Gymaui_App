@@ -3,43 +3,135 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:Gymaui_App.Controls"
              x:Class="Gymaui_App.Views.AddExercisePage"
-             Title="Add Exercise"
+             Title="Übung hinzufügen"
              BackgroundColor="#0D0D0D"
              Padding="0">
 
-    <Grid RowDefinitions="auto,*" ColumnDefinitions="*">
-        
-        <!-- Custom Header with Back Button -->
-        <controls:CustomHeader 
+	<Grid RowDefinitions="auto,*" ColumnDefinitions="*">
+
+		<!-- Custom Header with Back Button -->
+		<controls:CustomHeader
+            x:Name="CustomHeader"
             Grid.Row="0"
-            Title="➕ Übung Hinzufügen"
+            Title="Uebung Hinzufuegen"
             ShowBackButton="True" />
 
-        <!-- Content -->
-        <ScrollView Grid.Row="1">
-            <Grid Padding="16" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="*" BackgroundColor="#0D0D0D">
-                <Label Text="Name" Grid.Row="0" TextColor="#FFFFFF" FontAttributes="Bold" />
-                <Entry x:Name="NameEntry" Grid.Row="1" Placeholder="Übungsname" BackgroundColor="#1A1A1A" TextColor="#FFFFFF" PlaceholderColor="#8A8A8A" />
+		<!-- Content -->
+		<ScrollView Grid.Row="1">
+			<VerticalStackLayout Padding="16" Spacing="12" BackgroundColor="#0D0D0D">
 
-                <Label Text="Ziel-Wiederholungen" Grid.Row="2" TextColor="#FFFFFF" FontAttributes="Bold" Margin="0,12,0,0" />
-                <Entry x:Name="RepsEntry" Grid.Row="3" Keyboard="Numeric" Placeholder="z.B. 8" BackgroundColor="#1A1A1A" TextColor="#FFFFFF" PlaceholderColor="#8A8A8A" />
+				<!-- Uebungsname -->
+				<Label Text="Uebungsname" TextColor="#FFFFFF" FontAttributes="Bold" FontSize="14" />
+				<Entry x:Name="NameEntry"
+                       Placeholder="z.B. Bankdruecken"
+                       BackgroundColor="#1A1A1A"
+                       TextColor="#FFFFFF"
+                       PlaceholderColor="#8A8A8A" />
+				<Label x:Name="NameErrorLabel" TextColor="#FF6B6B" FontSize="11" IsVisible="False" />
 
-                <Label Text="Ziel-Sätze" Grid.Row="4" TextColor="#FFFFFF" FontAttributes="Bold" Margin="0,12,0,0" />
-                <Entry x:Name="SetsEntry" Grid.Row="5" Keyboard="Numeric" Placeholder="z.B. 3" BackgroundColor="#1A1A1A" TextColor="#FFFFFF" PlaceholderColor="#8A8A8A" />
+				<!-- Muskelgruppe -->
+				<Label Text="Muskelgruppe" TextColor="#FFFFFF" FontAttributes="Bold" FontSize="14" Margin="0,12,0,0" />
+				
+			<CollectionView x:Name="MuscleGroupCollection"
+                                Margin="0,8,0,0"
+                                SelectionMode="None">
+					<CollectionView.ItemsLayout>
+						<GridItemsLayout Orientation="Vertical"
+                                         Span="3"
+                                         HorizontalItemSpacing="12"
+                                         VerticalItemSpacing="12" />
+					</CollectionView.ItemsLayout>
+					<CollectionView.ItemTemplate>
+						<DataTemplate>
+							<Frame Padding="12"
+                                       CornerRadius="12"
+                                       BackgroundColor="#1A1A1A"
+                                       BorderColor="#2A2A2A"
+                                       HasShadow="False">
+								<Frame.GestureRecognizers>
+									<TapGestureRecognizer Tapped="OnMuscleGroupSelected" />
+								</Frame.GestureRecognizers>
+								<StackLayout Spacing="8" HorizontalOptions="Center" VerticalOptions="Center">
+									<Image Source="{Binding ., Converter={StaticResource MuscleGroupIconConverter}}"
+                                               HeightRequest="36"
+                                               WidthRequest="36"
+                                               HorizontalOptions="Center" />
+									<Label Text="{Binding .}"
+                                               TextColor="#FFFFFF"
+                                               FontSize="12"
+                                               FontAttributes="Bold"
+                                               HorizontalOptions="Center" />
+								</StackLayout>
+							</Frame>
+						</DataTemplate>
+					</CollectionView.ItemTemplate>
+				</CollectionView>
+				<Label x:Name="MuscleGroupErrorLabel" TextColor="#FF6B6B" FontSize="11" IsVisible="False" />
 
-                <Label Text="YouTube URL" Grid.Row="6" TextColor="#FFFFFF" FontAttributes="Bold" Margin="0,12,0,0" />
-                <Entry x:Name="YouTubeEntry" Grid.Row="7" Keyboard="Url" Placeholder="https://..." BackgroundColor="#1A1A1A" TextColor="#FFFFFF" PlaceholderColor="#8A8A8A" />
+				<!-- Ziel-Saetze -->
+				<Label Text="Ziel-Saetze" TextColor="#FFFFFF" FontAttributes="Bold" FontSize="14" Margin="0,12,0,0" />
+				<Entry x:Name="SetsEntry"
+                       Text="3"
+                       Keyboard="Numeric"
+                       Placeholder="z.B. 3"
+                       BackgroundColor="#1A1A1A"
+                       TextColor="#FFFFFF"
+                       PlaceholderColor="#8A8A8A" />
+				<Label x:Name="SetsErrorLabel" TextColor="#FF6B6B" FontSize="11" IsVisible="False" />
 
-                <Label Text="Bild" Grid.Row="8" TextColor="#FFFFFF" FontAttributes="Bold" Margin="0,12,0,0" />
-                <Image x:Name="PreviewImage" Grid.Row="9" HeightRequest="150" Aspect="AspectFill" BackgroundColor="#1A1A1A" />
+				<!-- Ziel-Wiederholungen -->
+				<Label Text="Ziel-Wiederholungen" TextColor="#FFFFFF" FontAttributes="Bold" FontSize="14" Margin="0,12,0,0" />
+				<Entry x:Name="RepsEntry"
+                       Text="10"
+                       Keyboard="Numeric"
+                       Placeholder="z.B. 10"
+                       BackgroundColor="#1A1A1A"
+                       TextColor="#FFFFFF"
+                       PlaceholderColor="#8A8A8A" />
+				<Label x:Name="RepsErrorLabel" TextColor="#FF6B6B" FontSize="11" IsVisible="False" />
 
-                <Button Text="📷 Bild aus Galerie" Grid.Row="10" Clicked="OnPickImageClicked" BackgroundColor="#8A8A8A" TextColor="#000000" FontAttributes="Bold" Margin="0,12,0,0" />
+				<!-- YouTube URL -->
+				<Label Text="YouTube URL (optional)" TextColor="#FFFFFF" FontAttributes="Bold" FontSize="14" Margin="0,12,0,0" />
+				<Entry x:Name="YouTubeEntry"
+                       Keyboard="Url"
+                       Placeholder="https://youtu.be/..."
+                       BackgroundColor="#1A1A1A"
+                       TextColor="#FFFFFF"
+                       PlaceholderColor="#8A8A8A" />
+				<Label x:Name="YoutubeErrorLabel" TextColor="#FF6B6B" FontSize="11" IsVisible="False" />
 
-                <HorizontalStackLayout Grid.Row="11" Spacing="12" HorizontalOptions="Center" Margin="0,20,0,0">
-                    <Button Text="✓ Speichern" x:Name="SaveButton" Clicked="OnSaveClicked" BackgroundColor="#E8FF47" TextColor="#000000" FontAttributes="Bold" WidthRequest="120" />
-                    <Button Text="✕ Abbrechen" Clicked="OnCancelClicked" BackgroundColor="#8A8A8A" TextColor="#000000" FontAttributes="Bold" WidthRequest="120" />
-                </HorizontalStackLayout>
-            </Grid>
-        </ScrollView>
-    </Grid>
+			<!-- Buttons -->
+				<HorizontalStackLayout Spacing="12" HorizontalOptions="Center" Margin="0,20,0,0">
+					<Button Text="Speichern"
+                            x:Name="SaveButton"
+                            Clicked="OnSaveClicked"
+                            BackgroundColor="#E8FF47"
+                            TextColor="#000000"
+                            FontAttributes="Bold"
+                            WidthRequest="140"
+                            CornerRadius="8" />
+					<Button Text="Abbrechen"
+                            Clicked="OnCancelClicked"
+                            BackgroundColor="#8A8A8A"
+                            TextColor="#000000"
+                            FontAttributes="Bold"
+                            WidthRequest="140"
+                            CornerRadius="8" />
+				</HorizontalStackLayout>
+
+				<!-- Delete Button (only visible in edit mode) -->
+				<Button x:Name="DeleteButton"
+                        Text="Übung Loeschen"
+                        Clicked="OnDeleteClicked"
+                        BackgroundColor="#FF4444"
+                        TextColor="#FFFFFF"
+                        FontAttributes="Bold"
+                        CornerRadius="8"
+                        IsVisible="False"
+                        HorizontalOptions="Center"
+                        WidthRequest="200"
+                        Margin="0,12,0,0" />
+			</VerticalStackLayout>
+		</ScrollView>
+	</Grid>
 </ContentPage>

@@ -3,20 +3,77 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:Gymaui_App.Controls"
              x:Class="Gymaui_App.Views.DayEditorPage"
-             Title="Day Editor"
+             Title="Tag bearbeiten"
              BackgroundColor="#0D0D0D"
              Padding="0">
 
     <Grid RowDefinitions="auto,*" ColumnDefinitions="*">
         
-        <!-- Custom Header with Back Button -->
         <controls:CustomHeader 
             Grid.Row="0"
-            Title="?? Tag Bearbeiten"
+            x:Name="CustomHeader"
             ShowBackButton="True" />
 
-        <!-- Content -->
-        <Grid Grid.Row="1" Padding="12" BackgroundColor="#0D0D0D" x:Name="ContentGrid" />
+        <ScrollView Grid.Row="1" BackgroundColor="#0D0D0D">
+            <VerticalStackLayout Padding="12" Spacing="12">
+                
+                <Label Text="Uebung hinzufuegen" FontSize="16" FontAttributes="Bold" TextColor="#E8FF47" />
+                <Button Text="+ Uebung suchen und hinzufuegen"
+                        BackgroundColor="#E8FF47"
+                        TextColor="#000000"
+                        FontAttributes="Bold"
+                        CornerRadius="8"
+                        HeightRequest="50"
+                        Clicked="OnSearchAndAddExerciseClicked" />
+
+                <Label Text="Uebungen fuer diesen Tag" FontSize="16" FontAttributes="Bold" TextColor="#E8FF47" Margin="0,20,0,0" />
+                <CollectionView x:Name="DayExercisesCollection" SelectionMode="None">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="8" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <SwipeView>
+                                <SwipeView.RightItems>
+                                    <SwipeItems>
+                                        <SwipeItem Text="🗑 Entfernen" BackgroundColor="#FF4444" Invoked="OnRemoveExerciseSwipe" CommandParameter="{Binding .}" />
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
+                                <Border BackgroundColor="#1A1A1A" 
+                                        Stroke="#2A2A2A" 
+                                        StrokeThickness="1" 
+                                        Padding="12"
+                                        StrokeShape="RoundRectangle 8">
+                                    <VerticalStackLayout VerticalOptions="Center">
+                                        <Label Text="{Binding Exercise.Name, StringFormat='Uebung: {0}'}" 
+                                               FontSize="14" 
+                                               FontAttributes="Bold"
+                                               TextColor="#FFFFFF" />
+                                        <Label Text="{Binding Exercise.TargetSets, StringFormat='Sätze: {0}'}" 
+                                               FontSize="12" 
+                                               TextColor="#8A8A8A" />
+                                        <Label Text="{Binding Exercise.TargetReps, StringFormat='Wdh: {0}'}" 
+                                               FontSize="12" 
+                                               TextColor="#8A8A8A" />
+                                    </VerticalStackLayout>
+                                </Border>
+                            </SwipeView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Button x:Name="StartTrainingButton"
+                        Text="Training starten"
+                        BackgroundColor="#E8FF47"
+                        TextColor="#000000"
+                        FontAttributes="Bold"
+                        CornerRadius="8"
+                        Padding="12"
+                        Margin="0,20,0,0"
+                        Clicked="OnStartTrainingClicked" />
+
+            </VerticalStackLayout>
+        </ScrollView>
     </Grid>
 
 </ContentPage>

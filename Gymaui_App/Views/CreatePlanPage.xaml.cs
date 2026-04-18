@@ -1,9 +1,3 @@
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Gymaui_App.Models;
 using Gymaui_App.Services;
 using Gymaui_App.Utilities;
@@ -12,11 +6,13 @@ namespace Gymaui_App.Views
 {
     public partial class CreatePlanPage : ContentPage
     {
+        public const string Route = nameof(CreatePlanPage);
         private readonly DatabaseService _db;
         private int _currentStep = 1;
         private PlanCreationDto _planData = new();
-        private WeekDayInfo[] _weekDays = WeekDayInfo.GetWeekDays();
+        private HashSet<int> _selectedDays = new(); // 0-based indices of selected training days
         private List<Exercise> _allExercises = new();
+        private bool _isInitialized = false;
 
         public CreatePlanPage(DatabaseService db)
         {
@@ -31,11 +27,21 @@ namespace Gymaui_App.Views
             {
                 await _db.InitializeAsync();
                 _allExercises = await _db.GetExercisesAsync();
-                SetupStep1();
+
+                if (!_isInitialized)
+                {
+                    _isInitialized = true;
+                    SetupStep1();
+                }
+                else if (_currentStep == 3)
+                {
+                    // Refresh exercises list when returning from the picker popup
+                    LoadExercisesForDays();
+                }
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Error", $"Failed to load: {ex.Message}", "OK");
+                await DisplayAlert("Fehler", $"Laden fehlgeschlagen: {ex.Message}", "OK");
             }
         }
 
@@ -50,77 +56,113 @@ namespace Gymaui_App.Views
             ShowStep(2);
             DaysFlexLayout.Children.Clear();
 
-            foreach (var day in _weekDays)
+            // Show toggle buttons for Tag 1 - Tag 7
+            for (int i = 0; i < 7; i++)
             {
-                var dayCard = CreateDayCard(day);
-                DaysFlexLayout.Children.Add(dayCard);
+                var dayIndex = i;
+                var isSelected = _selectedDays.Contains(dayIndex);
+                var border = new Border
+                {
+                    BackgroundColor = Color.FromArgb(isSelected ? "#E8FF47" : "#1A1A1A"),
+                    Stroke = Color.FromArgb("#2A2A2A"),
+                    StrokeThickness = 1,
+                    Padding = new Thickness(12, 8),
+                    Margin = new Thickness(4)
+                };
+
+                var stack = new VerticalStackLayout
+                {
+                    Spacing = 2,
+                    HorizontalOptions = LayoutOptions.Center
+                };
+
+                var dayLabel = new Label
+                {
+                    Text = $"Tag {dayIndex + 1}",
+                    TextColor = Color.FromArgb(isSelected ? "#000000" : "#FFFFFF"),
+                    HorizontalOptions = LayoutOptions.Center,
+                    FontSize = 14,
+                    FontAttributes = FontAttributes.Bold
+                };
+
+                var statusLabel = new Label
+                {
+                    Text = isSelected ? "Training" : "Pause",
+                    TextColor = Color.FromArgb(isSelected ? "#000000" : "#8A8A8A"),
+                    HorizontalOptions = LayoutOptions.Center,
+                    FontSize = 10
+                };
+
+                stack.Children.Add(dayLabel);
+                stack.Children.Add(statusLabel);
+                border.Content = stack;
+
+                var tapGesture = new TapGestureRecognizer();
+                tapGesture.Tapped += (s, e) => OnDayToggleTapped(dayIndex);
+                border.GestureRecognizers.Add(tapGesture);
+
+                DaysFlexLayout.Children.Add(border);
             }
         }
 
-        private Border CreateDayCard(WeekDayInfo day)
+        private void OnDayToggleTapped(int dayIndex)
         {
-            var border = new Border
-            {
-                BackgroundColor = Color.FromArgb("#1A1A1A"),
-                Stroke = Color.FromArgb("#2A2A2A"),
-                StrokeThickness = 1,
-                Padding = new Thickness(12, 8)
-            };
-
-            var label = new Label
-            {
-                Text = day.DayAbbreviation,
-                TextColor = Color.FromArgb("#8A8A8A"),
-                HorizontalOptions = LayoutOptions.Center,
-                FontSize = 14,
-                FontAttributes = FontAttributes.Bold
-            };
-
-            border.Content = label;
-
-            var tapGesture = new TapGestureRecognizer();
-            tapGesture.Tapped += (s, e) => OnDayCardTapped(day, border);
-            border.GestureRecognizers.Add(tapGesture);
-
-            return border;
-        }
-
-        private void OnDayCardTapped(WeekDayInfo day, Border card)
-        {
-            day.IsSelected = !day.IsSelected;
-            
-            if (day.IsSelected)
-            {
-                _planData.SelectedTrainingDays.Add(day.DayOfWeek);
-                card.BackgroundColor = Color.FromArgb("#E8FF47");
-                ((Label)card.Content).TextColor = Color.FromArgb("#000000");
-            }
+            // Toggle the day selection
+            if (_selectedDays.Contains(dayIndex))
+                _selectedDays.Remove(dayIndex);
             else
+                _selectedDays.Add(dayIndex);
+
+            // Update plan data
+            _planData.SelectedTrainingDays = _selectedDays.OrderBy(d => d).ToList();
+            _planData.NumberOfDays = _selectedDays.Count;
+
+            // Refresh the UI
+            SetupStep2Visual();
+        }
+
+        private void SetupStep2Visual()
+        {
+            // Update all cards visual state
+            for (int i = 0; i < DaysFlexLayout.Children.Count; i++)
             {
-                _planData.SelectedTrainingDays.Remove(day.DayOfWeek);
-                card.BackgroundColor = Color.FromArgb("#1A1A1A");
-                ((Label)card.Content).TextColor = Color.FromArgb("#8A8A8A");
+                if (DaysFlexLayout.Children[i] is Border card && card.Content is VerticalStackLayout stack)
+                {
+                    var isSelected = _selectedDays.Contains(i);
+                    card.BackgroundColor = Color.FromArgb(isSelected ? "#E8FF47" : "#1A1A1A");
+
+                    if (stack.Children.Count >= 2)
+                    {
+                        if (stack.Children[0] is Label dayLbl)
+                            dayLbl.TextColor = Color.FromArgb(isSelected ? "#000000" : "#FFFFFF");
+                        if (stack.Children[1] is Label statusLbl)
+                        {
+                            statusLbl.Text = isSelected ? "Training" : "Pause";
+                            statusLbl.TextColor = Color.FromArgb(isSelected ? "#000000" : "#8A8A8A");
+                        }
+                    }
+                }
             }
         }
 
-        private async void SetupStep3()
+        private void SetupStep3()
         {
             ShowStep(3);
-            await LoadExercisesForDays();
+            LoadExercisesForDays();
         }
 
-        private async Task LoadExercisesForDays()
+        private void LoadExercisesForDays()
         {
             var dayData = new List<DayExercisesViewModel>();
 
-            foreach (var dayOfWeek in _planData.SelectedTrainingDays.OrderBy(d => d))
+            foreach (var dayIndex in _planData.SelectedTrainingDays.OrderBy(d => d))
             {
-                var dayName = _weekDays[dayOfWeek].DayName;
+                var dayName = $"Tag {dayIndex + 1}";
                 var exercises = new List<Exercise>();
-                
-                if (_planData.ExercisesPerDay.ContainsKey(dayOfWeek))
+
+                if (_planData.ExercisesPerDay.ContainsKey(dayIndex))
                 {
-                    foreach (var exerciseId in _planData.ExercisesPerDay[dayOfWeek])
+                    foreach (var exerciseId in _planData.ExercisesPerDay[dayIndex])
                     {
                         var ex = _allExercises.FirstOrDefault(e => e.Id == exerciseId);
                         if (ex != null)
@@ -128,11 +170,11 @@ namespace Gymaui_App.Views
                     }
                 }
 
-                dayData.Add(new DayExercisesViewModel 
-                { 
-                    DayOfWeek = dayOfWeek,
-                    DayName = dayName, 
-                    Exercises = exercises 
+                dayData.Add(new DayExercisesViewModel
+                {
+                    DayOfWeek = dayIndex,
+                    DayName = dayName,
+                    Exercises = exercises
                 });
             }
 
@@ -145,35 +187,29 @@ namespace Gymaui_App.Views
             {
                 if (sender is Button btn && btn.CommandParameter is int dayOfWeek)
                 {
-                    // Show a dialog to select exercises
-                    var action = await DisplayActionSheet(
-                        "Select Exercise", 
-                        "Cancel", 
-                        null, 
-                        _allExercises.Select(e => e.Name).ToArray());
-                    
-                    if (action != null && action != "Cancel")
+                    // Show searchable exercise picker popup
+                    var popup = new ExercisePickerPopup(_allExercises);
+                    await Navigation.PushModalAsync(popup, animated: true);
+                    var selectedExercise = await popup.Result;
+
+                    if (selectedExercise != null)
                     {
-                        var selectedExercise = _allExercises.FirstOrDefault(e => e.Name == action);
-                        if (selectedExercise != null)
+                        if (!_planData.ExercisesPerDay.ContainsKey(dayOfWeek))
                         {
-                            if (!_planData.ExercisesPerDay.ContainsKey(dayOfWeek))
-                            {
-                                _planData.ExercisesPerDay[dayOfWeek] = new List<int>();
-                            }
-                            
-                            if (!_planData.ExercisesPerDay[dayOfWeek].Contains(selectedExercise.Id))
-                            {
-                                _planData.ExercisesPerDay[dayOfWeek].Add(selectedExercise.Id);
-                                await LoadExercisesForDays();
-                            }
+                            _planData.ExercisesPerDay[dayOfWeek] = new List<int>();
+                        }
+
+                        if (!_planData.ExercisesPerDay[dayOfWeek].Contains(selectedExercise.Id))
+                        {
+                            _planData.ExercisesPerDay[dayOfWeek].Add(selectedExercise.Id);
+                            LoadExercisesForDays();
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Error", $"Failed to add exercise: {ex.Message}", "OK");
+                await DisplayAlert("Fehler", $"Übung konnte nicht hinzugefügt werden: {ex.Message}", "OK");
             }
         }
 
@@ -187,12 +223,12 @@ namespace Gymaui_App.Views
                     {
                         dayExercises.RemoveAll(id => id == exerciseId);
                     }
-                    await LoadExercisesForDays();
+                    LoadExercisesForDays();
                 }
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Error", $"Failed to remove exercise: {ex.Message}", "OK");
+                await DisplayAlert("Fehler", $"Übung konnte nicht entfernt werden: {ex.Message}", "OK");
             }
         }
 
@@ -205,15 +241,15 @@ namespace Gymaui_App.Views
 
             StepLabel.Text = step switch
             {
-                1 => "Step 1: Plan Name",
-                2 => "Step 2: Select Training Days",
-                3 => "Step 3: Add Exercises",
-                _ => "Create Plan"
+                1 => "Schritt 1: Plan Name",
+                2 => "Schritt 2: Trainingstage auswählen",
+                3 => "Schritt 3: Übungen hinzufügen",
+                _ => "Plan erstellen"
             };
 
             ProgressBar.Progress = step * 0.33;
             BackButton.IsVisible = step > 1;
-            NextButton.Text = step == 3 ? "Create Plan" : "Next";
+            NextButton.Text = step == 3 ? "Plan erstellen" : "Weiter";
         }
 
         private void OnBackClicked(object sender, EventArgs e)
@@ -237,7 +273,7 @@ namespace Gymaui_App.Views
                     var planName = PlanNameEntry.Text?.Trim();
                     if (string.IsNullOrEmpty(planName))
                     {
-                        await DisplayAlert("Error", "Please enter a plan name", "OK");
+                        await DisplayAlert("Fehler", "Bitte gib einen Plan-Namen ein", "OK");
                         return;
                     }
 
@@ -246,9 +282,9 @@ namespace Gymaui_App.Views
                 }
                 else if (_currentStep == 2)
                 {
-                    if (_planData.SelectedTrainingDays.Count == 0)
+                    if (_selectedDays.Count == 0)
                     {
-                        await DisplayAlert("Error", "Please select at least one training day", "OK");
+                        await DisplayAlert("Fehler", "Bitte wähle mindestens einen Trainingstag aus", "OK");
                         return;
                     }
 
@@ -261,7 +297,7 @@ namespace Gymaui_App.Views
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
+                await DisplayAlert("Fehler", $"Ein Fehler ist aufgetreten: {ex.Message}", "OK");
             }
         }
 
@@ -269,38 +305,38 @@ namespace Gymaui_App.Views
         {
             try
             {
-                // Create plan
-                var plan = new Plan 
-                { 
-                    Name = _planData.PlanName, 
-                    Created = DateTime.UtcNow, 
-                    IsActive = true 
+                // Create plan with local date (start of today)
+                var plan = new Plan
+                {
+                    Name = _planData.PlanName,
+                    Created = DateTime.Now.Date,
+                    IsActive = true
                 };
                 await _db.AddPlanAsync(plan);
 
                 // Deactivate other plans
                 await _db.SetActivePlanAsync(plan.Id);
 
-                // Create plan days
-                int order = 0;
-                foreach (var dayOfWeek in _planData.SelectedTrainingDays.OrderBy(d => d))
+                // Create all 7 days in the cycle
+                for (int dayIndex = 0; dayIndex < 7; dayIndex++)
                 {
-                    var dayName = _weekDays[dayOfWeek].DayName;
+                    bool isTraining = _selectedDays.Contains(dayIndex);
+                    var dayName = isTraining ? $"Tag {dayIndex + 1}" : $"Tag {dayIndex + 1} (Pause)";
                     var planDay = new PlanDay
                     {
                         PlanId = plan.Id,
-                        DayOfWeek = dayOfWeek,
+                        DayOfWeek = dayIndex,
                         Name = dayName,
-                        IsTrainingDay = true,
-                        Order = order++
+                        IsTrainingDay = isTraining,
+                        Order = dayIndex
                     };
                     await _db.AddPlanDayAsync(planDay);
 
-                    // Add exercises for this day
-                    if (_planData.ExercisesPerDay.ContainsKey(dayOfWeek))
+                    // Add exercises for training days
+                    if (isTraining && _planData.ExercisesPerDay.ContainsKey(dayIndex))
                     {
                         int exerciseOrder = 1;
-                        foreach (var exerciseId in _planData.ExercisesPerDay[dayOfWeek])
+                        foreach (var exerciseId in _planData.ExercisesPerDay[dayIndex])
                         {
                             var planExercise = new PlanExercise
                             {
@@ -313,12 +349,12 @@ namespace Gymaui_App.Views
                     }
                 }
 
-                await DisplayAlert("Success", $"Plan '{_planData.PlanName}' created!", "OK");
+                await DisplayAlert("Erfolg", $"Plan '{_planData.PlanName}' erstellt!", "OK");
                 await Shell.Current.GoToAsync("///plans");
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Error", $"Failed to create plan: {ex.Message}", "OK");
+                await DisplayAlert("Fehler", $"Plan konnte nicht erstellt werden: {ex.Message}", "OK");
             }
         }
     }

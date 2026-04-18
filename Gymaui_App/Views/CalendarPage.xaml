@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:Gymaui_App.Controls"
+             x:Class="Gymaui_App.Views.CalendarPage"
+             Title="Kalender"
+             BackgroundColor="#0D0D0D"
+             Padding="0">
+
+    <Grid RowDefinitions="auto,auto,*" ColumnDefinitions="*">
+
+        <controls:CustomHeader 
+            x:Name="CustomHeader"
+            Grid.Row="0"
+            Title="📅 Trainingskalender"
+            ShowBackButton="False" />
+
+        <!-- Month Navigation -->
+        <Grid Grid.Row="1" 
+              ColumnDefinitions="auto,*,auto" 
+              Padding="12,12,12,12"
+              BackgroundColor="#0D0D0D">
+            
+            <Button Grid.Column="0"
+                   
+					 ImageSource="arrow_leftt" 
+                    Clicked="OnPreviousMonthClicked"
+                    BackgroundColor="#1A1A1A"
+                    TextColor="#E8FF47"
+                    FontSize="18"
+                    Padding="8,4"
+                    WidthRequest="40" />
+
+            <Label Grid.Column="1"
+                   x:Name="MonthYearLabel"
+                   Text="Januar 2025"
+                   HorizontalTextAlignment="Center"
+                   VerticalTextAlignment="Center"
+                   TextColor="#E8FF47"
+                   FontSize="16"
+                   FontAttributes="Bold" />
+
+            <Button Grid.Column="2"
+                     ImageSource="arrow_rightt"
+                    Clicked="OnNextMonthClicked"
+                    BackgroundColor="#1A1A1A"
+                    TextColor="#E8FF47"
+                    FontSize="18"
+                    Padding="8,4"
+                    WidthRequest="40" />
+        </Grid>
+
+        <!-- Calendar Grid -->
+        <ScrollView Grid.Row="2">
+            <VerticalStackLayout Padding="12" Spacing="12" BackgroundColor="#0D0D0D">
+
+                <!-- Day Headers -->
+                <Grid ColumnDefinitions="*,*,*,*,*,*,*" RowDefinitions="auto" ColumnSpacing="4" RowSpacing="4">
+                    <Label Grid.Column="0" Text="Mo" FontAttributes="Bold" TextColor="#8A8A8A" HorizontalTextAlignment="Center" FontSize="12" />
+                    <Label Grid.Column="1" Text="Di" FontAttributes="Bold" TextColor="#8A8A8A" HorizontalTextAlignment="Center" FontSize="12" />
+                    <Label Grid.Column="2" Text="Mi" FontAttributes="Bold" TextColor="#8A8A8A" HorizontalTextAlignment="Center" FontSize="12" />
+                    <Label Grid.Column="3" Text="Do" FontAttributes="Bold" TextColor="#8A8A8A" HorizontalTextAlignment="Center" FontSize="12" />
+                    <Label Grid.Column="4" Text="Fr" FontAttributes="Bold" TextColor="#8A8A8A" HorizontalTextAlignment="Center" FontSize="12" />
+                    <Label Grid.Column="5" Text="Sa" FontAttributes="Bold" TextColor="#8A8A8A" HorizontalTextAlignment="Center" FontSize="12" />
+                    <Label Grid.Column="6" Text="So" FontAttributes="Bold" TextColor="#8A8A8A" HorizontalTextAlignment="Center" FontSize="12" />
+                </Grid>
+
+                <!-- Calendar Days Grid -->
+                <Grid x:Name="CalendarGrid"
+                      ColumnDefinitions="*,*,*,*,*,*,*" 
+                      RowDefinitions="auto,auto,auto,auto,auto,auto"
+                      ColumnSpacing="4" 
+                      RowSpacing="4" />
+
+                <!-- Legend -->
+                <VerticalStackLayout Spacing="8" Margin="0,16,0,0">
+                    <Label Text="Legende:" TextColor="#E8FF47" FontAttributes="Bold" FontSize="14" />
+                    
+                    <HorizontalStackLayout Spacing="12">
+                        <Border WidthRequest="24" HeightRequest="24" 
+                                BackgroundColor="#00AA00" 
+                                StrokeShape="RoundRectangle 4,4,4,4" />
+                        <Label Text="Training absolviert" TextColor="#FFFFFF" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="12">
+                        <Border WidthRequest="24" HeightRequest="24" 
+                                BackgroundColor="#CC0000" 
+                                StrokeShape="RoundRectangle 4,4,4,4" />
+                        <Label Text="Training verpasst" TextColor="#FFFFFF" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="12">
+                        <Border WidthRequest="24" HeightRequest="24" 
+                                BackgroundColor="#0066FF" 
+                                StrokeShape="RoundRectangle 4,4,4,4" />
+                        <Label Text="Ruhetag" TextColor="#FFFFFF" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="12">
+                        <Border WidthRequest="24" HeightRequest="24" 
+                                BackgroundColor="#444444" 
+                                StrokeShape="RoundRectangle 4,4,4,4" />
+                        <Label Text="Zukünftiger Tag" TextColor="#FFFFFF" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

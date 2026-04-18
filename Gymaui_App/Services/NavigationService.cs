@@ -1,5 +1,3 @@
-using System;
-
 namespace Gymaui_App.Services
 {
     public interface INavigationService

@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Gymaui_App.Views.CreatePlanPage"
-             Title="Create Weekly Plan"
+             Title="Wochenplan erstellen"
              BackgroundColor="#0D0D0D"
              Padding="0">
 
@@ -10,7 +10,7 @@
         
         <!-- Progress Header -->
         <VerticalStackLayout Grid.Row="0" Padding="16" Spacing="8" BackgroundColor="#1A1A1A">
-            <Label x:Name="StepLabel" Text="Step 1: Plan Name" 
+            <Label x:Name="StepLabel" Text="Schritt 1: Plan Name" 
                    FontSize="16" FontAttributes="Bold" TextColor="#FFFFFF" />
             <ProgressBar x:Name="ProgressBar" 
                          Progress="0.33" 
@@ -23,10 +23,10 @@
             <VerticalStackLayout x:Name="ContentArea" Padding="16" Spacing="16" BackgroundColor="#0D0D0D">
                 <!-- Step 1: Plan Name -->
                 <VerticalStackLayout x:Name="Step1Content" Spacing="12">
-                    <Label Text="Give your plan a name" 
+                    <Label Text="Gib deinem Plan einen Namen!" 
                            FontSize="14" TextColor="#FFFFFF" />
                     <Entry x:Name="PlanNameEntry" 
-                           Placeholder="e.g., Beginner's Workout" 
+                           Placeholder="z.B. Anfänger-Workout" 
                            PlaceholderColor="#8A8A8A"
                            TextColor="#FFFFFF"
                            BackgroundColor="#1A1A1A" />
@@ -34,8 +34,10 @@
 
                 <!-- Step 2: Select Training Days -->
                 <VerticalStackLayout x:Name="Step2Content" IsVisible="False" Spacing="12">
-                    <Label Text="Select your training days" 
+                    <Label Text="Wähle deine Trainingstage aus (Tag 1 bis Tag 7)" 
                            FontSize="14" TextColor="#FFFFFF" />
+                    <Label Text="Die nicht ausgewählten Tage sind automatisch Pausentage. Die Tage wiederholen sich im 7-Tage-Zyklus."
+                           FontSize="12" TextColor="#8A8A8A" />
                     <FlexLayout x:Name="DaysFlexLayout" 
                                 Wrap="Wrap" 
                                 JustifyContent="Start" 
@@ -44,7 +46,7 @@
 
                 <!-- Step 3: Add Exercises -->
                 <VerticalStackLayout x:Name="Step3Content" IsVisible="False" Spacing="12">
-                    <Label Text="Add exercises for each training day" 
+                    <Label Text="Füge für jeden Trainingstag Übungen hinzu." 
                            FontSize="14" TextColor="#FFFFFF" />
                     <CollectionView x:Name="DaysExercisesCollection" 
                                     SelectionMode="None">
@@ -62,7 +64,7 @@
                                                    FontAttributes="Bold" 
                                                    TextColor="#E8FF47"
                                                    VerticalOptions="Center" />
-                                            <Button Text="+ Add Exercise" 
+                                            <Button Text="+ Übung hinzufügen" 
                                                     x:Name="AddExerciseBtn"
                                                     CommandParameter="{Binding DayOfWeek}"
                                                     Clicked="OnAddExerciseToDayClicked"
@@ -81,7 +83,7 @@
                                                                TextColor="#FFFFFF" 
                                                                VerticalOptions="Center"
                                                                HorizontalOptions="FillAndExpand" />
-                                                        <Button Text="?" 
+                                                        <Button Text="Entfernen" 
                                                                 CommandParameter="{Binding Id}"
                                                                 Clicked="OnRemoveExerciseClicked"
                                                                 BackgroundColor="#FF6B6B" 
@@ -107,14 +109,14 @@
                                Spacing="8" 
                                BackgroundColor="#1A1A1A">
             <Button x:Name="BackButton" 
-                    Text="Back" 
+                    Text="Zurück" 
                     Clicked="OnBackClicked"
                     BackgroundColor="#8A8A8A" 
                     TextColor="#000000" 
                     FontAttributes="Bold"
                     HorizontalOptions="FillAndExpand" />
             <Button x:Name="NextButton" 
-                    Text="Next" 
+                    Text="Weiter" 
                     Clicked="OnNextClicked"
                     BackgroundColor="#E8FF47" 
                     TextColor="#000000" 

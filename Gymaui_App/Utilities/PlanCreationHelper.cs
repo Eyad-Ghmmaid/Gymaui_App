@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using Gymaui_App.Models;
-
 namespace Gymaui_App.Utilities
 {
     /// <summary>
@@ -10,40 +6,43 @@ namespace Gymaui_App.Utilities
     public class PlanCreationDto
     {
         public string PlanName { get; set; } = string.Empty;
-        
+
         /// <summary>
-        /// Selected training days (0=Monday, 6=Sunday)
+        /// Number of training days in this plan
+        /// </summary>
+        public int NumberOfDays { get; set; }
+
+        /// <summary>
+        /// Selected training day indices (0-based)
         /// </summary>
         public List<int> SelectedTrainingDays { get; set; } = new();
-        
+
         /// <summary>
-        /// Exercises per day: key = DayOfWeek, value = list of exercise IDs
+        /// Exercises per day: key = day index, value = list of exercise IDs
         /// </summary>
         public Dictionary<int, List<int>> ExercisesPerDay { get; set; } = new();
     }
-    
+
     /// <summary>
-    /// Represents a day of the week with its properties
+    /// Represents a training day with a sequential number (Tag 1, Tag 2, etc.)
     /// </summary>
-    public class WeekDayInfo
+    public class TrainingDayInfo
     {
-        public int DayOfWeek { get; set; } // 0=Monday, 6=Sunday
-        public string DayName { get; set; } = string.Empty;
-        public string DayAbbreviation { get; set; } = string.Empty;
-        public bool IsSelected { get; set; }
-        
-        public static WeekDayInfo[] GetWeekDays()
+        public int DayIndex { get; set; } // 0-based index
+        public string DayName { get; set; } = string.Empty; // "Tag 1", "Tag 2", etc.
+
+        public static List<TrainingDayInfo> CreateDays(int count)
         {
-            return new[]
+            var days = new List<TrainingDayInfo>();
+            for (int i = 0; i < count; i++)
             {
-                new WeekDayInfo { DayOfWeek = 0, DayName = "Monday", DayAbbreviation = "Mo", IsSelected = false },
-                new WeekDayInfo { DayOfWeek = 1, DayName = "Tuesday", DayAbbreviation = "Di", IsSelected = false },
-                new WeekDayInfo { DayOfWeek = 2, DayName = "Wednesday", DayAbbreviation = "Mi", IsSelected = false },
-                new WeekDayInfo { DayOfWeek = 3, DayName = "Thursday", DayAbbreviation = "Do", IsSelected = false },
-                new WeekDayInfo { DayOfWeek = 4, DayName = "Friday", DayAbbreviation = "Fr", IsSelected = false },
-                new WeekDayInfo { DayOfWeek = 5, DayName = "Saturday", DayAbbreviation = "Sa", IsSelected = false },
-                new WeekDayInfo { DayOfWeek = 6, DayName = "Sunday", DayAbbreviation = "So", IsSelected = false }
-            };
+                days.Add(new TrainingDayInfo
+                {
+                    DayIndex = i,
+                    DayName = $"Tag {i + 1}"
+                });
+            }
+            return days;
         }
     }
 }

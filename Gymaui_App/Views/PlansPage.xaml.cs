@@ -1,10 +1,6 @@
-using System;
-using System.Linq;
-using Gymaui_App.Models;
 using Gymaui_App.Services;
+using Gymaui_App.Models;
 using Gymaui_App.Utilities;
-using Microsoft.Maui.Controls;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Gymaui_App.Views
 {
@@ -16,6 +12,9 @@ namespace Gymaui_App.Views
         {
             InitializeComponent();
             _db = db ?? throw new ArgumentNullException(nameof(db));
+
+            // Wire up custom header events using helper
+            HeaderEventHelper.SetupHeaderEvents(this);
         }
 
         protected override async void OnAppearing()
@@ -51,31 +50,31 @@ namespace Gymaui_App.Views
             await Shell.Current.GoToAsync("createplan");
         }
 
-        private async void OnEditPlanClicked(object sender, EventArgs e)
+        private async void OnEditPlanSwipe(object? sender, EventArgs e)
         {
-            if (sender is Button b && b.CommandParameter is int id)
+            if (sender is SwipeItem swipeItem && swipeItem.CommandParameter is Plan plan)
             {
-                await Shell.Current.GoToAsync($"{nameof(PlanEditorPage)}?planId={id}");
+                await Shell.Current.GoToAsync($"{nameof(PlanEditorPage)}?planId={plan.Id}");
             }
         }
 
-        private async void OnSetActiveClicked(object sender, EventArgs e)
+        private async void OnSetActiveSwipe(object? sender, EventArgs e)
         {
-            if (sender is Button b && b.CommandParameter is int id)
+            if (sender is SwipeItem swipeItem && swipeItem.CommandParameter is Plan plan)
             {
-                await _db.SetActivePlanAsync(id);
+                await _db.SetActivePlanAsync(plan.Id);
                 await LoadPlansAsync();
             }
         }
 
-        private async void OnDeletePlanClicked(object sender, EventArgs e)
+        private async void OnDeletePlanSwipe(object? sender, EventArgs e)
         {
-            if (sender is Button b && b.CommandParameter is int id)
+            if (sender is SwipeItem swipeItem && swipeItem.CommandParameter is Plan plan)
             {
                 var confirm = await DialogHelper.DisplayAlert("Löschen", "Plan löschen?", "Ja", "Nein");
                 if (!confirm) return;
 
-                await _db.DeletePlanAndChildrenAsync(id);
+                await _db.DeletePlanAndChildrenAsync(plan.Id);
                 await LoadPlansAsync();
             }
         }

@@ -1,15 +1,15 @@
-using System;
-using System.Linq;
-using Microsoft.Maui.Controls;
 using Gymaui_App.Models;
 using Gymaui_App.Services;
+using Gymaui_App.Utilities;
+using System.Collections.ObjectModel;
 
 namespace Gymaui_App.Views
 {
-[QueryProperty(nameof(ExerciseId), "ExerciseId")]
-[QueryProperty(nameof(WorkoutSessionId), "WorkoutSessionId")]
-public partial class ActiveWorkoutPage : ContentPage
+    [QueryProperty(nameof(ExerciseId), "ExerciseId")]
+    [QueryProperty(nameof(WorkoutSessionId), "WorkoutSessionId")]
+    public partial class ActiveWorkoutPage : ContentPage
     {
+        public const string Route = nameof(ActiveWorkoutPage);
         private string? _exerciseId;
         public string? ExerciseId
         {
@@ -23,14 +23,22 @@ public partial class ActiveWorkoutPage : ContentPage
             get => _workoutSessionId;
             set => _workoutSessionId = value;
         }
-        private readonly DatabaseService _databaseService = new DatabaseService();
-        private WorkoutSession _session;
 
-        public ActiveWorkoutPage(WorkoutSession? session = null)
+        private readonly DatabaseService _databaseService;
+        private readonly CalendarService _calendarService;
+        private WorkoutSession _session;
+        private PlanDay? _currentPlanDay;
+        private ObservableCollection<WorkoutExerciseItem> _exerciseItems = new();
+
+        public ActiveWorkoutPage(DatabaseService databaseService, CalendarService calendarService)
         {
             InitializeComponent();
-            _session = session ?? new WorkoutSession();
-            LoadSessionAsync();
+            _databaseService = databaseService ?? throw new ArgumentNullException(nameof(databaseService));
+            _calendarService = calendarService ?? throw new ArgumentNullException(nameof(calendarService));
+            _session = new WorkoutSession();
+
+            // Wire up custom header events using helper
+            HeaderEventHelper.SetupHeaderEvents(this);
         }
 
         protected override async void OnAppearing()
@@ -40,7 +48,11 @@ public partial class ActiveWorkoutPage : ContentPage
             {
                 await _databaseService.InitializeAsync();
 
-                // Check for pending workout session from navigation
+                // Always try to load the current plan day for completion tracking
+                var planDay = await _databaseService.GetTodaysPlanDayAsync();
+                if (planDay != null && planDay.IsTrainingDay)
+                    _currentPlanDay = planDay;
+
                 if (AppShell.PendingWorkoutSessionId.HasValue && AppShell.PendingWorkoutSessionId > 0)
                 {
                     var sid = AppShell.PendingWorkoutSessionId.Value;
@@ -48,70 +60,77 @@ public partial class ActiveWorkoutPage : ContentPage
                     if (s != null)
                     {
                         _session = s;
-                        ExercisesCollection.ItemsSource = _session.Exercises?.ToList() ?? new List<Exercise>();
-                        AppShell.PendingWorkoutSessionId = null; // Clear it after use
+                        await BindExercisesWithCompletionAsync(_session.Exercises);
+                        AppShell.PendingWorkoutSessionId = null;
                         return;
                     }
                 }
 
-                // Check for WorkoutSessionId from query parameter
                 if (!string.IsNullOrWhiteSpace(WorkoutSessionId) && int.TryParse(WorkoutSessionId, out var sid2))
                 {
                     var s = await _databaseService.GetWorkoutSessionAsync(sid2);
                     if (s != null)
                     {
                         _session = s;
-                        ExercisesCollection.ItemsSource = _session.Exercises?.ToList() ?? new List<Exercise>();
+                        await BindExercisesWithCompletionAsync(_session.Exercises);
                         return;
                     }
                 }
 
-                // Check for ExerciseId
                 if (!string.IsNullOrWhiteSpace(ExerciseId) && int.TryParse(ExerciseId, out var id))
                 {
-                    var exercise = await _database_service_get_exercise_guard(id);
+                    var exercise = await _databaseService.GetExerciseAsync(id);
                     if (exercise != null)
                     {
-                        // ensure session exists in DB
                         if (_session.Id == 0)
                         {
                             await _databaseService.AddWorkoutSessionAsync(_session);
                         }
 
-                        // add exercise to session if not already present
                         var exists = _session.Exercises.Any(e => e.Id == exercise.Id);
                         if (!exists)
                         {
-                            var list = _session.Exercises;
-                            list.Add(exercise);
-                            _session.Exercises = list;
+                            _session.Exercises.Add(exercise);
                             await _databaseService.UpdateWorkoutSessionAsync(_session);
                         }
 
-                        // refresh UI
-                        ExercisesCollection.ItemsSource = _session.Exercises?.ToList() ?? new List<Exercise>();
+                        await BindExercisesWithCompletionAsync(_session.Exercises);
                         return;
                     }
                 }
 
-                // If no specific session or exercise, try to load today's plan exercises
-                var planDay = await _databaseService.GetTodaysPlanDayAsync();
-                if (planDay != null && planDay.IsTrainingDay)
+                if (_currentPlanDay != null)
                 {
-                    var planExercises = await _databaseService.GetExercisesForDayAsync(planDay.Id);
-                    
-                    _session.Exercises.Clear();
-                    foreach (var pe in planExercises.OrderBy(pe => pe.Order))
+                    // Check if a session for today already exists
+                    var existingSession = await _databaseService.GetTodaysSessionAsync();
+                    if (existingSession != null)
                     {
-                        var exercise = await _databaseService.GetExerciseAsync(pe.ExerciseId);
-                        if (exercise != null)
+                        _session = existingSession;
+                        await BindExercisesWithCompletionAsync(_session.Exercises);
+                        return;
+                    }
+
+                    // Batch-load all exercises in one query instead of N+1
+                    var planExercises = await _databaseService.GetExercisesForDayAsync(_currentPlanDay.Id);
+                    var exerciseIds = planExercises.OrderBy(pe => pe.Order).Select(pe => pe.ExerciseId);
+                    var exercises = await _databaseService.GetExercisesByIdsAsync(exerciseIds);
+
+                    if (exercises.Count > 0)
+                    {
+                        _session.Exercises = exercises;
+                        _session.Name = _currentPlanDay.Name;
+                        if (_session.Id == 0)
                         {
-                            _session.Exercises.Add(exercise);
+                            await _databaseService.AddWorkoutSessionAsync(_session);
+                        }
+                        else
+                        {
+                            await _databaseService.UpdateWorkoutSessionAsync(_session);
                         }
                     }
                 }
-                
-                ExercisesCollection.ItemsSource = _session.Exercises?.ToList() ?? new List<Exercise>();
+
+                await BindExercisesWithCompletionAsync(_session.Exercises);
             }
             catch (Exception ex)
             {
@@ -119,40 +138,42 @@ public partial class ActiveWorkoutPage : ContentPage
             }
         }
 
-        // helper to get exercise and handle potential exceptions
-        private async Task<Exercise?> _database_service_get_exercise_guard(int id)
+        private async Task BindExercisesWithCompletionAsync(List<Exercise> exercises)
         {
-            try
-            {
-                return await _databaseService.GetExerciseAsync(id);
-            }
-            catch
-            {
-                return null;
-            }
-        }
+            _exerciseItems.Clear();
 
-        private async void LoadSessionAsync()
-        {
-            await _databaseService.InitializeAsync();
-
-            if (_session.Id == 0)
+            // Load completion status from database if we have a plan day
+            Dictionary<int, bool>? completionMap = null;
+            if (_currentPlanDay != null)
             {
-                // save a new session to get an Id
-                await _databaseService.AddWorkoutSessionAsync(_session);
+                var planExercises = await _databaseService.GetExercisesForDayAsync(_currentPlanDay.Id);
+                var today = DateTime.Now.Date;
+                completionMap = new Dictionary<int, bool>();
+                foreach (var pe in planExercises)
+                {
+                    var isCompleted = await _calendarService.IsExerciseCompletedAsync(pe.Id, today);
+                    completionMap[pe.ExerciseId] = isCompleted;
+                }
             }
 
-            ExercisesCollection.ItemsSource = _session.Exercises;
+            foreach (var exercise in exercises)
+            {
+                bool completed = completionMap != null
+                    && completionMap.TryGetValue(exercise.Id, out var c) && c;
+                _exerciseItems.Add(new WorkoutExerciseItem(exercise, completed));
+            }
+
+            ExercisesCollection.ItemsSource = _exerciseItems;
         }
 
         private async void OnExerciseSelected(object? sender, SelectionChangedEventArgs e)
         {
             if (e.CurrentSelection != null && e.CurrentSelection.Count > 0)
             {
-                var exercise = e.CurrentSelection[0] as Exercise;
+                var item = e.CurrentSelection[0] as WorkoutExerciseItem;
+                var exercise = item?.Exercise;
                 if (exercise != null)
                 {
-                    // navigate to sets entry page using Shell and pass exercise id
                     if (Shell.Current != null)
                     {
                         var sid = _session?.Id ?? 0;
@@ -160,8 +181,86 @@ public partial class ActiveWorkoutPage : ContentPage
                     }
                 }
 
-                // clear selection
                 ((CollectionView)sender).SelectedItem = null;
+            }
+        }
+
+        private async void OnExerciseCompletionToggled(object sender, EventArgs e)
+        {
+            try
+            {
+                if (sender is not Button button)
+                    return;
+
+                var item = button.BindingContext as WorkoutExerciseItem;
+                if (item == null)
+                    return;
+
+                var exercise = item.Exercise;
+
+                // Try to find the plan exercise in the current plan day first
+                PlanExercise? planExercise = null;
+
+                if (_currentPlanDay != null)
+                {
+                    var planExercises = await _databaseService.GetExercisesForDayAsync(_currentPlanDay.Id);
+                    planExercise = planExercises.FirstOrDefault(pe => pe.ExerciseId == exercise.Id);
+                }
+
+                // If not found in current day, search across all days of the active plan
+                if (planExercise == null)
+                {
+                    var activePlan = await _databaseService.GetActivePlanAsync();
+                    if (activePlan != null)
+                    {
+                        var allDays = await _databaseService.GetDaysForPlanAsync(activePlan.Id);
+                        foreach (var day in allDays)
+                        {
+                            var dayExercises = await _databaseService.GetExercisesForDayAsync(day.Id);
+                            planExercise = dayExercises.FirstOrDefault(pe => pe.ExerciseId == exercise.Id);
+                            if (planExercise != null)
+                            {
+                                // Also update _currentPlanDay to the correct day for further toggles
+                                _currentPlanDay = day;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (planExercise == null)
+                {
+                    await DisplayAlert("Fehler", "Uebung nicht im Plan gefunden", "OK");
+                    return;
+                }
+
+                bool newCompletionStatus = !item.IsCompleted;
+
+                await _calendarService.MarkExerciseCompletedAsync(planExercise.Id, DateTime.Now.Date, newCompletionStatus);
+
+                // Update the bound property so the UI reflects the change persistently
+                item.IsCompleted = newCompletionStatus;
+
+                // Haptic feedback
+                try
+                {
+                    HapticFeedback.Default.Perform(newCompletionStatus ? HapticFeedbackType.LongPress : HapticFeedbackType.Click);
+                }
+                catch { /* Haptic not available on all platforms */ }
+
+                if (newCompletionStatus)
+                {
+                    // Scale animation for completion
+                    await button.ScaleTo(1.3, 100, Easing.CubicOut);
+                    await button.ScaleTo(1.0, 100, Easing.CubicIn);
+                }
+
+                System.Diagnostics.Debug.WriteLine($"Exercise '{exercise.Name}' marked as {(newCompletionStatus ? "completed" : "incomplete")}");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error toggling exercise completion: {ex.Message}");
+                await DisplayAlert("Fehler", $"Fehler beim Aktualisieren der Uebung: {ex.Message}", "OK");
             }
         }
     }

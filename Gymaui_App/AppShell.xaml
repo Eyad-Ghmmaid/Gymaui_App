@@ -27,35 +27,50 @@
     <TabBar>
         <ShellContent
             x:Name="HomeTab"
-            Title="🏠 Home"
+            Title="🏠 Start"
             ContentTemplate="{DataTemplate views:StartPage}"
             Route="home" />
 
         <!-- Tab 2: Workout → ActiveWorkoutPage -->
         <ShellContent
             x:Name="WorkoutTab"
-            Title="💪 Workout"
+            Title="💪 Training"
             ContentTemplate="{DataTemplate views:ActiveWorkoutPage}"
             Route="workout" />
+
 
         <!-- Tab 3: Pläne → PlansPage -->
         <ShellContent
             x:Name="PlansTab"
-            Title="📋 Plans"
+            Title="📋 Pläne"
             ContentTemplate="{DataTemplate views:PlansPage}"
             Route="plans" />
 
-        <!-- Tab 4: Stats → StatisticsPage -->
+        <!-- Tab 4: Trainingstage → WorkoutHistoryPage -->
+        <ShellContent
+            x:Name="HistoryTab"
+            Title="📅 Tage"
+            ContentTemplate="{DataTemplate views:WorkoutHistoryPage}"
+            Route="history" />
+
+        <!-- Tab 5: Calendar → CalendarPage -->
+        <ShellContent
+            x:Name="CalendarTab"
+            Title="📅 Kalender"
+            ContentTemplate="{DataTemplate views:CalendarPage}"
+            Route="calendar" />
+
+        <!-- Tab 5: Stats → StatisticsPage -->
         <ShellContent
             x:Name="StatsTab"
-            Title="📊 Stats"
+            Title="📊 Statistik"
             ContentTemplate="{DataTemplate views:StatisticsPage}"
             Route="stats" />
 
-        <!-- Tab 5: Exercises → ExerciseListPage -->
+    <!-- Tab 6: Exercises → ExerciseListPage -->
         <ShellContent
             x:Name="ExercisesTab"
-            Title="🏋️ Exercises"
+            Title="🏋️ Übungen"
             ContentTemplate="{DataTemplate views:ExerciseListPage}"
             Route="exercises" />
     </TabBar>

@@ -1,5 +1,3 @@
-using Microsoft.Maui.Controls;
-
 namespace Gymaui_App.Controls
 {
     public partial class BottomTabBar : ContentView
@@ -29,15 +27,29 @@ namespace Gymaui_App.Controls
             if (index < 0 || index >= _tabButtons.Length)
                 return;
 
+            // Get theme-aware colors
+            Color inactiveColor;
+            Color activeColor;
+
+            if (Application.Current?.Resources.TryGetValue("TextSecondary", out var ts) == true)
+                inactiveColor = (Color)ts;
+            else
+                inactiveColor = Color.FromArgb("#8A8A8A");
+
+            if (Application.Current?.Resources.TryGetValue("PrimaryAccent", out var pa) == true)
+                activeColor = (Color)pa;
+            else
+                activeColor = Color.FromArgb("#E8FF47");
+
             // Reset previous tab
             if (_selectedTabIndex >= 0 && _selectedTabIndex < _tabButtons.Length)
             {
-                _tabButtons[_selectedTabIndex].TextColor = Color.FromArgb("#8A8A8A");
+                _tabButtons[_selectedTabIndex].TextColor = inactiveColor;
             }
 
             // Set new tab
             _selectedTabIndex = index;
-            _tabButtons[index].TextColor = Color.FromArgb("#E8FF47");
+            _tabButtons[index].TextColor = activeColor;
 
             TabSelected?.Invoke(this, new TabSelectedEventArgs { SelectedIndex = index });
         }

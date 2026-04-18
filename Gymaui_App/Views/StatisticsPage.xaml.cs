@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
 using Gymaui_App.Models;
 using Gymaui_App.Services;
+using Gymaui_App.Utilities;
 
 namespace Gymaui_App.Views
 {
@@ -21,23 +16,16 @@ namespace Gymaui_App.Views
         public string? ExerciseId
         {
             get => _exerciseId;
-            set
-            {
-                _exerciseId = value;
-            }
+            set => _exerciseId = value;
         }
 
-        // parameterless ctor for XAML instantiation (fallback)
-        public StatisticsPage() : this(new DatabaseService())
-        {
-        }
-
-        // DI-friendly ctor
         public StatisticsPage(DatabaseService databaseService)
         {
             _databaseService = databaseService ?? throw new ArgumentNullException(nameof(databaseService));
             InitializeComponent();
             ChartView.Drawable = _drawable;
+
+            HeaderEventHelper.SetupHeaderEvents(this);
         }
 
         protected override async void OnAppearing()
@@ -48,7 +36,6 @@ namespace Gymaui_App.Views
                 await _databaseService.InitializeAsync();
                 await LoadAllExercisesAsync();
 
-                // if Exercise ID was passed via query parameter, select it
                 if (!string.IsNullOrWhiteSpace(ExerciseId) && int.TryParse(ExerciseId, out var id))
                 {
                     _exercise = await _databaseService.GetExerciseAsync(id);
@@ -117,6 +104,7 @@ namespace Gymaui_App.Views
                 if (logs.Count == 0)
                 {
                     if (NoDataLabel != null) NoDataLabel.IsVisible = true;
+                    if (PRBadge != null) PRBadge.IsVisible = false;
                     if (MaxWeightLabel != null) MaxWeightLabel.Text = "-";
                     if (AvgWeightLabel != null) AvgWeightLabel.Text = "-";
                     if (EntryCountLabel != null) EntryCountLabel.Text = "0";
@@ -128,10 +116,9 @@ namespace Gymaui_App.Views
 
                 if (NoDataLabel != null) NoDataLabel.IsVisible = false;
 
-                // order by time
                 var ordered = logs.OrderBy(l => l.Timestamp).ToList();
 
-                // Calculate statistics
+                // Basic statistics
                 var maxWeight = ordered.Max(l => l.Weight);
                 var avgWeight = ordered.Average(l => l.Weight);
                 var lastDate = ordered.Last().Timestamp;
@@ -139,12 +126,34 @@ namespace Gymaui_App.Views
                 if (MaxWeightLabel != null) MaxWeightLabel.Text = $"{maxWeight:F1} kg";
                 if (AvgWeightLabel != null) AvgWeightLabel.Text = $"{avgWeight:F1} kg";
                 if (EntryCountLabel != null) EntryCountLabel.Text = ordered.Count.ToString();
-                if (LastDateLabel != null) LastDateLabel.Text = lastDate.ToString("dd.MM.yyyy");
+                if (LastDateLabel != null) LastDateLabel.Text = lastDate.ToString("dd.MM.yy");
+
+                // Check for recent PR (in the last session)
+                var lastSessionLogs = ordered.Where(l => l.Timestamp.Date == lastDate.Date).ToList();
+                var previousLogs = ordered.Where(l => l.Timestamp.Date < lastDate.Date).ToList();
+
+                if (previousLogs.Count > 0 && lastSessionLogs.Count > 0)
+                {
+                    var prevMax = previousLogs.Max(l => l.Weight);
+                    var lastMax = lastSessionLogs.Max(l => l.Weight);
+
+                    if (lastMax > prevMax)
+                    {
+                        PRBadge.IsVisible = true;
+                        PRLabel.Text = $"Neuer PR! {lastMax:F1} kg (+{lastMax - prevMax:F1} kg)";
+                    }
+                    else
+                    {
+                        PRBadge.IsVisible = false;
+                    }
+                }
+                else
+                {
+                    PRBadge.IsVisible = false;
+                }
 
                 // Prepare chart data
                 _drawable.Data = ordered.Select(l => new WeightPoint { Time = l.Timestamp, Weight = l.Weight }).ToList();
-
-                // request redraw
                 ChartView.Invalidate();
             }
             catch (Exception ex)
@@ -156,17 +165,16 @@ namespace Gymaui_App.Views
         private async void OnRefreshClicked(object? sender, EventArgs e)
         {
             await LoadAndRenderAsync();
+            StatsRefreshView.IsRefreshing = false;
         }
     }
 
-    // simple DTO for drawing
     internal class WeightPoint
     {
         public DateTime Time { get; set; }
         public double Weight { get; set; }
     }
 
-    // drawable that paints a simple line chart
     internal class WeightChartDrawable : IDrawable
     {
         public List<WeightPoint> Data { get; set; } = new List<WeightPoint>();
@@ -175,7 +183,6 @@ namespace Gymaui_App.Views
         {
             canvas.SaveState();
 
-            // Dark background to match app theme
             canvas.FillColor = Color.FromArgb("#0D0D0D");
             canvas.FillRectangle(dirtyRect);
 
@@ -189,17 +196,13 @@ namespace Gymaui_App.Views
             var plotWidth = Math.Max(10f, dirtyRect.Width - paddingLeft - paddingRight);
             var plotHeight = Math.Max(10f, dirtyRect.Height - paddingTop - paddingBottom);
 
-            // draw axes
             canvas.StrokeColor = Color.FromArgb("#2A2A2A");
             canvas.StrokeSize = 1;
-            // x axis
             canvas.DrawLine(plotX, plotY + plotHeight, plotX + plotWidth, plotY + plotHeight);
-            // y axis
             canvas.DrawLine(plotX, plotY, plotX, plotY + plotHeight);
 
             if (Data == null || Data.Count == 0)
             {
-                // no data text
                 canvas.FontColor = Color.FromArgb("#8A8A8A");
                 canvas.FontSize = 14;
                 canvas.DrawString("Keine Daten", 0, 0, dirtyRect.Width, dirtyRect.Height, HorizontalAlignment.Center, VerticalAlignment.Center);
@@ -207,7 +210,6 @@ namespace Gymaui_App.Views
                 return;
             }
 
-            // compute ranges
             var times = Data.Select(d => d.Time).ToList();
             var weights = Data.Select(d => d.Weight).ToList();
 
@@ -217,12 +219,11 @@ namespace Gymaui_App.Views
             var maxWeight = Math.Max(1, (int)Math.Ceiling(weights.Max()));
 
             var timeRange = (maxTime - minTime).TotalSeconds;
-            if (timeRange <= 0) timeRange = 1; // avoid div by zero
+            if (timeRange <= 0) timeRange = 1;
 
             var weightRange = maxWeight - minWeight;
             if (weightRange <= 0) weightRange = 1;
 
-            // draw horizontal grid lines and weight labels (4 lines)
             canvas.FontColor = Color.FromArgb("#8A8A8A");
             canvas.FontSize = 12;
             int gridLines = 4;
@@ -238,7 +239,6 @@ namespace Gymaui_App.Views
                 canvas.DrawString(weightLabel, 4, y - 8, 32, 16, HorizontalAlignment.Left, VerticalAlignment.Center);
             }
 
-            // compute points in pixel coordinates
             var pts = new List<PointF>();
             foreach (var d in Data)
             {
@@ -252,7 +252,20 @@ namespace Gymaui_App.Views
                 pts.Add(new PointF(x, y));
             }
 
-            // draw line
+            // Fill area under the line
+            if (pts.Count >= 2)
+            {
+                var path = new PathF();
+                path.MoveTo(pts[0].X, plotY + plotHeight);
+                foreach (var p in pts)
+                    path.LineTo(p.X, p.Y);
+                path.LineTo(pts.Last().X, plotY + plotHeight);
+                path.Close();
+
+                canvas.FillColor = Color.FromArgb("#E8FF47").WithAlpha(0.1f);
+                canvas.FillPath(path);
+            }
+
             canvas.StrokeColor = Color.FromArgb("#E8FF47");
             canvas.StrokeSize = 2;
             for (int i = 0; i < pts.Count - 1; i++)
@@ -260,7 +273,6 @@ namespace Gymaui_App.Views
                 canvas.DrawLine(pts[i].X, pts[i].Y, pts[i + 1].X, pts[i + 1].Y);
             }
 
-            // draw points
             canvas.FillColor = Color.FromArgb("#E8FF47");
             canvas.StrokeColor = Color.FromArgb("#E8FF47");
             foreach (var p in pts)
@@ -269,11 +281,15 @@ namespace Gymaui_App.Views
                 canvas.DrawCircle(p.X, p.Y, 4);
             }
 
-            // draw time labels: first and last
+            // Highlight the max point
+            var maxPt = pts[Data.IndexOf(Data.OrderByDescending(d => d.Weight).First())];
+            canvas.FillColor = Color.FromArgb("#00AA00");
+            canvas.FillCircle(maxPt.X, maxPt.Y, 6);
+
             canvas.FontColor = Color.FromArgb("#8A8A8A");
             canvas.FontSize = 10;
-            var firstLabel = minTime.ToString("yyyy-MM-dd");
-            var lastLabel = maxTime.ToString("yyyy-MM-dd");
+            var firstLabel = minTime.ToString("dd.MM.yy");
+            var lastLabel = maxTime.ToString("dd.MM.yy");
             canvas.DrawString(firstLabel, plotX, plotY + plotHeight + 4, 120, 20, HorizontalAlignment.Left, VerticalAlignment.Top);
             canvas.DrawString(lastLabel, plotX + plotWidth - 120, plotY + plotHeight + 4, 120, 20, HorizontalAlignment.Right, VerticalAlignment.Top);
 

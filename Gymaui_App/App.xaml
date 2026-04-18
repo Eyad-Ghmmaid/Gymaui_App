@@ -15,6 +15,13 @@
             
             <!-- Converters -->
             <converters:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <converters:ChipBackgroundConverter x:Key="ChipBackgroundConverter" />
+            <converters:ChipTextColorConverter x:Key="ChipTextColorConverter" />
+            <converters:ExerciseDetailsConverter x:Key="ExerciseDetailsConverter" />
+            <converters:CountConverter x:Key="CountConverter" />
+            <converters:MuscleGroupIconConverter x:Key="MuscleGroupIconConverter" />
+            <converters:MuscleGroupBorderConverter x:Key="MuscleGroupBorderConverter" />
+            <converters:MuscleGroupTextConverter x:Key="MuscleGroupTextConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

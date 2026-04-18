@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Gymaui_App.Views.ExercisePickerPopup"
+             BackgroundColor="#80000000"
+             Padding="0">
+
+    <Grid VerticalOptions="End" Padding="0">
+        <Border BackgroundColor="#1A1A1A"
+                Stroke="#2A2A2A"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 16,16,0,0"
+                Padding="0"
+                MaximumHeightRequest="600">
+            <VerticalStackLayout Spacing="0">
+
+                <!-- Header -->
+                <Grid Padding="16,16,16,8" ColumnDefinitions="*,Auto">
+                    <Label Grid.Column="0"
+                           Text="Uebung auswaehlen"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="#FFFFFF"
+                           VerticalOptions="Center" />
+                    <Button Grid.Column="1"
+                            Text="Abbrechen"
+                            BackgroundColor="Transparent"
+                            TextColor="#E8FF47"
+                            FontSize="14"
+                            Clicked="OnCancelClicked" />
+                </Grid>
+
+                <!-- Search Bar -->
+                <SearchBar x:Name="ExerciseSearchBar"
+                           Placeholder="Uebung suchen..."
+                           BackgroundColor="#242424"
+                           TextColor="#FFFFFF"
+                           PlaceholderColor="#8A8A8A"
+                           CancelButtonColor="#E8FF47"
+                           Margin="16,0,16,8"
+                           TextChanged="OnSearchTextChanged" />
+
+                <!-- Exercise List -->
+                <CollectionView x:Name="ExerciseListView"
+                                SelectionMode="None"
+                                MaximumHeightRequest="400">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <VerticalStackLayout>
+                                <Border BackgroundColor="Transparent"
+                                        Stroke="Transparent"
+                                        Padding="16,12">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnExerciseTapped" />
+                                    </Border.GestureRecognizers>
+                                    <Label Text="{Binding Name}"
+                                           FontSize="15"
+                                           TextColor="#FFFFFF" />
+                                </Border>
+                                <BoxView HeightRequest="1"
+                                         Color="#2A2A2A"
+                                         Margin="16,0" />
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+
+</ContentPage>

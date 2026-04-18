@@ -1,4 +1,3 @@
-using System;
 using SQLite;
 
 namespace Gymaui_App.Models

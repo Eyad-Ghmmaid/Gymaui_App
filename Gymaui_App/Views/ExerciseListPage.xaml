@@ -1,50 +1,108 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-xmlns:controls="clr-namespace:Gymaui_App.Controls"
-x:Class="Gymaui_App.Views.ExerciseListPage"
-Title="Exercises"
-BackgroundColor="#0D0D0D"
-Padding="0">
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:Gymaui_App.Controls"
+             x:Class="Gymaui_App.Views.ExerciseListPage"
+             Title="Übungen"
+             BackgroundColor="#0D0D0D"
+             Padding="0">
 
-    <Grid RowDefinitions="auto,*" ColumnDefinitions="*">
-        
-        <!-- Custom Header -->
-        <controls:CustomHeader 
+	<Grid RowDefinitions="auto,*" ColumnDefinitions="*">
+
+		<!-- Custom Header -->
+		<controls:CustomHeader 
+            x:Name="CustomHeader"
             Grid.Row="0"
-            Title="⚙️ Übungen"
+            Title="Uebungen"
             ShowBackButton="False" />
 
-        <!-- Content -->
-        <Grid Grid.Row="1" RowDefinitions="Auto,*" Padding="12" BackgroundColor="#0D0D0D">
-            <!-- Header with title and Add button -->
-            <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
-                <Label Text="Meine Übungen" FontSize="20" VerticalOptions="Center" TextColor="#FFFFFF" FontAttributes="Bold" />
-                <Button Text="+ Hinzufügen" Grid.Column="1" Clicked="OnAddClicked" BackgroundColor="#E8FF47" TextColor="#000000" FontAttributes="Bold" />
-            </Grid>
+		<!-- Content -->
+		<VerticalStackLayout Grid.Row="1" BackgroundColor="#0D0D0D" Padding="12" Spacing="12">
 
-            <!-- Collection of exercises -->
-            <CollectionView Grid.Row="1" x:Name="ExercisesCollection" ItemsSource="{Binding Exercises}" SelectionMode="Single" SelectionChanged="OnExerciseSelected">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Border BackgroundColor="#1A1A1A" StrokeThickness="1" Stroke="#2A2A2A" Padding="12" Margin="6" StrokeShape="RoundRectangle 8,8,8,8">
-                            <Grid ColumnDefinitions="60,*,Auto,Auto">
-                                <Image Source="{Binding ImagePath}" WidthRequest="48" HeightRequest="48" Aspect="AspectFill" VerticalOptions="Center" />
+			<!-- Search Bar with Add Button -->
+			<Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+				<SearchBar Grid.Column="0"
+                        x:Name="SearchBar"
+                        Placeholder="Uebung suchen..."
+                        Text="{Binding SearchText}"
+                        BackgroundColor="#242424"
+                        TextColor="#FFFFFF"
+                        PlaceholderColor="#8A8A8A"
+                        CancelButtonColor="#E8FF47" />
 
-                                <Label Grid.Column="1" Text="{Binding Name}" VerticalOptions="Center" FontSize="16" TextColor="#FFFFFF" FontAttributes="Bold" />
+				<Button Grid.Column="1"
+                       Text="+"
+                       Clicked="OnAddClicked"
+                       BackgroundColor="#E8FF47"
+                       TextColor="#000000"
+                       FontAttributes="Bold"
+                       FontSize="18"
+                       Padding="8"
+                       CornerRadius="8"
+                       WidthRequest="50"
+                       HeightRequest="50"
+                       VerticalOptions="Start" />
+			</Grid>
 
-                                <Button Grid.Column="2" Text="Bearbeiten" Clicked="OnEditClicked" CommandParameter="{Binding .}" VerticalOptions="Center" BackgroundColor="#8A8A8A" TextColor="#000000" FontSize="12" Padding="8" />
-                                <Button Grid.Column="3" Text="Stats" Clicked="OnStatsClicked" CommandParameter="{Binding Id}" VerticalOptions="Center" BackgroundColor="#8A8A8A" TextColor="#000000" FontSize="12" Padding="8" />
-                            </Grid>
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnItemTapped" NumberOfTapsRequired="1" />
-                            </Border.GestureRecognizers>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </Grid>
-    </Grid>
+			<!-- Muscle Group Filter Chips -->
+			<HorizontalStackLayout x:Name="MuscleGroupChips"
+                            Spacing="8"
+                            BindableLayout.ItemsSource="{Binding AvailableMuscleGroups}">
+				<BindableLayout.ItemTemplate>
+					<DataTemplate>
+						<Frame CornerRadius="20" Padding="16,8" HasShadow="False"
+                               BackgroundColor="{Binding ., Converter={StaticResource ChipBackgroundConverter}}"
+                               BorderColor="Transparent">
+							<Frame.GestureRecognizers>
+								<TapGestureRecognizer Tapped="OnMuscleGroupChipTapped" />
+							</Frame.GestureRecognizers>
+							<Label Text="{Binding .}"
+                                   TextColor="{Binding ., Converter={StaticResource ChipTextColorConverter}}"
+                                   FontAttributes="Bold"
+                                   FontSize="12" />
+						</Frame>
+					</DataTemplate>
+				</BindableLayout.ItemTemplate>
+			</HorizontalStackLayout>
+
+			<!-- Exercises List -->
+			<CollectionView x:Name="ExercisesCollection"
+							ItemsSource="{Binding FilteredExercises}"
+							SelectionMode="None">
+
+				<CollectionView.ItemTemplate>
+					<DataTemplate>
+						<SwipeView>
+							<SwipeView.LeftItems>
+								<SwipeItems>
+									<SwipeItem Text="✏ Bearbeiten" BackgroundColor="#E8FF47" Invoked="OnEditExerciseSwipe" CommandParameter="{Binding .}" />
+								</SwipeItems>
+							</SwipeView.LeftItems>
+							<SwipeView.RightItems>
+								<SwipeItems>
+									<SwipeItem Text="🗑 Löschen" BackgroundColor="#FF4444" Invoked="OnDeleteExerciseSwipe" CommandParameter="{Binding .}" />
+								</SwipeItems>
+							</SwipeView.RightItems>
+							<Frame BackgroundColor="#1A1A1A"
+								BorderColor="#2A2A2A"
+								CornerRadius="8"
+								Padding="12"
+								Margin="0,6"
+								HasShadow="False">
+								<StackLayout Spacing="4">
+									<Label Text="{Binding Name}"
+										FontSize="14"
+										TextColor="#FFFFFF"
+										FontAttributes="Bold" />
+									<Label Text="{Binding ., Converter={StaticResource ExerciseDetailsConverter}}"
+										FontSize="12"
+										TextColor="#8A8A8A" />
+								</StackLayout>
+							</Frame>
+						</SwipeView>
+					</DataTemplate>
+				</CollectionView.ItemTemplate>
+			</CollectionView>
+
+		</VerticalStackLayout>
+	</Grid>
 </ContentPage>
-
-

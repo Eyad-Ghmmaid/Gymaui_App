@@ -1,44 +1,101 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-         x:Class="Gymaui_App.Controls.CustomHeader"
-         Padding="0"
-         HeightRequest="64">
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Gymaui_App.Controls.CustomHeader"
+             Padding="0">
 
-<Border Stroke="#2A2A2A" StrokeThickness="0,1,0,0">
-    <Grid RowDefinitions="64" ColumnDefinitions="auto,*,auto" 
-          BackgroundColor="#1A1A1A" Padding="16,12,16,12">
-        
-        <!-- Back Button -->
-        <Button x:Name="BackButton" 
-                Grid.Column="0"
-                Text="←" 
-                FontSize="20"
-                TextColor="#8A8A8A"
-                BackgroundColor="Transparent"
-                Padding="0"
-                Clicked="OnBackClicked"
-                CornerRadius="0"
+    <VerticalStackLayout Spacing="0">
+        <!-- Main Header Bar -->
+        <Border Stroke="#2A2A2A" StrokeThickness="1">
+            <Grid RowDefinitions="56" ColumnDefinitions="auto,*,auto" 
+                  BackgroundColor="#1A1A1A" Padding="12,8,12,8">
+                
+                <!-- Back Button (Column 0) -->
+                <Button x:Name="BackButton" 
+                        Grid.Column="0"
+						 
+						ImageSource="back_icon.png"
+						FontSize="20"
+                        TextColor="#8A8A8A"
+                        BackgroundColor="Transparent"
+                        Padding="0"
+                        Clicked="OnBackClicked"
+                        CornerRadius="0"
+                        IsVisible="False"
+                        WidthRequest="40"
+                        HeightRequest="40"/>
+
+                <!-- Title with Icon (Column 1) -->
+                <HorizontalStackLayout Grid.Column="1"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Start"
+                                       Spacing="8"
+                                       Margin="8,0,0,0">
+                    <Label x:Name="IconLabel"
+                           Text="📅"
+                           FontSize="20"
+                           TextColor="#E8FF47"
+                           VerticalOptions="Center" />
+                    
+                    <Label x:Name="TitleLabel"
+                           Text="Training Calendar"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="#FFFFFF"
+                           VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+
+                <!-- Right Action Buttons (Column 2) -->
+                <HorizontalStackLayout Grid.Column="2" 
+                                       x:Name="RightContentPlaceholder"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="End"
+                                       Spacing="8">
+                    <!-- Settings/Menu Button -->
+                    <Button x:Name="SettingsButton"
+                            Text="⚙️"
+                            FontSize="18"
+                            TextColor="#8A8A8A"
+                            BackgroundColor="Transparent"
+                            Padding="0"
+                            Clicked="OnSettingsClicked"
+                            CornerRadius="0"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            IsVisible="True" />
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+
+        <!-- Search Bar (Collapsible) -->
+        <Border x:Name="SearchBarContainer"
+                Stroke="#2A2A2A"
+                StrokeThickness="1"
+                BackgroundColor="#0D0D0D"
                 IsVisible="False"
-                WidthRequest="44"
-                HeightRequest="44"/>
-
-        <!-- Title -->
-        <Label x:Name="TitleLabel"
-               Grid.Column="1"
-               Text="Home"
-               FontSize="18"
-               FontAttributes="Bold"
-               TextColor="#FFFFFF"
-               VerticalOptions="Center"
-               HorizontalOptions="Center"
-               Margin="16,0,16,0"/>
-
-        <!-- Placeholder for right content -->
-        <StackLayout Grid.Column="2" x:Name="RightContentPlaceholder" />
-    </Grid>
-    </Border>
+                Padding="0">
+            <HorizontalStackLayout Padding="12,8,12,8" Spacing="8">
+                <SearchBar x:Name="SearchEntry"
+                           Placeholder="Suchen..."
+                           PlaceholderColor="#8A8A8A"
+                           TextColor="#FFFFFF"
+                           BackgroundColor="#1A1A1A"
+                           HorizontalOptions="FillAndExpand"
+                           VerticalOptions="Center"
+                           TextChanged="OnSearchTextChanged"
+                           SearchButtonPressed="OnSearchPressed"/>
+                
+                <Button x:Name="CloseSearchButton"
+                        Text="✕"
+                        FontSize="16"
+                        TextColor="#8A8A8A"
+                        BackgroundColor="Transparent"
+                        Padding="0"
+                        Clicked="OnCloseSearchClicked"
+                        CornerRadius="0"
+                        WidthRequest="40"
+                        HeightRequest="40"/>
+            </HorizontalStackLayout>
+        </Border>
+    </VerticalStackLayout>
 
 </ContentView>
-
-

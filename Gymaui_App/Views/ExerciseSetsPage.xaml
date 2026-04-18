@@ -2,45 +2,131 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:Gymaui_App.Controls"
+             xmlns:converters="clr-namespace:Gymaui_App.Converters"
              x:Class="Gymaui_App.Views.ExerciseSetsPage"
-             Title="Enter Sets"
-             BackgroundColor="#0D0D0D"
+             Title="Sätze erfassen"
+             BackgroundColor="{StaticResource BackgroundDark}"
              Padding="0">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:StringNotEmptyConverter x:Key="StringNotEmptyConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <Grid RowDefinitions="auto,*" ColumnDefinitions="*">
         
         <!-- Custom Header with Back Button -->
         <controls:CustomHeader 
+            x:Name="CustomHeader"
             Grid.Row="0"
-            Title="📝 Sätze Erfassen"
+            Title="📝 Saetze Erfassen"
             ShowBackButton="True" />
 
         <!-- Content -->
         <ScrollView Grid.Row="1">
-            <VerticalStackLayout Padding="12" Spacing="12" BackgroundColor="#0D0D0D">
+            <VerticalStackLayout Padding="12" Spacing="12" BackgroundColor="{StaticResource BackgroundDark}">
                 <HorizontalStackLayout Spacing="8">
-                    <Label x:Name="ExerciseNameLabel" FontSize="18" HorizontalOptions="StartAndExpand" TextColor="#FFFFFF" FontAttributes="Bold" />
-                    <Button x:Name="YouTubeButton" Text="🎥 Video" Clicked="OnYouTubeClicked" HorizontalOptions="End" BackgroundColor="#E8FF47" TextColor="#000000" FontAttributes="Bold" />
+                    <Label x:Name="ExerciseNameLabel" FontSize="18" HorizontalOptions="StartAndExpand" TextColor="{StaticResource TextPrimary}" FontAttributes="Bold" />
+                    <Button x:Name="YouTubeButton" Text="🎥 Video" Clicked="OnYouTubeClicked" HorizontalOptions="End" BackgroundColor="{StaticResource PrimaryAccent}" TextColor="#000000" FontAttributes="Bold" />
                 </HorizontalStackLayout>
 
-                <Label Text="Letzte Einträge" FontAttributes="Bold" IsVisible="True" TextColor="#FFFFFF" />
-                <CollectionView x:Name="PreviousLogsCollection" HeightRequest="160" SelectionMode="None">
+                <!-- Rest Timer Section -->
+                <Border BackgroundColor="{StaticResource Surface}"
+                        Stroke="#2A2A2A"
+                        StrokeThickness="1"
+                        Padding="16"
+                        StrokeShape="RoundRectangle 12">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="⏱️ Pausenzeit" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                        <Label x:Name="TimerLabel" 
+                               Text="00:00" 
+                               FontSize="36" 
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource PrimaryAccent}"
+                               HorizontalTextAlignment="Center" />
+                        <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="8">
+                            <Button Grid.Column="0" Text="30s" Clicked="OnTimerPreset" CommandParameter="30"
+                                    BackgroundColor="#2A2A2A" TextColor="{StaticResource TextPrimary}" FontSize="12" Padding="4" CornerRadius="8" />
+                            <Button Grid.Column="1" Text="60s" Clicked="OnTimerPreset" CommandParameter="60"
+                                    BackgroundColor="#2A2A2A" TextColor="{StaticResource TextPrimary}" FontSize="12" Padding="4" CornerRadius="8" />
+                            <Button Grid.Column="2" Text="90s" Clicked="OnTimerPreset" CommandParameter="90"
+                                    BackgroundColor="#2A2A2A" TextColor="{StaticResource TextPrimary}" FontSize="12" Padding="4" CornerRadius="8" />
+                            <Button Grid.Column="3" Text="120s" Clicked="OnTimerPreset" CommandParameter="120"
+                                    BackgroundColor="#2A2A2A" TextColor="{StaticResource TextPrimary}" FontSize="12" Padding="4" CornerRadius="8" />
+                        </Grid>
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                            <Button Grid.Column="0" x:Name="StartTimerButton" Text="▶ Start" Clicked="OnStartTimerClicked"
+                                    BackgroundColor="{StaticResource PrimaryAccent}" TextColor="#000000" FontAttributes="Bold" CornerRadius="8" />
+                            <Button Grid.Column="1" x:Name="ResetTimerButton" Text="⟲ Reset" Clicked="OnResetTimerClicked"
+                                    BackgroundColor="#2A2A2A" TextColor="{StaticResource TextPrimary}" FontAttributes="Bold" CornerRadius="8" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Label Text="Letzte Eintraege" FontAttributes="Bold" IsVisible="True" TextColor="{StaticResource TextPrimary}" />
+                <CollectionView x:Name="PreviousLogsCollection" HeightRequest="200" SelectionMode="None">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Border Padding="12" Margin="4" BackgroundColor="#1A1A1A" Stroke="#2A2A2A" StrokeThickness="1" StrokeShape="RoundRectangle 8,8,8,8">
-                                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
-                                    <Label Text="{Binding Weight, StringFormat='Gewicht: {0} kg'}" Grid.Column="0" Grid.Row="0" TextColor="#E8FF47" FontAttributes="Bold" />
-                                    <Label Text="{Binding Reps, StringFormat='Wdh: {0}'}" Grid.Column="1" Grid.Row="0" TextColor="#E8FF47" FontAttributes="Bold" />
-                                    <Label Text="{Binding Timestamp, StringFormat='{0:yyyy-MM-dd HH:mm}'}" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" TextColor="#8A8A8A" />
-                                </Grid>
-                            </Border>
+                            <SwipeView>
+                                <SwipeView.LeftItems>
+                                    <SwipeItems>
+                                        <SwipeItem Text="✏ Bearbeiten" BackgroundColor="#E8FF47" Invoked="OnEditLogSwipe" CommandParameter="{Binding .}" />
+                                    </SwipeItems>
+                                </SwipeView.LeftItems>
+                                <SwipeView.RightItems>
+                                    <SwipeItems>
+                                        <SwipeItem Text="🗑 Löschen" BackgroundColor="#FF4444" Invoked="OnDeleteLogSwipe" CommandParameter="{Binding .}" />
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
+                                <Border Padding="12" Margin="4" BackgroundColor="{StaticResource Surface}" Stroke="#2A2A2A" StrokeThickness="1" StrokeShape="RoundRectangle 8,8,8,8">
+                                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                        <Label Text="{Binding Weight, StringFormat='Gewicht: {0} kg'}" Grid.Column="0" Grid.Row="0" TextColor="{StaticResource PrimaryAccent}" FontAttributes="Bold" />
+                                        <Label Text="{Binding Reps, StringFormat='Wdh: {0}'}" Grid.Column="1" Grid.Row="0" TextColor="{StaticResource PrimaryAccent}" FontAttributes="Bold" />
+                                        <Label Text="{Binding Timestamp, StringFormat='{0:yyyy-MM-dd HH:mm}'}" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" TextColor="{StaticResource TextSecondary}" />
+                                        <Label Text="{Binding Notes}" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" TextColor="{StaticResource TextSecondary}" FontSize="12" IsVisible="{Binding Notes, Converter={StaticResource StringNotEmptyConverter}}" LineBreakMode="TailTruncation" />
+                                    </Grid>
+                                </Border>
+                            </SwipeView>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
                 <StackLayout x:Name="SetsContainer" Spacing="12" />
 
-                <Button Text="✓ Einträge Speichern" Clicked="OnSaveClicked" BackgroundColor="#E8FF47" TextColor="#000000" FontAttributes="Bold" Margin="0,12,0,0" />
+                <!-- Notizen -->
+                <Border BackgroundColor="{StaticResource Surface}"
+                        Stroke="#2A2A2A"
+                        StrokeThickness="1"
+                        Padding="12"
+                        StrokeShape="RoundRectangle 12">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="📝 Notizen" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                        <Editor x:Name="NotesEditor"
+                                Placeholder="Notiz hinzufügen..."
+                                PlaceholderColor="#666666"
+                                TextColor="{StaticResource TextPrimary}"
+                                BackgroundColor="#2A2A2A"
+                                FontSize="14"
+                                HeightRequest="80"
+                                AutoSize="TextChanges" />
+                        <Label Text="Bisherige Notizen:" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" Margin="0,8,0,0" x:Name="PreviousNotesHeader" IsVisible="False" />
+                        <CollectionView x:Name="PreviousNotesCollection" IsVisible="False">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="8" Margin="0,2" BackgroundColor="#2A2A2A" StrokeShape="RoundRectangle 6" Stroke="Transparent">
+                                        <VerticalStackLayout Spacing="2">
+                                            <Label Text="{Binding Notes}" TextColor="{StaticResource TextPrimary}" FontSize="13" />
+                                            <Label Text="{Binding Timestamp, StringFormat='{0:dd.MM.yyyy HH:mm}'}" TextColor="{StaticResource TextSecondary}" FontSize="10" />
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Button Text="✓ Eintraege Speichern" Clicked="OnSaveClicked" BackgroundColor="{StaticResource PrimaryAccent}" TextColor="#000000" FontAttributes="Bold" Margin="0,12,0,0" CornerRadius="8" HeightRequest="50" />
             </VerticalStackLayout>
         </ScrollView>
     </Grid>

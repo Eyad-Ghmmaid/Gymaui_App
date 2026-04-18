@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
+    <TargetFrameworks>net9.0-android;net9.0-ios</TargetFrameworks>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <RootNamespace>Gymaui_App</RootNamespace>
@@ -19,15 +20,82 @@
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
     <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+    <FileVersion>1.1.3</FileVersion>
+    <AssemblyVersion>1.1.3.0</AssemblyVersion>
+    <IncludeSymbols>True</IncludeSymbols>
+    <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android|AnyCPU'">
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
+    <ApplicationDisplayVersion>1.1.3</ApplicationDisplayVersion>
+    <ApplicationVersion>3</ApplicationVersion>
+    <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+    <DebugSymbols>True</DebugSymbols>
+    <AndroidKeyStore>False</AndroidKeyStore>
+    <RunAOTCompilation>True</RunAOTCompilation>
+    <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
+    <AndroidUseAapt2>True</AndroidUseAapt2>
+    <TrimMode>link</TrimMode>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-android|AnyCPU'">
+    <ApplicationDisplayVersion>1.1.3</ApplicationDisplayVersion>
+    <ApplicationVersion>3</ApplicationVersion>
+    <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+    <DebugSymbols>False</DebugSymbols>
+    <AndroidKeyStore>False</AndroidKeyStore>
+    <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
+    <RunAOTCompilation>True</RunAOTCompilation>
+    <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
+    <AndroidUseAapt2>True</AndroidUseAapt2>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
+    <TrimMode>link</TrimMode>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-ios|AnyCPU'">
+    <ApplicationDisplayVersion>1.1.3</ApplicationDisplayVersion>
+    <ApplicationVersion>3</ApplicationVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-maccatalyst|AnyCPU'">
+    <ApplicationDisplayVersion>1.1.2</ApplicationDisplayVersion>
+    <ApplicationVersion>4</ApplicationVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-windows10.0.19041.0|AnyCPU'">
+    <ApplicationDisplayVersion>1.1.3</ApplicationDisplayVersion>
+    <ApplicationVersion>3</ApplicationVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-ios|AnyCPU'">
+    <ApplicationDisplayVersion>1.1.3</ApplicationDisplayVersion>
+    <ApplicationVersion>3</ApplicationVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-maccatalyst|AnyCPU'">
+    <ApplicationDisplayVersion>1.1.2</ApplicationDisplayVersion>
+    <ApplicationVersion>4</ApplicationVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-windows10.0.19041.0|AnyCPU'">
+    <ApplicationDisplayVersion>1.1.3</ApplicationDisplayVersion>
+    <ApplicationVersion>3</ApplicationVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
-    <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+    <MauiImage Include="Resources\AppIcon\appicon.png" ForegroundFile="Resources\AppIcon\appiconfg.png" ForegroundScale="0.65" />
+    <MauiIcon Include="Resources\AppIcon\appiconfg.png" />
+    <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#000000" BaseSize="128,128" />
     <MauiImage Include="Resources\Images\*" />
     <MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
     <MauiFont Include="Resources\Fonts\*" />
     <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\AppIcon\appiconfg.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,6 +120,15 @@
     <MauiXaml Update="Resources\Styles\Dimensions.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
+    <MauiXaml Update="Views\ActiveWorkoutPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\AddExercisePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\CalendarPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
     <MauiXaml Update="Views\CreatePlanPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
@@ -61,28 +138,34 @@
     <MauiXaml Update="Views\DesignSystemExamplePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
+    <MauiXaml Update="Views\EditExercisePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\ExerciseListPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
     <MauiXaml Update="Views\PlanEditorPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\PlansPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
+    <MauiXaml Update="Views\SettingsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
     <MauiXaml Update="Views\StartPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Views\ExerciseListPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Views\AddExercisePage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
-    <MauiXaml Update="Views\ActiveWorkoutPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\ExerciseSetsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\StatisticsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\WorkoutDetailPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\WorkoutHistoryPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
   </ItemGroup>
