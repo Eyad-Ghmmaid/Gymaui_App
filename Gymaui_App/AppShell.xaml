@@ -73,6 +73,13 @@
             Title="🏋️ Übungen"
             ContentTemplate="{DataTemplate views:ExerciseListPage}"
             Route="exercises" />
+
+    <!-- Tab 8: Help → HelpPage -->
+        <ShellContent
+            x:Name="HelpTab"
+            Title="❓ Hilfe"
+            ContentTemplate="{DataTemplate views:HelpPage}"
+            Route="help" />
     </TabBar>
 
 </Shell>

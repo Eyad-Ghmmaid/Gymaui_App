@@ -278,7 +278,7 @@ namespace Gymaui_App.Services
         public async Task<int> AddWorkoutSessionAsync(WorkoutSession session)
         {
             // Ensure ExercisesJson is up to date
-            session.ExercisesJson = JsonSerializer.Serialize(session.Exercises);
+            session.ExercisesJson = JsonSerializer.Serialize(session.Exercises, AppJsonContext.Default.ListExercise);
             return await _db!.InsertAsync(session);
         }
 
@@ -290,7 +290,7 @@ namespace Gymaui_App.Services
 
         public async Task<int> UpdateWorkoutSessionAsync(WorkoutSession session)
         {
-            session.ExercisesJson = JsonSerializer.Serialize(session.Exercises);
+            session.ExercisesJson = JsonSerializer.Serialize(session.Exercises, AppJsonContext.Default.ListExercise);
             return await _db!.UpdateAsync(session);
         }
 

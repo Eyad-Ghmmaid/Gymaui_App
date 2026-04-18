@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:Gymaui_App.Controls"
+             x:Class="Gymaui_App.Views.HelpPage"
+             Title="Hilfe"
+             BackgroundColor="#0D0D0D"
+             Padding="0">
+
+	<Grid RowDefinitions="Auto,*">
+
+		<controls:CustomHeader
+            Grid.Row="0"
+            Title="Hilfe &amp; Anleitung"
+            ShowBackButton="False" />
+
+		<ScrollView Grid.Row="1" Padding="16,12">
+			<VerticalStackLayout Spacing="16">
+
+				<Label Text="Willkommen bei Gymaui! Hier erfährst du, wie du die App nutzen kannst."
+                       TextColor="#B0B0B0"
+                       FontSize="15" />
+
+				<Border Stroke="#2A2A2A" StrokeThickness="1" BackgroundColor="#1A1A1A"
+                        Padding="16" StrokeShape="RoundRectangle 10">
+					<VerticalStackLayout Spacing="8">
+						<Label Text="Übungen verwalten" FontSize="18" FontAttributes="Bold" TextColor="#E8FF47" />
+						<Label TextColor="#CCCCCC" FontSize="14">
+							<Label.Text>
+								&#x2022; Tippe auf das + Symbol, um eine neue Übung hinzuzufügen.
+								&#x2022; Nutze die Suchleiste, um schnell eine Übung zu finden.
+								&#x2022; Wische eine Übung nach links, um sie zu löschen.
+								&#x2022; Tippe auf eine Übung, um Details zu sehen oder sie zu bearbeiten.
+							</Label.Text>
+						</Label>
+					</VerticalStackLayout>
+				</Border>
+
+				<Border Stroke="#2A2A2A" StrokeThickness="1" BackgroundColor="#1A1A1A"
+                        Padding="16" StrokeShape="RoundRectangle 10">
+					<VerticalStackLayout Spacing="8">
+						<Label Text="Trainingspläne erstellen" FontSize="18" FontAttributes="Bold" TextColor="#E8FF47" />
+						<Label TextColor="#CCCCCC" FontSize="14">
+							<Label.Text>
+								&#x2022; Gehe zum Tab Pläne und erstelle einen neuen Plan.
+								&#x2022; Füge Trainingstage hinzu und ordne Übungen zu.
+								&#x2022; Halte einen Plan gedrückt, um ihn zu bearbeiten oder zu löschen.
+							</Label.Text>
+						</Label>
+					</VerticalStackLayout>
+				</Border>
+
+				<Border Stroke="#2A2A2A" StrokeThickness="1" BackgroundColor="#1A1A1A"
+                        Padding="16" StrokeShape="RoundRectangle 10">
+					<VerticalStackLayout Spacing="8">
+						<Label Text="Training starten" FontSize="18" FontAttributes="Bold" TextColor="#E8FF47" />
+						<Label TextColor="#CCCCCC" FontSize="14">
+							<Label.Text>
+								&#x2022; Gehe zum Tab Training und wähle einen Plan oder starte ein freies Training.
+								&#x2022; Trage deine Sätze, Gewicht und Wiederholungen ein.
+								&#x2022; Beende das Training, um es in der Historie zu speichern.
+							</Label.Text>
+						</Label>
+					</VerticalStackLayout>
+				</Border>
+
+				<Border Stroke="#2A2A2A" StrokeThickness="1" BackgroundColor="#1A1A1A"
+                        Padding="16" StrokeShape="RoundRectangle 10">
+					<VerticalStackLayout Spacing="8">
+						<Label Text="Trainingshistorie" FontSize="18" FontAttributes="Bold" TextColor="#E8FF47" />
+						<Label TextColor="#CCCCCC" FontSize="14">
+							<Label.Text>
+								&#x2022; Im Tab Tage siehst du alle vergangenen Trainings.
+								&#x2022; Tippe auf ein Training, um die Details einzusehen.
+								&#x2022; Im Kalender-Tab kannst du deine Trainingstage im Überblick sehen.
+							</Label.Text>
+						</Label>
+					</VerticalStackLayout>
+				</Border>
+
+				<Border Stroke="#2A2A2A" StrokeThickness="1" BackgroundColor="#1A1A1A"
+                        Padding="16" StrokeShape="RoundRectangle 10">
+					<VerticalStackLayout Spacing="8">
+						<Label Text="Statistiken" FontSize="18" FontAttributes="Bold" TextColor="#E8FF47" />
+						<Label TextColor="#CCCCCC" FontSize="14">
+							<Label.Text>
+								&#x2022; Im Tab Statistik siehst du deinen Fortschritt über die Zeit.
+								&#x2022; Verfolge dein Gesamtvolumen, Trainingsfrequenz und mehr.
+							</Label.Text>
+						</Label>
+					</VerticalStackLayout>
+				</Border>
+
+				<Border Stroke="#2A2A2A" StrokeThickness="1" BackgroundColor="#1A1A1A"
+                        Padding="16" StrokeShape="RoundRectangle 10">
+					<VerticalStackLayout Spacing="8">
+						<Label Text="Löschen &amp; Bearbeiten" FontSize="18" FontAttributes="Bold" TextColor="#E8FF47" />
+						<Label TextColor="#CCCCCC" FontSize="14">
+							<Label.Text>
+								&#x2022; Wische ein Element nach links, um die Lösch-Option anzuzeigen.
+								&#x2022; Wische ein Element nach rechts, um Bearbeitungsoptionen zu öffnen.
+								&#x2022; Bestätige das Löschen im erscheinenden Dialog.
+							</Label.Text>
+						</Label>
+					</VerticalStackLayout>
+				</Border>
+
+			</VerticalStackLayout>
+		</ScrollView>
+
+	</Grid>
+
+</ContentPage>

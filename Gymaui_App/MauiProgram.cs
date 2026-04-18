@@ -49,6 +49,7 @@ namespace Gymaui_App
             builder.Services.AddTransient<WorkoutHistoryPage>();
             builder.Services.AddTransient<WorkoutDetailPage>();
             builder.Services.AddTransient<SettingsPage>();
+            builder.Services.AddTransient<HelpPage>();
 
             // Register AppShell
             builder.Services.AddSingleton<AppShell>();

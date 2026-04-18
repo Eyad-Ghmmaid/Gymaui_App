@@ -17,7 +17,7 @@
                 <!-- Header -->
                 <Grid Padding="16,16,16,8" ColumnDefinitions="*,Auto">
                     <Label Grid.Column="0"
-                           Text="Uebung auswaehlen"
+                           Text="Übung auswaehlen"
                            FontSize="18"
                            FontAttributes="Bold"
                            TextColor="#FFFFFF"
@@ -32,7 +32,7 @@
 
                 <!-- Search Bar -->
                 <SearchBar x:Name="ExerciseSearchBar"
-                           Placeholder="Uebung suchen..."
+                           Placeholder="Übung suchen..."
                            BackgroundColor="#242424"
                            TextColor="#FFFFFF"
                            PlaceholderColor="#8A8A8A"

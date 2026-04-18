@@ -38,14 +38,14 @@ namespace Gymaui_App.Models
 
                 _cachedExercises = string.IsNullOrEmpty(ExercisesJson)
                     ? new List<Exercise>()
-                    : JsonSerializer.Deserialize<List<Exercise>>(ExercisesJson) ?? new List<Exercise>();
+                    : JsonSerializer.Deserialize(ExercisesJson, AppJsonContext.Default.ListExercise) ?? new List<Exercise>();
 
                 return _cachedExercises;
             }
             set
             {
                 _cachedExercises = value ?? new List<Exercise>();
-                _exercisesJson = JsonSerializer.Serialize(_cachedExercises);
+                _exercisesJson = JsonSerializer.Serialize(_cachedExercises, AppJsonContext.Default.ListExercise);
             }
         }
     }
