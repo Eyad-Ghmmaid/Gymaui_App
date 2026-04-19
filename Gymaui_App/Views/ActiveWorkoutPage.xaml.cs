@@ -189,10 +189,8 @@ namespace Gymaui_App.Views
         {
             try
             {
-                if (sender is not Button button)
-                    return;
-
-                var item = button.BindingContext as WorkoutExerciseItem;
+                var element = sender as Element;
+                var item = element?.BindingContext as WorkoutExerciseItem;
                 if (item == null)
                     return;
 
@@ -248,11 +246,11 @@ namespace Gymaui_App.Views
                 }
                 catch { /* Haptic not available on all platforms */ }
 
-                if (newCompletionStatus)
+                if (newCompletionStatus && sender is VisualElement ve)
                 {
                     // Scale animation for completion
-                    await button.ScaleTo(1.3, 100, Easing.CubicOut);
-                    await button.ScaleTo(1.0, 100, Easing.CubicIn);
+                    await ve.ScaleTo(1.3, 100, Easing.CubicOut);
+                    await ve.ScaleTo(1.0, 100, Easing.CubicIn);
                 }
 
                 System.Diagnostics.Debug.WriteLine($"Exercise '{exercise.Name}' marked as {(newCompletionStatus ? "completed" : "incomplete")}");

@@ -13,7 +13,8 @@ Padding="0">
         <controls:CustomHeader 
             x:Name="CustomHeader"
             Grid.Row="0"
-            Title="📋 Pläne"
+            Title="Pläne"
+            IconSource="plaene.png"
             ShowBackButton="False" />
 
         <!-- Content -->

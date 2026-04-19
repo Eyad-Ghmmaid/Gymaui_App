@@ -31,23 +31,19 @@ namespace Gymaui_App.Utilities
             if (page == null) return;
 
             var action = await page.DisplayActionSheet(
-                "Settings",
-                "Cancel",
+                "Menü",
+                "Abbrechen",
                 null,
-                "View Statistics",
-                "My Training Plans",
-                "Settings & Preferences");
+                "Einstellungen",
+                "Hilfe");
 
             switch (action)
             {
-                case "View Statistics":
-                    await Shell.Current.GoToAsync("///stats");
-                    break;
-                case "My Training Plans":
-                    await Shell.Current.GoToAsync("///plans");
-                    break;
-                case "Settings & Preferences":
+                case "Einstellungen":
                     await Shell.Current.GoToAsync("SettingsPage");
+                    break;
+                case "Hilfe":
+                    await Shell.Current.GoToAsync("///help");
                     break;
             }
         }

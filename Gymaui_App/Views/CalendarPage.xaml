@@ -12,7 +12,8 @@
         <controls:CustomHeader 
             x:Name="CustomHeader"
             Grid.Row="0"
-            Title="📅 Trainingskalender"
+            Title="Trainingskalender"
+            IconSource="calendar.png"
             ShowBackButton="False" />
 
         <!-- Month Navigation -->

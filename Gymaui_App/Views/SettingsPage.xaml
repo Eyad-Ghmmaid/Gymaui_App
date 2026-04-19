@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Gymaui_App.Views.SettingsPage"
              Title="Einstellungen"
-             BackgroundColor="{StaticResource BackgroundDark}"
+             BackgroundColor="{DynamicResource BackgroundDark}"
              Shell.NavBarIsVisible="False"
              Padding="0">
 
@@ -11,7 +11,7 @@
 
         <!-- Header -->
         <Border Grid.Row="0"
-                BackgroundColor="{StaticResource Surface}"
+                BackgroundColor="{DynamicResource Surface}"
                 Stroke="#2A2A2A"
                 StrokeThickness="1"
                 Padding="16,12">
@@ -20,14 +20,14 @@
                         Text="Zurück"
                         Clicked="OnBackClicked"
                         BackgroundColor="Transparent"
-                        TextColor="{StaticResource PrimaryAccent}"
+                        TextColor="{DynamicResource PrimaryAccent}"
                         FontSize="16"
                         Padding="0"
                         HorizontalOptions="Start"
                         VerticalOptions="Center" />
                 <Label Grid.Column="1"
                        Text="⚙️ Einstellungen"
-                       TextColor="{StaticResource TextPrimary}"
+                       TextColor="{DynamicResource TextPrimary}"
                        FontSize="20"
                        FontAttributes="Bold"
                        HorizontalOptions="Center"
@@ -40,67 +40,67 @@
             <VerticalStackLayout Spacing="20">
 
                 <!-- Section: Theme / Erscheinungsbild -->
-                <Border BackgroundColor="{StaticResource Surface}"
+                <Border BackgroundColor="{DynamicResource Surface}"
                         Stroke="#2A2A2A"
                         StrokeThickness="1"
                         Padding="16"
                         StrokeShape="RoundRectangle 12">
                     <VerticalStackLayout Spacing="12">
                         <Label Text="🎨 Erscheinungsbild"
-                               TextColor="{StaticResource PrimaryAccent}"
+                               TextColor="{DynamicResource PrimaryAccent}"
                                FontSize="18"
                                FontAttributes="Bold" />
 
                         <Label Text="Waehle zwischen Dunkel- und Hellmodus."
-                               TextColor="{StaticResource TextSecondary}"
+                               TextColor="{DynamicResource TextSecondary}"
                                FontSize="13" />
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
                             <Label x:Name="ThemeModeLabel"
                                    Text="Dunkelmodus"
-                                   TextColor="{StaticResource TextPrimary}"
+                                   TextColor="{DynamicResource TextPrimary}"
                                    FontSize="16"
                                    VerticalOptions="Center" />
                             <Switch x:Name="ThemeSwitch"
                                     Grid.Column="1"
                                     Toggled="OnThemeToggled"
-                                    OnColor="{StaticResource PrimaryAccent}"
+                                    OnColor="{DynamicResource PrimaryAccent}"
                                     VerticalOptions="Center" />
                         </Grid>
                     </VerticalStackLayout>
                 </Border>
 
                 <!-- Section: Default Rest Timer -->
-                <Border BackgroundColor="{StaticResource Surface}"
+                <Border BackgroundColor="{DynamicResource Surface}"
                         Stroke="#2A2A2A"
                         StrokeThickness="1"
                         Padding="16"
                         StrokeShape="RoundRectangle 12">
                     <VerticalStackLayout Spacing="12">
                         <Label Text="⏱️ Standard-Pausenzeit"
-                               TextColor="{StaticResource PrimaryAccent}"
+                               TextColor="{DynamicResource PrimaryAccent}"
                                FontSize="18"
                                FontAttributes="Bold" />
 
                         <Label Text="Waehle die Standard-Pausenzeit zwischen Saetzen."
-                               TextColor="{StaticResource TextSecondary}"
+                               TextColor="{DynamicResource TextSecondary}"
                                FontSize="13" />
 
                         <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="8">
                             <Button x:Name="Timer30Btn" Grid.Column="0" Text="30s" Clicked="OnRestTimerChanged" CommandParameter="30"
-                                    BackgroundColor="#2A2A2A" TextColor="{StaticResource TextPrimary}" CornerRadius="8" />
+                                    BackgroundColor="#2A2A2A" TextColor="{DynamicResource TextPrimary}" CornerRadius="8" />
                             <Button x:Name="Timer60Btn" Grid.Column="1" Text="60s" Clicked="OnRestTimerChanged" CommandParameter="60"
-                                    BackgroundColor="{StaticResource PrimaryAccent}" TextColor="#000000" CornerRadius="8" FontAttributes="Bold" />
+                                    BackgroundColor="{DynamicResource PrimaryAccent}" TextColor="#000000" CornerRadius="8" FontAttributes="Bold" />
                             <Button x:Name="Timer90Btn" Grid.Column="2" Text="90s" Clicked="OnRestTimerChanged" CommandParameter="90"
-                                    BackgroundColor="#2A2A2A" TextColor="{StaticResource TextPrimary}" CornerRadius="8" />
+                                    BackgroundColor="#2A2A2A" TextColor="{DynamicResource TextPrimary}" CornerRadius="8" />
                             <Button x:Name="Timer120Btn" Grid.Column="3" Text="120s" Clicked="OnRestTimerChanged" CommandParameter="120"
-                                    BackgroundColor="#2A2A2A" TextColor="{StaticResource TextPrimary}" CornerRadius="8" />
+                                    BackgroundColor="#2A2A2A" TextColor="{DynamicResource TextPrimary}" CornerRadius="8" />
                         </Grid>
                     </VerticalStackLayout>
                 </Border>
 
                 <!-- Section: Danger Zone -->
-                <Border BackgroundColor="{StaticResource Surface}"
+                <Border BackgroundColor="{DynamicResource Surface}"
                         Stroke="#2A2A2A"
                         StrokeThickness="1"
                         Padding="16"
@@ -112,12 +112,12 @@
                                FontAttributes="Bold" />
 
                         <Label Text="Alle Daten zuruecksetzen"
-                               TextColor="{StaticResource TextPrimary}"
+                               TextColor="{DynamicResource TextPrimary}"
                                FontSize="16"
                                FontAttributes="Bold" />
 
                         <Label Text="Setzt die gesamte App zurueck: Alle Trainingsplaene, Workout-Verlauf, Statistiken und Uebungseintraege werden geloescht. Die Standard-Uebungen werden neu geladen."
-                               TextColor="{StaticResource TextSecondary}"
+                               TextColor="{DynamicResource TextSecondary}"
                                FontSize="13"
                                LineBreakMode="WordWrap" />
 
@@ -135,25 +135,25 @@
                 </Border>
 
                 <!-- Section: Info -->
-                <Border BackgroundColor="{StaticResource Surface}"
+                <Border BackgroundColor="{DynamicResource Surface}"
                         Stroke="#2A2A2A"
                         StrokeThickness="1"
                         Padding="16"
                         StrokeShape="RoundRectangle 12">
                     <VerticalStackLayout Spacing="8">
                         <Label Text="ℹ️ App-Info"
-                               TextColor="{StaticResource PrimaryAccent}"
+                               TextColor="{DynamicResource PrimaryAccent}"
                                FontSize="18"
                                FontAttributes="Bold" />
 
                         <Label x:Name="AppVersionLabel"
                                Text="Version: 1.0"
-                               TextColor="{StaticResource TextSecondary}"
+                               TextColor="{DynamicResource TextSecondary}"
                                FontSize="14" />
 
                         <Label x:Name="DbInfoLabel"
                                Text=""
-                               TextColor="{StaticResource TextSecondary}"
+                               TextColor="{DynamicResource TextSecondary}"
                                FontSize="14" />
                     </VerticalStackLayout>
                 </Border>

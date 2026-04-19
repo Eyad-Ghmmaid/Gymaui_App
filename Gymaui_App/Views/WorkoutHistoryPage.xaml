@@ -13,6 +13,7 @@
             x:Name="CustomHeader"
             Grid.Row="0"
             Title="Trainingstage"
+            IconSource="seven_days.png"
             ShowBackButton="False" />
 
         <Grid Grid.Row="1" Padding="12" RowDefinitions="Auto,*" BackgroundColor="#0D0D0D">
@@ -34,9 +35,8 @@
             </VerticalStackLayout>
 
             <CollectionView x:Name="DaysCollection"
-                            Grid.Row="1"
-                            SelectionMode="Single"
-                            SelectionChanged="OnDaySelected">
+                             Grid.Row="1"
+                             SelectionMode="None">
                 <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Border StrokeShape="RoundRectangle 12"
@@ -46,6 +46,7 @@
                                     Margin="0,6"
                                     BackgroundColor="#1A1A1A">
                                 <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnDayTapped" />
                                     <DropGestureRecognizer
                                         AllowDrop="True"
                                         DragOver="OnDragOver"

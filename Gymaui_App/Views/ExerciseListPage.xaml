@@ -13,6 +13,7 @@
 			x:Name="CustomHeader"
 			Grid.Row="0"
 			Title="Übungen"
+			IconSource="strength.png"
 			ShowBackButton="False" />
 
 		<!-- Search Bar with Add Button -->

@@ -72,22 +72,88 @@ namespace Gymaui_App.Views
             }
         }
 
-        private async void OnDaySelected(object? sender, SelectionChangedEventArgs e)
+        private async void OnDayTapped(object? sender, TappedEventArgs e)
         {
-            if (e.CurrentSelection.Count == 0)
+            var element = sender as Element;
+            var display = element?.BindingContext as PlanDayDisplay;
+
+            if (display == null)
                 return;
 
-            if (e.CurrentSelection[0] is PlanDayDisplay display && display.IsTrainingDay)
+            if (!display.IsTrainingDay)
             {
+                await DisplayAlert("Ruhetag", "Dies ist ein Ruhetag – keine Übungen vorhanden.", "OK");
+                return;
+            }
+
+            var activePlan = await _db.GetActivePlanAsync();
+            if (activePlan == null) return;
+
+            var action = await DisplayActionSheet(
+                display.DayName,
+                "Abbrechen",
+                null,
+                "Übungen ansehen",
+                "Training starten",
+                "Bearbeiten");
+
+            switch (action)
+            {
+                case "Übungen ansehen":
+                case "Bearbeiten":
+                    await Shell.Current.GoToAsync(
+                        $"{nameof(DayEditorPage)}?planId={activePlan.Id}&planDayId={display.PlanDayId}");
+                    break;
+
+                case "Training starten":
+                    await StartTrainingForDayAsync(activePlan.Id, display);
+                    break;
+            }
+        }
+
+        private async Task StartTrainingForDayAsync(int planId, PlanDayDisplay display)
+        {
+            try
+            {
+                var planExercises = await _db.GetExercisesForDayAsync(display.PlanDayId);
+                var allExercises = await _db.GetExercisesAsync();
+
+                var exercises = planExercises
+                    .OrderBy(pe => pe.Order)
+                    .Select(pe => allExercises.FirstOrDefault(ex => ex.Id == pe.ExerciseId))
+                    .OfType<Models.Exercise>()
+                    .ToList();
+
+                if (exercises.Count == 0)
+                {
+                    await DisplayAlert("Warnung", "Keine Übungen für diesen Tag vorhanden.", "OK");
+                    return;
+                }
+
+                var session = new Models.WorkoutSession
+                {
+                    Date = DateTime.UtcNow,
+                    Name = display.DayName,
+                    Exercises = exercises
+                };
+
+                await _db.AddWorkoutSessionAsync(session);
+
+                // Auto-adjust plan: update the plan's current day to this day
                 var activePlan = await _db.GetActivePlanAsync();
                 if (activePlan != null)
                 {
-                    await Shell.Current.GoToAsync(
-                        $"{nameof(DayEditorPage)}?planId={activePlan.Id}&planDayId={display.PlanDayId}");
+                    activePlan.CurrentDayIndex = display.PlanDay.Order;
+                    await _db.UpdatePlanAsync(activePlan);
                 }
-            }
 
-            ((CollectionView)sender!).SelectedItem = null;
+                AppShell.PendingWorkoutSessionId = session.Id;
+                await AppShell.NavigateToTab("workout");
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Fehler", $"Training konnte nicht gestartet werden: {ex.Message}", "OK");
+            }
         }
 
         private void OnDragStarting(object? sender, DragStartingEventArgs e)

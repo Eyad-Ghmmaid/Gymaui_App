@@ -12,6 +12,7 @@
 <converters:CompletionBackgroundConverter x:Key="CompletionBackgroundConverter" />
 <converters:CompletionTextConverter x:Key="CompletionTextConverter" />
 <converters:CompletionTextColorConverter x:Key="CompletionTextColorConverter" />
+<converters:InvertedBoolConverter x:Key="InvertedBoolConverter" />
 </ResourceDictionary>
 </ContentPage.Resources>
     <Grid RowDefinitions="auto,*" ColumnDefinitions="*">
@@ -21,6 +22,7 @@
             x:Name="CustomHeader"
             Grid.Row="0"
             Title="&#x1F4AA; Training"
+            IconSource="training.png"
             ShowBackButton="False" />
 
         <!-- Content -->
@@ -63,20 +65,38 @@
                                            VerticalOptions="Start" />
                                 </Grid>
 
-                                <!-- Done Button (Column 1) - bound to IsCompleted via converters -->
-                                <Button Grid.Column="1"
-                                        Text="{Binding IsCompleted, Converter={StaticResource CompletionTextConverter}}"
-                                        Clicked="OnExerciseCompletionToggled"
-                                        BackgroundColor="{Binding IsCompleted, Converter={StaticResource CompletionBackgroundConverter}}"
-                                        TextColor="{Binding IsCompleted, Converter={StaticResource CompletionTextColorConverter}}"
-                                        CornerRadius="16"
-                                        WidthRequest="36"
-                                        HeightRequest="36"
-                                        Padding="0"
-                                        FontSize="12"
-                                        FontAttributes="Bold"
-                                        VerticalOptions="Center"
-                                        HorizontalOptions="End" />
+                                <!-- Done Button (Column 1) -->
+                                <Grid Grid.Column="1"
+                                      WidthRequest="36"
+                                      HeightRequest="36"
+                                      VerticalOptions="Center"
+                                      HorizontalOptions="End">
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnExerciseCompletionToggled" />
+                                    </Grid.GestureRecognizers>
+
+                                    <!-- OK label (shown when NOT completed) -->
+                                    <Border StrokeShape="RoundRectangle 16"
+                                            BackgroundColor="#E8FF47"
+                                            StrokeThickness="0"
+                                            IsVisible="{Binding IsCompleted, Converter={StaticResource InvertedBoolConverter}}"
+                                            WidthRequest="36"
+                                            HeightRequest="36">
+                                        <Label Text="OK"
+                                               FontSize="12"
+                                               FontAttributes="Bold"
+                                               TextColor="#000000"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center" />
+                                    </Border>
+
+                                    <!-- Check mark image (shown when completed) -->
+                                    <Image Source="check_mark.png"
+                                           IsVisible="{Binding IsCompleted}"
+                                           WidthRequest="32"
+                                           HeightRequest="32"
+                                           Aspect="AspectFit" />
+                                </Grid>
                             </Grid>
                         </Border>
                     </DataTemplate>

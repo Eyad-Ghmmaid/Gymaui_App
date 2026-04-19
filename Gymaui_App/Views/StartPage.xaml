@@ -4,7 +4,7 @@ xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 xmlns:controls="clr-namespace:Gymaui_App.Controls"
 x:Class="Gymaui_App.Views.StartPage"
 Title="Startseite"
-BackgroundColor="{StaticResource BackgroundDark}"
+BackgroundColor="{DynamicResource BackgroundDark}"
 Padding="0">
 
     <Grid RowDefinitions="auto,*" ColumnDefinitions="*">
@@ -13,31 +13,32 @@ Padding="0">
         <controls:CustomHeader 
             x:Name="CustomHeader"
             Grid.Row="0"
-            Title="🏠 Startseite"
+            Title="Startseite"
+            IconSource="home.png"
             ShowBackButton="False" />
 
         <!-- Content with Pull-to-Refresh -->
         <RefreshView Grid.Row="1"
                      x:Name="MainRefreshView"
                      Refreshing="OnRefreshing"
-                     RefreshColor="{StaticResource PrimaryAccent}">
+                     RefreshColor="{DynamicResource PrimaryAccent}">
         <ScrollView>
         <VerticalStackLayout 
             Padding="20" 
             Spacing="16" 
-            BackgroundColor="{StaticResource BackgroundDark}">
+            BackgroundColor="{DynamicResource BackgroundDark}">
 
             <!-- Greeting & Motivation -->
             <VerticalStackLayout Spacing="4">
                 <Label x:Name="GreetingLabel" 
                        Text="Guten Tag! 💪" 
                        FontSize="26" 
-                       TextColor="{StaticResource TextPrimary}"
+                       TextColor="{DynamicResource TextPrimary}"
                        FontAttributes="Bold" />
                 <Label x:Name="MotivationLabel" 
                        Text="" 
                        FontSize="14" 
-                       TextColor="{StaticResource TextSecondary}"
+                       TextColor="{DynamicResource TextSecondary}"
                        FontAttributes="Italic" />
             </VerticalStackLayout>
 
@@ -45,7 +46,7 @@ Padding="0">
             <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
                 <!-- Streak Card -->
                 <Border Grid.Column="0"
-                        BackgroundColor="{StaticResource Surface}"
+                        BackgroundColor="{DynamicResource Surface}"
                         Stroke="#2A2A2A"
                         StrokeThickness="1"
                         Padding="12"
@@ -59,18 +60,18 @@ Padding="0">
                                Text="0" 
                                FontSize="22" 
                                FontAttributes="Bold"
-                               TextColor="{StaticResource PrimaryAccent}"
+                               TextColor="{DynamicResource PrimaryAccent}"
                                HorizontalTextAlignment="Center" />
                         <Label Text="Serie" 
                         FontSize="11" 
-                        TextColor="{StaticResource TextSecondary}"
+                        TextColor="{DynamicResource TextSecondary}"
                         HorizontalTextAlignment="Center" />
                     </VerticalStackLayout>
                 </Border>
 
                 <!-- Total Workouts Card -->
                 <Border Grid.Column="1"
-                        BackgroundColor="{StaticResource Surface}"
+                        BackgroundColor="{DynamicResource Surface}"
                         Stroke="#2A2A2A"
                         StrokeThickness="1"
                         Padding="12"
@@ -83,19 +84,19 @@ Padding="0">
                                Text="0" 
                                FontSize="22" 
                                FontAttributes="Bold"
-                               TextColor="{StaticResource PrimaryAccent}"
+                               TextColor="{DynamicResource PrimaryAccent}"
                                HorizontalTextAlignment="Center" />
                         <Label x:Name="TrainingsSubLabel"
                                Text="Trainings" 
                                FontSize="11" 
-                               TextColor="{StaticResource TextSecondary}"
+                               TextColor="{DynamicResource TextSecondary}"
                                HorizontalTextAlignment="Center" />
                     </VerticalStackLayout>
                 </Border>
 
                 <!-- Active Plan Card -->
                 <Border Grid.Column="2"
-                        BackgroundColor="{StaticResource Surface}"
+                        BackgroundColor="{DynamicResource Surface}"
                         Stroke="#2A2A2A"
                         StrokeThickness="1"
                         Padding="12"
@@ -108,20 +109,20 @@ Padding="0">
                                Text="-" 
                                FontSize="14" 
                                FontAttributes="Bold"
-                               TextColor="{StaticResource PrimaryAccent}"
+                               TextColor="{DynamicResource PrimaryAccent}"
                                HorizontalTextAlignment="Center"
                                LineBreakMode="TailTruncation"
                                MaxLines="1" />
                         <Label Text="Plan" 
                                FontSize="11" 
-                               TextColor="{StaticResource TextSecondary}"
+                               TextColor="{DynamicResource TextSecondary}"
                                HorizontalTextAlignment="Center" />
                     </VerticalStackLayout>
                 </Border>
             </Grid>
 
             <!-- Weekly Progress Bar -->
-            <Border BackgroundColor="{StaticResource Surface}"
+            <Border BackgroundColor="{DynamicResource Surface}"
                     Stroke="#2A2A2A"
                     StrokeThickness="1"
                     Padding="16"
@@ -130,7 +131,7 @@ Padding="0">
                     <Label Text="Diese Woche" 
                            FontSize="15" 
                            FontAttributes="Bold"
-                           TextColor="{StaticResource TextPrimary}" />
+                           TextColor="{DynamicResource TextPrimary}" />
                     <Grid x:Name="WeeklyProgressGrid"
                           ColumnDefinitions="*,*,*,*,*,*,*" 
                           ColumnSpacing="8"
@@ -138,13 +139,13 @@ Padding="0">
                         <!-- Dynamically filled -->
                     </Grid>
                     <Grid ColumnDefinitions="*,*,*,*,*,*,*" ColumnSpacing="8">
-                        <Label Grid.Column="0" Text="Mo" FontSize="10" TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="Center" />
-                        <Label Grid.Column="1" Text="Di" FontSize="10" TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="Center" />
-                        <Label Grid.Column="2" Text="Mi" FontSize="10" TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="Center" />
-                        <Label Grid.Column="3" Text="Do" FontSize="10" TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="Center" />
-                        <Label Grid.Column="4" Text="Fr" FontSize="10" TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="Center" />
-                        <Label Grid.Column="5" Text="Sa" FontSize="10" TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="Center" />
-                        <Label Grid.Column="6" Text="So" FontSize="10" TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="Center" />
+                        <Label Grid.Column="0" Text="Mo" FontSize="10" TextColor="{DynamicResource TextSecondary}" HorizontalTextAlignment="Center" />
+                        <Label Grid.Column="1" Text="Di" FontSize="10" TextColor="{DynamicResource TextSecondary}" HorizontalTextAlignment="Center" />
+                        <Label Grid.Column="2" Text="Mi" FontSize="10" TextColor="{DynamicResource TextSecondary}" HorizontalTextAlignment="Center" />
+                        <Label Grid.Column="3" Text="Do" FontSize="10" TextColor="{DynamicResource TextSecondary}" HorizontalTextAlignment="Center" />
+                        <Label Grid.Column="4" Text="Fr" FontSize="10" TextColor="{DynamicResource TextSecondary}" HorizontalTextAlignment="Center" />
+                        <Label Grid.Column="5" Text="Sa" FontSize="10" TextColor="{DynamicResource TextSecondary}" HorizontalTextAlignment="Center" />
+                        <Label Grid.Column="6" Text="So" FontSize="10" TextColor="{DynamicResource TextSecondary}" HorizontalTextAlignment="Center" />
                     </Grid>
                 </VerticalStackLayout>
             </Border>
@@ -153,12 +154,12 @@ Padding="0">
                    Text="" 
                    FontSize="15" 
                    HorizontalOptions="Center"
-                   TextColor="{StaticResource TextSecondary}"
+                   TextColor="{DynamicResource TextSecondary}"
                    IsVisible="False" />
 
             <!-- No Plan State -->
             <Border x:Name="NoPlanLayout"
-                    BackgroundColor="{StaticResource Surface}"
+                    BackgroundColor="{DynamicResource Surface}"
                     Stroke="#2A2A2A"
                     StrokeThickness="1"
                     Padding="24"
@@ -169,15 +170,15 @@ Padding="0">
                     <Label Text="Kein Trainingsplan aktiv" 
                            FontSize="18"
                            FontAttributes="Bold"
-                           TextColor="{StaticResource TextPrimary}"
+                           TextColor="{DynamicResource TextPrimary}"
                            HorizontalTextAlignment="Center" />
                     <Label Text="Erstelle deinen ersten Plan und starte dein Training!" 
                            FontSize="14"
-                           TextColor="{StaticResource TextSecondary}"
+                           TextColor="{DynamicResource TextSecondary}"
                            HorizontalTextAlignment="Center" />
                     <Button Text="Trainingsplan erstellen →" 
                             Clicked="OnCreatePlanClicked" 
-                            BackgroundColor="{StaticResource PrimaryAccent}"
+                            BackgroundColor="{DynamicResource PrimaryAccent}"
                             TextColor="#000000"
                             FontAttributes="Bold"
                             CornerRadius="8"
@@ -191,7 +192,7 @@ Padding="0">
                 
                 <!-- Today's Workout Card -->
                 <Border Padding="16" 
-                        BackgroundColor="{StaticResource Surface}" 
+                        BackgroundColor="{DynamicResource Surface}" 
                         Stroke="#2A2A2A" 
                         StrokeThickness="1"
                         StrokeShape="RoundRectangle 12">
@@ -201,10 +202,10 @@ Padding="0">
                                    x:Name="TodayLabel" 
                                    FontSize="16" 
                                    FontAttributes="Bold"
-                                   TextColor="{StaticResource TextPrimary}" />
+                                   TextColor="{DynamicResource TextPrimary}" />
                             <Border Grid.Column="1"
                                     x:Name="TodayBadge"
-                                    BackgroundColor="{StaticResource PrimaryAccent}"
+                                    BackgroundColor="{DynamicResource PrimaryAccent}"
                                     StrokeShape="RoundRectangle 10"
                                     StrokeThickness="0"
                                     Padding="10,4">
@@ -217,7 +218,7 @@ Padding="0">
 
                         <Label x:Name="PlanNameLabel"
                                FontSize="13"
-                               TextColor="{StaticResource TextSecondary}" />
+                               TextColor="{DynamicResource TextSecondary}" />
 
                         <CollectionView x:Name="TodayExercisesCollection" 
                                         SelectionMode="None"
@@ -227,12 +228,12 @@ Padding="0">
                                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" Padding="4,3">
                                         <Label Grid.Column="0" 
                                                Text="•" 
-                                               TextColor="{StaticResource PrimaryAccent}"
+                                               TextColor="{DynamicResource PrimaryAccent}"
                                                FontSize="16"
                                                VerticalTextAlignment="Center" />
                                         <Label Grid.Column="1"
                                                Text="{Binding Name}"
-                                               TextColor="{StaticResource TextPrimary}"
+                                               TextColor="{DynamicResource TextPrimary}"
                                                FontSize="14"
                                                VerticalTextAlignment="Center" />
                                     </Grid>
@@ -243,7 +244,7 @@ Padding="0">
                         <Button x:Name="StartTrainingButton" 
                                 Text="🚀 Training starten" 
                                 Clicked="OnStartTrainingClicked"
-                                BackgroundColor="{StaticResource PrimaryAccent}"
+                                BackgroundColor="{DynamicResource PrimaryAccent}"
                                 TextColor="#000000"
                                 FontAttributes="Bold"
                                 FontSize="16"
@@ -255,7 +256,7 @@ Padding="0">
 
             <!-- Calendar Section -->
             <Border Padding="12" 
-                    BackgroundColor="{StaticResource Surface}" 
+                    BackgroundColor="{DynamicResource Surface}" 
                     Stroke="#2A2A2A" 
                     StrokeThickness="1"
                     StrokeShape="RoundRectangle 12">
@@ -266,8 +267,8 @@ Padding="0">
                         <Button Grid.Column="0"
                                 ImageSource="arrow_leftt" 
                                 Clicked="OnPreviousMonthClicked"
-                                BackgroundColor="{StaticResource Surface}"
-                                TextColor="{StaticResource PrimaryAccent}"
+                                BackgroundColor="{DynamicResource Surface}"
+                                TextColor="{DynamicResource PrimaryAccent}"
                                 FontSize="18"
                                 Padding="8,4"
                                 WidthRequest="40" />
@@ -276,14 +277,14 @@ Padding="0">
                                Text="Januar 2025"
                                HorizontalTextAlignment="Center"
                                VerticalTextAlignment="Center"
-                               TextColor="{StaticResource PrimaryAccent}"
+                               TextColor="{DynamicResource PrimaryAccent}"
                                FontSize="16"
                                FontAttributes="Bold" />
                         <Button Grid.Column="2"
                                 ImageSource="arrow_rightt"
                                 Clicked="OnNextMonthClicked"
-                                BackgroundColor="{StaticResource Surface}"
-                                TextColor="{StaticResource PrimaryAccent}"
+                                BackgroundColor="{DynamicResource Surface}"
+                                TextColor="{DynamicResource PrimaryAccent}"
                                 FontSize="18"
                                 Padding="8,4"
                                 WidthRequest="40" />
@@ -291,13 +292,13 @@ Padding="0">
 
                     <!-- Day Headers -->
                     <Grid ColumnDefinitions="*,*,*,*,*,*,*" RowDefinitions="auto" ColumnSpacing="4" RowSpacing="4">
-                        <Label Grid.Column="0" Text="Mo" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="Center" FontSize="12" />
-                        <Label Grid.Column="1" Text="Di" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="Center" FontSize="12" />
-                        <Label Grid.Column="2" Text="Mi" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="Center" FontSize="12" />
-                        <Label Grid.Column="3" Text="Do" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="Center" FontSize="12" />
-                        <Label Grid.Column="4" Text="Fr" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="Center" FontSize="12" />
-                        <Label Grid.Column="5" Text="Sa" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="Center" FontSize="12" />
-                        <Label Grid.Column="6" Text="So" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="Center" FontSize="12" />
+                        <Label Grid.Column="0" Text="Mo" FontAttributes="Bold" TextColor="{DynamicResource TextSecondary}" HorizontalTextAlignment="Center" FontSize="12" />
+                        <Label Grid.Column="1" Text="Di" FontAttributes="Bold" TextColor="{DynamicResource TextSecondary}" HorizontalTextAlignment="Center" FontSize="12" />
+                        <Label Grid.Column="2" Text="Mi" FontAttributes="Bold" TextColor="{DynamicResource TextSecondary}" HorizontalTextAlignment="Center" FontSize="12" />
+                        <Label Grid.Column="3" Text="Do" FontAttributes="Bold" TextColor="{DynamicResource TextSecondary}" HorizontalTextAlignment="Center" FontSize="12" />
+                        <Label Grid.Column="4" Text="Fr" FontAttributes="Bold" TextColor="{DynamicResource TextSecondary}" HorizontalTextAlignment="Center" FontSize="12" />
+                        <Label Grid.Column="5" Text="Sa" FontAttributes="Bold" TextColor="{DynamicResource TextSecondary}" HorizontalTextAlignment="Center" FontSize="12" />
+                        <Label Grid.Column="6" Text="So" FontAttributes="Bold" TextColor="{DynamicResource TextSecondary}" HorizontalTextAlignment="Center" FontSize="12" />
                     </Grid>
 
                     <!-- Calendar Days Grid -->
@@ -311,19 +312,19 @@ Padding="0">
                     <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="4" Margin="0,8,0,0">
                         <HorizontalStackLayout Grid.Column="0" Spacing="4" HorizontalOptions="Center">
                             <BoxView WidthRequest="10" HeightRequest="10" Color="#00AA00" CornerRadius="2" VerticalOptions="Center" />
-                            <Label Text="Fertig" TextColor="{StaticResource TextSecondary}" FontSize="10" VerticalOptions="Center" />
+                            <Label Text="Fertig" TextColor="{DynamicResource TextSecondary}" FontSize="10" VerticalOptions="Center" />
                         </HorizontalStackLayout>
                         <HorizontalStackLayout Grid.Column="1" Spacing="4" HorizontalOptions="Center">
                             <BoxView WidthRequest="10" HeightRequest="10" Color="#CC0000" CornerRadius="2" VerticalOptions="Center" />
-                            <Label Text="Verpasst" TextColor="{StaticResource TextSecondary}" FontSize="10" VerticalOptions="Center" />
+                            <Label Text="Verpasst" TextColor="{DynamicResource TextSecondary}" FontSize="10" VerticalOptions="Center" />
                         </HorizontalStackLayout>
                         <HorizontalStackLayout Grid.Column="2" Spacing="4" HorizontalOptions="Center">
                             <BoxView WidthRequest="10" HeightRequest="10" Color="#0066FF" CornerRadius="2" VerticalOptions="Center" />
-                            <Label Text="Ruhe" TextColor="{StaticResource TextSecondary}" FontSize="10" VerticalOptions="Center" />
+                            <Label Text="Ruhe" TextColor="{DynamicResource TextSecondary}" FontSize="10" VerticalOptions="Center" />
                         </HorizontalStackLayout>
                         <HorizontalStackLayout Grid.Column="3" Spacing="4" HorizontalOptions="Center">
                             <BoxView WidthRequest="10" HeightRequest="10" Color="#444444" CornerRadius="2" VerticalOptions="Center" />
-                            <Label Text="Offen" TextColor="{StaticResource TextSecondary}" FontSize="10" VerticalOptions="Center" />
+                            <Label Text="Offen" TextColor="{DynamicResource TextSecondary}" FontSize="10" VerticalOptions="Center" />
                         </HorizontalStackLayout>
                     </Grid>
 

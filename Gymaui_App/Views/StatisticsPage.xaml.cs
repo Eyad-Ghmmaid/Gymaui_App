@@ -41,11 +41,9 @@ namespace Gymaui_App.Views
                     _exercise = await _databaseService.GetExerciseAsync(id);
                     if (_exercise != null)
                     {
-                        var index = _allExercises.FindIndex(e => e.Id == _exercise.Id);
-                        if (index >= 0)
-                        {
-                            ExercisePicker!.SelectedIndex = index;
-                        }
+                        ExerciseNameLabel.Text = _exercise.Name;
+                        ExerciseSearchBar.Text = _exercise.Name;
+                        await LoadAndRenderAsync();
                     }
                 }
             }
@@ -60,10 +58,6 @@ namespace Gymaui_App.Views
             try
             {
                 _allExercises = await _databaseService.GetExercisesAsync();
-                if (ExercisePicker != null)
-                {
-                    ExercisePicker.ItemsSource = _allExercises.Select(e => e.Name).ToList();
-                }
             }
             catch (Exception ex)
             {
@@ -71,17 +65,34 @@ namespace Gymaui_App.Views
             }
         }
 
-        private async void OnExerciseSelected(object? sender, EventArgs e)
+        private void OnSearchTextChanged(object? sender, TextChangedEventArgs e)
+        {
+            var searchText = e.NewTextValue?.Trim() ?? string.Empty;
+            if (string.IsNullOrEmpty(searchText))
+            {
+                ExerciseSearchResults.IsVisible = false;
+                return;
+            }
+
+            var filtered = _allExercises
+                .Where(ex => ex.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            ExerciseSearchResults.ItemsSource = filtered;
+            ExerciseSearchResults.IsVisible = filtered.Count > 0;
+        }
+
+        private async void OnExerciseTapped(object? sender, TappedEventArgs e)
         {
             try
             {
-                if (ExercisePicker != null && ExercisePicker.SelectedIndex >= 0 && ExercisePicker.SelectedIndex < _allExercises.Count)
+                var element = sender as Element;
+                if (element?.BindingContext is Exercise selected)
                 {
-                    _exercise = _allExercises[ExercisePicker.SelectedIndex];
-                    if (ExerciseNameLabel != null)
-                    {
-                        ExerciseNameLabel.Text = _exercise.Name;
-                    }
+                    _exercise = selected;
+                    ExerciseNameLabel.Text = _exercise.Name;
+                    ExerciseSearchBar.Text = _exercise.Name;
+                    ExerciseSearchResults.IsVisible = false;
                     await LoadAndRenderAsync();
                 }
             }

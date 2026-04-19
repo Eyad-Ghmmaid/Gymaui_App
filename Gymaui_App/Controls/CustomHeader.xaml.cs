@@ -38,6 +38,22 @@ namespace Gymaui_App.Controls
                 }
             });
 
+        public static readonly BindableProperty IconSourceProperty = BindableProperty.Create(
+            nameof(IconSource),
+            typeof(string),
+            typeof(CustomHeader),
+            "calendar.png",
+            propertyChanged: (bindable, oldValue, newValue) =>
+            {
+                if (bindable is CustomHeader header && newValue is string source)
+                {
+                    if (header.IconLabel != null)
+                    {
+                        header.IconLabel.Source = source;
+                    }
+                }
+            });
+
         public static readonly BindableProperty ShowSearchProperty = BindableProperty.Create(
             nameof(ShowSearch),
             typeof(bool),
@@ -70,6 +86,12 @@ namespace Gymaui_App.Controls
         {
             get => (bool)GetValue(ShowSearchProperty);
             set => SetValue(ShowSearchProperty, value);
+        }
+
+        public string IconSource
+        {
+            get => (string)GetValue(IconSourceProperty);
+            set => SetValue(IconSourceProperty, value);
         }
 
         public CustomHeader()

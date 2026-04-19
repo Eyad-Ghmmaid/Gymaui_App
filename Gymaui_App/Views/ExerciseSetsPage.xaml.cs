@@ -203,13 +203,26 @@ namespace Gymaui_App.Views
             if (!string.IsNullOrWhiteSpace(lastNote))
                 NotesEditor.Text = lastNote;
 
-            // Show previous notes
+            // Show previous notes (max 5, delete oldest if more)
             var previousNotes = allLogs
                 .Where(l => !string.IsNullOrWhiteSpace(l.Notes))
                 .GroupBy(l => l.Notes)
                 .Select(g => g.First())
-                .Take(5)
+                .OrderByDescending(l => l.Timestamp)
                 .ToList();
+
+            // Enforce max 5 notes: delete oldest if exceeded
+            if (previousNotes.Count > 5)
+            {
+                var toDelete = previousNotes.Skip(5).ToList();
+                foreach (var old in toDelete)
+                {
+                    old.Notes = string.Empty;
+                    await _databaseService.UpdateExerciseLogAsync(old);
+                }
+                previousNotes = previousNotes.Take(5).ToList();
+            }
+
             if (previousNotes.Count > 0)
             {
                 PreviousNotesHeader.IsVisible = true;
@@ -343,6 +356,39 @@ namespace Gymaui_App.Views
                 await _databaseService.UpdateExerciseLogAsync(log);
                 await RefreshPreviousLogsAsync();
             }
+        }
+
+        private async void OnDeleteNoteSwipe(object? sender, EventArgs e)
+        {
+            if (sender is SwipeItem swipeItem && swipeItem.CommandParameter is ExerciseLog log)
+            {
+                var confirm = await DisplayAlert("Notiz löschen", $"Notiz '{log.Notes}' wirklich löschen?", "Ja", "Nein");
+                if (!confirm) return;
+
+                // Clear the note text from the log
+                log.Notes = string.Empty;
+                await _databaseService.UpdateExerciseLogAsync(log);
+
+                // Refresh notes display
+                await RefreshPreviousNotesAsync();
+            }
+        }
+
+        private async Task RefreshPreviousNotesAsync()
+        {
+            var logs = await _databaseService.GetLogsForExerciseAsync(_exercise.Id);
+            var allLogs = logs.OrderByDescending(l => l.Timestamp).ToList();
+            var previousNotes = allLogs
+                .Where(l => !string.IsNullOrWhiteSpace(l.Notes))
+                .GroupBy(l => l.Notes)
+                .Select(g => g.First())
+                .OrderByDescending(l => l.Timestamp)
+                .Take(5)
+                .ToList();
+
+            PreviousNotesHeader.IsVisible = previousNotes.Count > 0;
+            PreviousNotesCollection.IsVisible = previousNotes.Count > 0;
+            PreviousNotesCollection.ItemsSource = previousNotes;
         }
 
         private async void OnDeleteLogSwipe(object? sender, EventArgs e)

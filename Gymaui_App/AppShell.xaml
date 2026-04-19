@@ -7,7 +7,11 @@
     xmlns:views="clr-namespace:Gymaui_App.Views"
     xmlns:controls="clr-namespace:Gymaui_App.Controls"
     Title="Gymaui_App"
-    BackgroundColor="#0D0D0D">
+    BackgroundColor="{DynamicResource BackgroundDark}"
+    Shell.TabBarBackgroundColor="{DynamicResource Surface}"
+    Shell.TabBarTitleColor="{DynamicResource PrimaryAccent}"
+    Shell.TabBarUnselectedColor="{DynamicResource TextSecondary}"
+    Shell.TabBarForegroundColor="{DynamicResource PrimaryAccent}">
 
     <Shell.Resources>
         <ResourceDictionary>
@@ -27,14 +31,16 @@
     <TabBar>
         <ShellContent
             x:Name="HomeTab"
-            Title="🏠 Start"
+            Title="Start"
+            Icon="home.png"
             ContentTemplate="{DataTemplate views:StartPage}"
             Route="home" />
 
         <!-- Tab 2: Workout → ActiveWorkoutPage -->
         <ShellContent
             x:Name="WorkoutTab"
-            Title="💪 Training"
+            Title="Training"
+            Icon="training.png"
             ContentTemplate="{DataTemplate views:ActiveWorkoutPage}"
             Route="workout" />
 
@@ -42,42 +48,48 @@
         <!-- Tab 3: Pläne → PlansPage -->
         <ShellContent
             x:Name="PlansTab"
-            Title="📋 Pläne"
+            Title="Pläne"
+            Icon="plaene.png"
             ContentTemplate="{DataTemplate views:PlansPage}"
             Route="plans" />
 
         <!-- Tab 4: Trainingstage → WorkoutHistoryPage -->
         <ShellContent
             x:Name="HistoryTab"
-            Title="📅 Tage"
+            Title="Tage"
+            Icon="seven_days.png"
             ContentTemplate="{DataTemplate views:WorkoutHistoryPage}"
             Route="history" />
 
         <!-- Tab 5: Calendar → CalendarPage -->
         <ShellContent
             x:Name="CalendarTab"
-            Title="📅 Kalender"
+            Title="Kalender"
+            Icon="calendar.png"
             ContentTemplate="{DataTemplate views:CalendarPage}"
             Route="calendar" />
 
         <!-- Tab 5: Stats → StatisticsPage -->
         <ShellContent
             x:Name="StatsTab"
-            Title="📊 Statistik"
+            Title="Statistik"
+            Icon="statistics.png"
             ContentTemplate="{DataTemplate views:StatisticsPage}"
             Route="stats" />
 
     <!-- Tab 6: Exercises → ExerciseListPage -->
         <ShellContent
             x:Name="ExercisesTab"
-            Title="🏋️ Übungen"
+            Title="Übungen"
+            Icon="strength.png"
             ContentTemplate="{DataTemplate views:ExerciseListPage}"
             Route="exercises" />
 
     <!-- Tab 8: Help → HelpPage -->
         <ShellContent
             x:Name="HelpTab"
-            Title="❓ Hilfe"
+            Title="Hilfe"
+            Icon="help.png"
             ContentTemplate="{DataTemplate views:HelpPage}"
             Route="help" />
     </TabBar>

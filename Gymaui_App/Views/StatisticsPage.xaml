@@ -4,7 +4,7 @@
              xmlns:controls="clr-namespace:Gymaui_App.Controls"
              x:Class="Gymaui_App.Views.StatisticsPage"
              Title="Statistiken"
-             BackgroundColor="{StaticResource BackgroundDark}"
+             BackgroundColor="{DynamicResource BackgroundDark}"
              Padding="0">
 
     <Grid RowDefinitions="auto,*" ColumnDefinitions="*">
@@ -12,78 +12,98 @@
         <controls:CustomHeader 
             x:Name="CustomHeader"
             Grid.Row="0"
-            Title="📊 Statistiken"
+            Title="Statistiken"
+            IconSource="statistics.png"
             ShowBackButton="False" />
 
         <RefreshView Grid.Row="1"
                      x:Name="StatsRefreshView"
                      Refreshing="OnRefreshClicked"
-                     RefreshColor="{StaticResource PrimaryAccent}">
+                     RefreshColor="{DynamicResource PrimaryAccent}">
         <ScrollView>
-            <VerticalStackLayout Padding="12" Spacing="12" BackgroundColor="{StaticResource BackgroundDark}">
+            <VerticalStackLayout Padding="12" Spacing="12" BackgroundColor="{DynamicResource BackgroundDark}">
                 
-                <Label Text="Uebung auswaehlen:" FontSize="14" TextColor="{StaticResource TextPrimary}" FontAttributes="Bold" />
-                <Picker x:Name="ExercisePicker" 
-                        Title="Uebung waehlen..."
-                        BackgroundColor="{StaticResource Surface}"
-                        TextColor="{StaticResource PrimaryAccent}"
-                        TitleColor="{StaticResource TextSecondary}"
-                        SelectedIndexChanged="OnExerciseSelected" />
+                <Label Text="Übung auswaehlen:" FontSize="14" TextColor="{DynamicResource TextPrimary}" FontAttributes="Bold" />
+
+                <!-- Search + Exercise Picker -->
+                <SearchBar x:Name="ExerciseSearchBar"
+                           Placeholder="Uebung suchen..."
+                           BackgroundColor="{DynamicResource Surface2}"
+                           TextColor="{DynamicResource TextPrimary}"
+                           PlaceholderColor="{DynamicResource TextSecondary}"
+                           CancelButtonColor="{DynamicResource PrimaryAccent}"
+                           TextChanged="OnSearchTextChanged" />
+
+                <CollectionView x:Name="ExerciseSearchResults"
+                                SelectionMode="None"
+                                MaximumHeightRequest="200"
+                                IsVisible="False">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border BackgroundColor="Transparent" Stroke="Transparent" Padding="12,10">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnExerciseTapped" />
+                                </Border.GestureRecognizers>
+                                <Label Text="{Binding Name}" FontSize="14" TextColor="{DynamicResource TextPrimary}" />
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
                 <Label x:Name="ExerciseNameLabel" 
                        Text="Keine Uebung gewaehlt"
-                       TextColor="{StaticResource PrimaryAccent}" 
+                       TextColor="{DynamicResource PrimaryAccent}" 
                        FontAttributes="Bold"
                        FontSize="18" />
 
                 <!-- Stats Cards Row 1 -->
                 <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="8" RowSpacing="8">
                     <Border Grid.Column="0" Grid.Row="0"
-                            BackgroundColor="{StaticResource Surface}"
+                            BackgroundColor="{DynamicResource Surface}"
                             Stroke="#2A2A2A"
                             StrokeThickness="1"
                             Padding="12"
                             StrokeShape="RoundRectangle 8,8,8,8">
                         <VerticalStackLayout Spacing="4">
-                            <Label Text="🏆 Max Gewicht" FontSize="12" TextColor="{StaticResource TextSecondary}" />
-                            <Label x:Name="MaxWeightLabel" Text="-" FontSize="20" TextColor="{StaticResource PrimaryAccent}" FontAttributes="Bold" />
+                            <Label Text="Max Gewicht" FontSize="12" TextColor="{DynamicResource TextSecondary}" />
+                            <Label x:Name="MaxWeightLabel" Text="-" FontSize="20" TextColor="{DynamicResource PrimaryAccent}" FontAttributes="Bold" />
                         </VerticalStackLayout>
                     </Border>
 
                     <Border Grid.Column="1" Grid.Row="0"
-                            BackgroundColor="{StaticResource Surface}"
+                            BackgroundColor="{DynamicResource Surface}"
                             Stroke="#2A2A2A"
                             StrokeThickness="1"
                             Padding="12"
                             StrokeShape="RoundRectangle 8,8,8,8">
                         <VerticalStackLayout Spacing="4">
-                            <Label Text="📈 Durchschnitt" FontSize="12" TextColor="{StaticResource TextSecondary}" />
-                            <Label x:Name="AvgWeightLabel" Text="-" FontSize="20" TextColor="{StaticResource PrimaryAccent}" FontAttributes="Bold" />
+                            <Label Text="Durchschnitt" FontSize="12" TextColor="{DynamicResource TextSecondary}" />
+                            <Label x:Name="AvgWeightLabel" Text="-" FontSize="20" TextColor="{DynamicResource PrimaryAccent}" FontAttributes="Bold" />
                         </VerticalStackLayout>
                     </Border>
 
                     <!-- Stats Cards Row 2 -->
                     <Border Grid.Column="0" Grid.Row="1"
-                            BackgroundColor="{StaticResource Surface}"
+                            BackgroundColor="{DynamicResource Surface}"
                             Stroke="#2A2A2A"
                             StrokeThickness="1"
                             Padding="12"
                             StrokeShape="RoundRectangle 8,8,8,8">
                         <VerticalStackLayout Spacing="4">
-                            <Label Text="📋 Einträge" FontSize="12" TextColor="{StaticResource TextSecondary}" />
-                            <Label x:Name="EntryCountLabel" Text="0" FontSize="20" TextColor="{StaticResource PrimaryAccent}" FontAttributes="Bold" />
+                            <Label Text="Einträge" FontSize="12" TextColor="{DynamicResource TextSecondary}" />
+                            <Label x:Name="EntryCountLabel" Text="0" FontSize="20" TextColor="{DynamicResource PrimaryAccent}" FontAttributes="Bold" />
                         </VerticalStackLayout>
                     </Border>
 
                     <Border Grid.Column="1" Grid.Row="1"
-                            BackgroundColor="{StaticResource Surface}"
+                            BackgroundColor="{DynamicResource Surface}"
                             Stroke="#2A2A2A"
                             StrokeThickness="1"
                             Padding="12"
                             StrokeShape="RoundRectangle 8,8,8,8">
                         <VerticalStackLayout Spacing="4">
-                            <Label Text="📅 Letzter Eintrag" FontSize="12" TextColor="{StaticResource TextSecondary}" />
-                            <Label x:Name="LastDateLabel" Text="-" FontSize="16" TextColor="{StaticResource PrimaryAccent}" FontAttributes="Bold" />
+                            <Label Text="Letzter Eintrag" FontSize="12" TextColor="{DynamicResource TextSecondary}" />
+                            <Label x:Name="LastDateLabel" Text="-" FontSize="16" TextColor="{DynamicResource PrimaryAccent}" FontAttributes="Bold" />
                         </VerticalStackLayout>
                     </Border>
 
@@ -98,13 +118,13 @@
                         StrokeShape="RoundRectangle 8,8,8,8"
                         IsVisible="False">
                     <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
-                        <Label Text="🏆" FontSize="20" VerticalOptions="Center" />
+                        <Label Text="ðŸ†" FontSize="20" VerticalOptions="Center" />
                         <Label x:Name="PRLabel" Text="" FontSize="14" TextColor="#00AA00" FontAttributes="Bold" VerticalOptions="Center" />
                     </HorizontalStackLayout>
                 </Border>
 
-                <Label Text="Gewichtsverlauf" FontSize="14" TextColor="{StaticResource TextPrimary}" FontAttributes="Bold" Margin="0,8,0,0" />
-                <Border BackgroundColor="{StaticResource Surface}"
+                <Label Text="Gewichtsverlauf" FontSize="14" TextColor="{DynamicResource TextPrimary}" FontAttributes="Bold" Margin="0,8,0,0" />
+                <Border BackgroundColor="{DynamicResource Surface}"
                         Stroke="#2A2A2A"
                         StrokeThickness="1"
                         Padding="0"
@@ -116,7 +136,7 @@
                 <Label x:Name="NoDataLabel"
                        Text="Keine Daten vorhanden. Trainiere um Statistiken zu sehen."
                        FontSize="14"
-                       TextColor="{StaticResource TextSecondary}"
+                       TextColor="{DynamicResource TextSecondary}"
                        HorizontalTextAlignment="Center"
                        IsVisible="False"
                        Margin="0,12,0,0" />

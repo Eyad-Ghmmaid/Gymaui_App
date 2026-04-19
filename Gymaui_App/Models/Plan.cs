@@ -14,5 +14,8 @@ namespace Gymaui_App.Models
 
         // mark which plan is currently active
         public bool IsActive { get; set; }
+
+        // tracks which day the user is currently on in the plan
+        public int CurrentDayIndex { get; set; }
     }
 }

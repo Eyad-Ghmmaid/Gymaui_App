@@ -95,6 +95,20 @@ namespace Gymaui_App.Services
                 resources["PrimaryBrush"] = new SolidColorBrush(primaryColor);
             else
                 SetInMergedDictionaries(resources, "PrimaryBrush", new SolidColorBrush(primaryColor));
+
+            // Update Shell tab bar colors
+            if (Shell.Current != null)
+            {
+                var bgColor = Color.FromArgb(colors["Surface"]);
+                var textColor = Color.FromArgb(colors["PrimaryAccent"]);
+                var unselectedColor = Color.FromArgb(colors["TextSecondary"]);
+
+                Shell.SetTabBarBackgroundColor(Shell.Current, bgColor);
+                Shell.SetTabBarTitleColor(Shell.Current, textColor);
+                Shell.SetTabBarForegroundColor(Shell.Current, textColor);
+                Shell.SetTabBarUnselectedColor(Shell.Current, unselectedColor);
+                Shell.Current.BackgroundColor = Color.FromArgb(colors["BackgroundDark"]);
+            }
         }
 
         private static void SetInMergedDictionaries(ResourceDictionary resources, string key, object value)
