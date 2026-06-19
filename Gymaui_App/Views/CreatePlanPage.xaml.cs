@@ -162,7 +162,7 @@ namespace Gymaui_App.Views
 
                 if (_planData.ExercisesPerDay.ContainsKey(dayIndex))
                 {
-                    foreach (var exerciseId in _planData.ExercisesPerDay[dayIndex])
+                    foreach (var (exerciseId, targetSets, targetReps) in _planData.ExercisesPerDay[dayIndex])
                     {
                         var ex = _allExercises.FirstOrDefault(e => e.Id == exerciseId);
                         if (ex != null)
@@ -194,14 +194,45 @@ namespace Gymaui_App.Views
 
                     if (selectedExercise != null)
                     {
-                        if (!_planData.ExercisesPerDay.ContainsKey(dayOfWeek))
+                        // Benutzer auffordern, Sätze einzugeben
+                        string setsInput = await DisplayPromptAsync(
+                            "Sätze eingeben",
+                            $"Anzahl der Sätze für {selectedExercise.Name}:",
+                            placeholder: "z.B. 3",
+                            maxLength: 2,
+                            keyboard: Keyboard.Numeric
+                        );
+
+                        if (string.IsNullOrWhiteSpace(setsInput) || !int.TryParse(setsInput, out int sets) || sets < 1)
                         {
-                            _planData.ExercisesPerDay[dayOfWeek] = new List<int>();
+                            await DisplayAlert("Ungültig", "Bitte geben Sie eine Zahl größer als 0 ein.", "OK");
+                            return;
                         }
 
-                        if (!_planData.ExercisesPerDay[dayOfWeek].Contains(selectedExercise.Id))
+                        // Benutzer auffordern, Wiederholungen einzugeben
+                        string repsInput = await DisplayPromptAsync(
+                            "Wiederholungen eingeben",
+                            $"Anzahl der Wiederholungen für {selectedExercise.Name}:",
+                            placeholder: "z.B. 10",
+                            maxLength: 2,
+                            keyboard: Keyboard.Numeric
+                        );
+
+                        if (string.IsNullOrWhiteSpace(repsInput) || !int.TryParse(repsInput, out int reps) || reps < 1)
                         {
-                            _planData.ExercisesPerDay[dayOfWeek].Add(selectedExercise.Id);
+                            await DisplayAlert("Ungültig", "Bitte geben Sie eine Zahl größer als 0 ein.", "OK");
+                            return;
+                        }
+
+                        if (!_planData.ExercisesPerDay.ContainsKey(dayOfWeek))
+                        {
+                            _planData.ExercisesPerDay[dayOfWeek] = new List<(int, int, int)>();
+                        }
+
+                        // Check if exercise already exists
+                        if (!_planData.ExercisesPerDay[dayOfWeek].Any(ex => ex.ExerciseId == selectedExercise.Id))
+                        {
+                            _planData.ExercisesPerDay[dayOfWeek].Add((selectedExercise.Id, sets, reps));
                             LoadExercisesForDays();
                         }
                     }
@@ -221,7 +252,7 @@ namespace Gymaui_App.Views
                 {
                     foreach (var dayExercises in _planData.ExercisesPerDay.Values)
                     {
-                        dayExercises.RemoveAll(id => id == exerciseId);
+                        dayExercises.RemoveAll(ex => ex.ExerciseId == exerciseId);
                     }
                     LoadExercisesForDays();
                 }
@@ -336,13 +367,15 @@ namespace Gymaui_App.Views
                     if (isTraining && _planData.ExercisesPerDay.ContainsKey(dayIndex))
                     {
                         int exerciseOrder = 1;
-                        foreach (var exerciseId in _planData.ExercisesPerDay[dayIndex])
+                        foreach (var (exerciseId, targetSets, targetReps) in _planData.ExercisesPerDay[dayIndex])
                         {
                             var planExercise = new PlanExercise
                             {
                                 PlanDayId = planDay.Id,
                                 ExerciseId = exerciseId,
-                                Order = exerciseOrder++
+                                Order = exerciseOrder++,
+                                TargetSets = targetSets,
+                                TargetReps = targetReps
                             };
                             await _db.AddPlanExerciseAsync(planExercise);
                         }

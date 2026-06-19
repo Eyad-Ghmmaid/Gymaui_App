@@ -20,17 +20,18 @@
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
     <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
-    <FileVersion>1.1.3</FileVersion>
-    <AssemblyVersion>1.1.3.0</AssemblyVersion>
+    <FileVersion>1.3.2</FileVersion>
     <IncludeSymbols>True</IncludeSymbols>
     <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <AssemblyVersion>1.3.2.0</AssemblyVersion>
+    <AnalysisLevel>latest</AnalysisLevel>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android|AnyCPU'">
     <AndroidPackageFormat>apk</AndroidPackageFormat>
-    <ApplicationDisplayVersion>1.2.1</ApplicationDisplayVersion>
-    <ApplicationVersion>4</ApplicationVersion>
+    <ApplicationDisplayVersion>1.3.2</ApplicationDisplayVersion>
+    <ApplicationVersion>5</ApplicationVersion>
     <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
     <DebugSymbols>True</DebugSymbols>
     <AndroidKeyStore>False</AndroidKeyStore>
@@ -38,25 +39,29 @@
     <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
     <AndroidUseAapt2>True</AndroidUseAapt2>
     <TrimMode>link</TrimMode>
+    <ApplicationTitle>Gymaui</ApplicationTitle>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-android|AnyCPU'">
-    <ApplicationDisplayVersion>1.2.1</ApplicationDisplayVersion>
-    <ApplicationVersion>4</ApplicationVersion>
+    <ApplicationDisplayVersion>1.3.2</ApplicationDisplayVersion>
+    <ApplicationVersion>5</ApplicationVersion>
     <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
-    <DebugSymbols>False</DebugSymbols>
+    <DebugSymbols>True</DebugSymbols>
+    <AndroidIncludeDebugSymbols>True</AndroidIncludeDebugSymbols>
     <AndroidKeyStore>False</AndroidKeyStore>
-    <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
+    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
     <RunAOTCompilation>True</RunAOTCompilation>
     <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
     <AndroidUseAapt2>True</AndroidUseAapt2>
     <AndroidPackageFormat>apk</AndroidPackageFormat>
     <TrimMode>link</TrimMode>
+    <ApplicationTitle>Gymaui</ApplicationTitle>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-ios|AnyCPU'">
-    <ApplicationDisplayVersion>1.2.1</ApplicationDisplayVersion>
-    <ApplicationVersion>4</ApplicationVersion>
+    <ApplicationDisplayVersion>1.3.2</ApplicationDisplayVersion>
+    <ApplicationVersion>5</ApplicationVersion>
+    <ApplicationTitle>Gymaui</ApplicationTitle>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-maccatalyst|AnyCPU'">
@@ -65,13 +70,15 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-windows10.0.19041.0|AnyCPU'">
-    <ApplicationDisplayVersion>1.2.1</ApplicationDisplayVersion>
-    <ApplicationVersion>4</ApplicationVersion>
+    <ApplicationDisplayVersion>1.3.2</ApplicationDisplayVersion>
+    <ApplicationVersion>5</ApplicationVersion>
+    <ApplicationTitle>Gymaui</ApplicationTitle>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-ios|AnyCPU'">
-    <ApplicationDisplayVersion>1.2.1</ApplicationDisplayVersion>
-    <ApplicationVersion>4</ApplicationVersion>
+    <ApplicationDisplayVersion>1.3.2</ApplicationDisplayVersion>
+    <ApplicationVersion>5</ApplicationVersion>
+    <ApplicationTitle>Gymaui</ApplicationTitle>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-maccatalyst|AnyCPU'">
@@ -80,8 +87,9 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-windows10.0.19041.0|AnyCPU'">
-    <ApplicationDisplayVersion>1.2.1</ApplicationDisplayVersion>
-    <ApplicationVersion>4</ApplicationVersion>
+    <ApplicationDisplayVersion>1.3.2</ApplicationDisplayVersion>
+    <ApplicationVersion>5</ApplicationVersion>
+    <ApplicationTitle>Gymaui</ApplicationTitle>
   </PropertyGroup>
 
   <ItemGroup>

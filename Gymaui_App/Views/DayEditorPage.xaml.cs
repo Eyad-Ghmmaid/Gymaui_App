@@ -89,13 +89,45 @@ namespace Gymaui_App.Views
 
                 if (selectedExercise == null) return;
 
+                // Benutzer auffordern, Sätze einzugeben
+                string setsInput = await DisplayPromptAsync(
+                    "Sätze eingeben",
+                    $"Anzahl der Sätze für {selectedExercise.Name}:",
+                    placeholder: "z.B. 3",
+                    maxLength: 2,
+                    keyboard: Keyboard.Numeric
+                );
+
+                if (string.IsNullOrWhiteSpace(setsInput) || !int.TryParse(setsInput, out int sets) || sets < 1)
+                {
+                    await DisplayAlert("Ungültig", "Bitte geben Sie eine Zahl größer als 0 ein.", "OK");
+                    return;
+                }
+
+                // Benutzer auffordern, Wiederholungen einzugeben
+                string repsInput = await DisplayPromptAsync(
+                    "Wiederholungen eingeben",
+                    $"Anzahl der Wiederholungen für {selectedExercise.Name}:",
+                    placeholder: "z.B. 10",
+                    maxLength: 2,
+                    keyboard: Keyboard.Numeric
+                );
+
+                if (string.IsNullOrWhiteSpace(repsInput) || !int.TryParse(repsInput, out int reps) || reps < 1)
+                {
+                    await DisplayAlert("Ungültig", "Bitte geben Sie eine Zahl größer als 0 ein.", "OK");
+                    return;
+                }
+
                 var order = (_dayExercises?.Count ?? 0) + 1;
 
                 var pe = new PlanExercise
                 {
                     PlanDayId = _planDay.Id,
                     ExerciseId = selectedExercise.Id,
-                    Order = order
+                    Order = order,
+                    TargetSets = sets,
+                    TargetReps = reps
                 };
 
                 await _db.AddPlanExerciseAsync(pe);
@@ -122,6 +154,56 @@ namespace Gymaui_App.Views
                 catch (Exception ex)
                 {
                     await DisplayAlert("Fehler", $"Fehler beim Entfernen: {ex.Message}", "OK");
+                }
+            }
+        }
+
+        private async void OnEditExerciseSetsSwipe(object? sender, EventArgs e)
+        {
+            if (sender is SwipeItem swipeItem && swipeItem.CommandParameter is PlanExercise planExercise)
+            {
+                try
+                {
+                    string result = await DisplayPromptAsync(
+                        "Sätze bearbeiten",
+                        $"Anzahl der Sätze für {planExercise.Exercise?.Name}:",
+                        initialValue: planExercise.TargetSets.ToString(),
+                        placeholder: "z.B. 3",
+                        maxLength: 2,
+                        keyboard: Keyboard.Numeric
+                    );
+
+                    if (string.IsNullOrWhiteSpace(result) || !int.TryParse(result, out int sets) || sets < 1)
+                    {
+                        await DisplayAlert("Ungültig", "Bitte geben Sie eine Zahl größer als 0 ein.", "OK");
+                        return;
+                    }
+
+                    planExercise.TargetSets = sets;
+
+                    result = await DisplayPromptAsync(
+                        "Wiederholungen bearbeiten",
+                        $"Anzahl der Wiederholungen für {planExercise.Exercise?.Name}:",
+                        initialValue: planExercise.TargetReps.ToString(),
+                        placeholder: "z.B. 10",
+                        maxLength: 2,
+                        keyboard: Keyboard.Numeric
+                    );
+
+                    if (string.IsNullOrWhiteSpace(result) || !int.TryParse(result, out int reps) || reps < 1)
+                    {
+                        await DisplayAlert("Ungültig", "Bitte geben Sie eine Zahl größer als 0 ein.", "OK");
+                        return;
+                    }
+
+                    planExercise.TargetReps = reps;
+
+                    await _db.UpdatePlanExerciseAsync(planExercise);
+                    await LoadDayExercises();
+                }
+                catch (Exception ex)
+                {
+                    await DisplayAlert("Fehler", $"Fehler beim Aktualisieren: {ex.Message}", "OK");
                 }
             }
         }

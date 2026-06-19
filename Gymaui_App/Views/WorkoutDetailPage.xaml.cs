@@ -138,7 +138,7 @@ namespace Gymaui_App.Views
             ExerciseId = exercise.Id;
             ExerciseName = exercise.Name;
             MuscleGroup = exercise.MuscleGroup;
-            TargetInfo = $"{exercise.TargetSets} Saetze x {exercise.TargetReps} Wdh";
+            TargetInfo = string.Empty; // Target Sets/Reps are set at the plan level, not exercise level
             Logs = logs;
         }
     }

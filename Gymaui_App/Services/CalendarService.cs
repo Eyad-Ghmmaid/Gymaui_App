@@ -110,14 +110,14 @@ namespace Gymaui_App.Services
                     dayInfo.CompletedExercises = progress.CompletedExerciseCount;
                     dayInfo.Status = (progress.CompletedExerciseCount >= exerciseCount && exerciseCount > 0)
                         ? DayStatus.CompletedTraining
-                        : DayStatus.RestDay; // Not completed yet but not "missed" - dynamic shifting handles this
+                        : DayStatus.MissedTraining; // Incomplete training day in the past is marked as missed
                 }
                 else
                 {
                     dayInfo.CompletedExercises = 0;
-                    // With dynamic shifting, an incomplete training day is not "missed",
-                    // it's just pending (will be shown as the current day)
-                    dayInfo.Status = (date < today) ? DayStatus.RestDay : DayStatus.Future;
+                    // Check if the date is in the past - if so, it's a missed training day
+                    // If it's today or future, it's just not started yet
+                    dayInfo.Status = (date < today) ? DayStatus.MissedTraining : DayStatus.Future;
                 }
 
                 result.Add(dayInfo);

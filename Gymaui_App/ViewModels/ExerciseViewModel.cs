@@ -64,9 +64,7 @@ namespace Gymaui_App.ViewModels
                     Name = "New Exercise",
                     MuscleGroup = string.Empty,
                     YouTubeUrl = string.Empty,
-                    ImagePath = string.Empty,
-                    TargetReps = 0,
-                    TargetSets = 0
+                    ImagePath = string.Empty
                 };
 
                 await _databaseService.AddExerciseAsync(exercise);

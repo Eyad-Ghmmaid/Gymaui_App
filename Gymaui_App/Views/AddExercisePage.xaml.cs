@@ -54,8 +54,6 @@ namespace Gymaui_App.Views
                     DeleteButton.IsVisible = true;
 
                     NameEntry.Text = _editingExercise.Name;
-                    SetsEntry.Text = _editingExercise.TargetSets.ToString();
-                    RepsEntry.Text = _editingExercise.TargetReps.ToString();
                     YouTubeEntry.Text = _editingExercise.YouTubeUrl;
 
                     if (!string.IsNullOrEmpty(_editingExercise.MuscleGroup))
@@ -120,8 +118,6 @@ namespace Gymaui_App.Views
             // Clear all error messages
             NameErrorLabel.IsVisible = false;
             MuscleGroupErrorLabel.IsVisible = false;
-            SetsErrorLabel.IsVisible = false;
-            RepsErrorLabel.IsVisible = false;
             YoutubeErrorLabel.IsVisible = false;
 
             // Validate Name
@@ -137,22 +133,6 @@ namespace Gymaui_App.Views
             {
                 MuscleGroupErrorLabel.Text = "Muskelgruppe auswählen";
                 MuscleGroupErrorLabel.IsVisible = true;
-                isValid = false;
-            }
-
-            // Validate Sets
-            if (!int.TryParse(SetsEntry.Text, out int sets) || sets <= 0)
-            {
-                SetsErrorLabel.Text = "Positive Zahl erforderlich";
-                SetsErrorLabel.IsVisible = true;
-                isValid = false;
-            }
-
-            // Validate Reps
-            if (!int.TryParse(RepsEntry.Text, out int reps) || reps <= 0)
-            {
-                RepsErrorLabel.Text = "Positive Zahl erforderlich";
-                RepsErrorLabel.IsVisible = true;
                 isValid = false;
             }
 
@@ -189,15 +169,10 @@ namespace Gymaui_App.Views
                     return;
                 }
 
-                int sets = int.Parse(SetsEntry.Text);
-                int reps = int.Parse(RepsEntry.Text);
-
                 if (_isEditMode && _editingExercise != null)
                 {
                     _editingExercise.Name = NameEntry.Text?.Trim() ?? string.Empty;
                     _editingExercise.MuscleGroup = _selectedMuscleGroup;
-                    _editingExercise.TargetReps = reps;
-                    _editingExercise.TargetSets = sets;
                     _editingExercise.YouTubeUrl = YouTubeEntry.Text?.Trim() ?? string.Empty;
 
                     await _databaseService.InitializeAsync();
@@ -211,8 +186,6 @@ namespace Gymaui_App.Views
                     {
                         Name = NameEntry.Text?.Trim() ?? string.Empty,
                         MuscleGroup = _selectedMuscleGroup,
-                        TargetReps = reps,
-                        TargetSets = sets,
                         YouTubeUrl = YouTubeEntry.Text?.Trim() ?? string.Empty,
                         ImagePath = string.Empty
                     };

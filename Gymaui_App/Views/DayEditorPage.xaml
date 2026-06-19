@@ -33,9 +33,10 @@
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <SwipeView>
+                                <SwipeView>
                                 <SwipeView.RightItems>
                                     <SwipeItems>
+                                        <SwipeItem Text="✏ Bearbeiten" BackgroundColor="#E8FF47" Invoked="OnEditExerciseSetsSwipe" CommandParameter="{Binding .}" />
                                         <SwipeItem Text="🗑 Entfernen" BackgroundColor="#FF4444" Invoked="OnRemoveExerciseSwipe" CommandParameter="{Binding .}" />
                                     </SwipeItems>
                                 </SwipeView.RightItems>
@@ -44,15 +45,15 @@
                                         StrokeThickness="1" 
                                         Padding="12"
                                         StrokeShape="RoundRectangle 8">
-                                    <VerticalStackLayout VerticalOptions="Center">
+                                    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="FillAndExpand">
                                         <Label Text="{Binding Exercise.Name, StringFormat='Uebung: {0}'}" 
                                                FontSize="14" 
                                                FontAttributes="Bold"
                                                TextColor="#FFFFFF" />
-                                        <Label Text="{Binding Exercise.TargetSets, StringFormat='Sätze: {0}'}" 
+                                        <Label Text="{Binding TargetSets, StringFormat='Sätze: {0}'}" 
                                                FontSize="12" 
                                                TextColor="#8A8A8A" />
-                                        <Label Text="{Binding Exercise.TargetReps, StringFormat='Wdh: {0}'}" 
+                                        <Label Text="{Binding TargetReps, StringFormat='Wdh: {0}'}" 
                                                FontSize="12" 
                                                TextColor="#8A8A8A" />
                                     </VerticalStackLayout>

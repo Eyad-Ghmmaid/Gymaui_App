@@ -15,9 +15,5 @@ namespace Gymaui_App.Models
         public string YouTubeUrl { get; set; } = string.Empty;
 
         public string ImagePath { get; set; } = string.Empty;
-
-        public int TargetReps { get; set; }
-
-        public int TargetSets { get; set; }
     }
 }

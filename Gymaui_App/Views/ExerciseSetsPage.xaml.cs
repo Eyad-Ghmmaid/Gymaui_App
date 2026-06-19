@@ -11,6 +11,8 @@ namespace Gymaui_App.Views
         public const string Route = nameof(ExerciseSetsPage);
         private int _workoutSessionId = 0;
         private Exercise _exercise = new Exercise();
+        private int _targetSets = 3; // Default value for target sets
+        private int _targetReps = 10; // Default value for target reps
         private readonly DatabaseService _databaseService;
 
         private readonly List<Entry> _weightEntries = new List<Entry>();
@@ -84,7 +86,7 @@ namespace Gymaui_App.Views
             _checkBoxes.Clear();
             _savedLogIds.Clear();
 
-            for (int i = 0; i < Math.Max(1, _exercise.TargetSets); i++)
+            for (int i = 0; i < Math.Max(1, _targetSets); i++)
             {
                 var setIndex = i;
 
@@ -138,7 +140,7 @@ namespace Gymaui_App.Views
         {
             if (int.TryParse(repsText, out var reps))
             {
-                if (reps >= _exercise.TargetReps)
+                if (reps >= _targetReps)
                     box.Color = Colors.Green;
                 else
                     box.Color = Colors.Red;

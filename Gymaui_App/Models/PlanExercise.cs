@@ -19,6 +19,11 @@ namespace Gymaui_App.Models
 
         public string Notes { get; set; } = string.Empty;
 
+        // Sets and Reps defined at the plan level
+        public int TargetSets { get; set; } = 3;
+
+        public int TargetReps { get; set; } = 10;
+
         [Ignore]
         public Exercise? Exercise { get; set; }
     }

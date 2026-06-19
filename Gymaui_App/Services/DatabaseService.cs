@@ -263,6 +263,9 @@ namespace Gymaui_App.Services
         public Task<int> DeletePlanExerciseAsync(Models.PlanExercise pe)
             => _db!.DeleteAsync(pe);
 
+        public Task<int> UpdatePlanExerciseAsync(Models.PlanExercise pe)
+            => _db!.UpdateAsync(pe);
+
         public async Task DeletePlanAndChildrenAsync(int planId)
         {
             // Delete all child exercises for all days of this plan in one query
@@ -455,71 +458,71 @@ namespace Gymaui_App.Services
                 var defaultExercises = new List<Exercise>
                 {
                     // BRUST
-                    new() { Name = "Barbell Bench Press", MuscleGroup = MuscleGroups.Brust, YouTubeUrl = "https://www.youtube.com/watch?v=Blpub1haOj8", TargetSets = 4, TargetReps = 8 },
-                    new() { Name = "Incline Bench Press", MuscleGroup = MuscleGroups.Brust, YouTubeUrl = "https://www.youtube.com/watch?v=R8kRvIzUbUc", TargetSets = 3, TargetReps = 10 },
-                    new() { Name = "Incline Dumbbell Press", MuscleGroup = MuscleGroups.Brust, YouTubeUrl = "https://www.youtube.com/watch?v=8iPEnn-ltC8", TargetSets = 3, TargetReps = 10 },
-                    new() { Name = "Chest Press Machine", MuscleGroup = MuscleGroups.Brust, YouTubeUrl = "https://www.youtube.com/watch?v=sW0BRP315U8", TargetSets = 3, TargetReps = 12 },
-                    new() { Name = "Cable Fly", MuscleGroup = MuscleGroups.Brust, YouTubeUrl = "https://www.youtube.com/watch?v=eozdVDA78K0", TargetSets = 3, TargetReps = 12 },
-                    new() { Name = "Pec Deck (Butterfly)", MuscleGroup = MuscleGroups.Brust, YouTubeUrl = "https://www.youtube.com/watch?v=vSU49q3sXuw", TargetSets = 3, TargetReps = 12 },
-                    new() { Name = "Dips", MuscleGroup = MuscleGroups.Brust, YouTubeUrl = "https://www.youtube.com/watch?v=2z8JmcrW-As", TargetSets = 3, TargetReps = 10 },
-                    new() { Name = "Push-Up", MuscleGroup = MuscleGroups.Brust, YouTubeUrl = "https://www.youtube.com/watch?v=IODxDxX7oi4", TargetSets = 3, TargetReps = 15 },
-                    new() { Name = "Decline Bench Press", MuscleGroup = MuscleGroups.Brust, YouTubeUrl = "https://www.youtube.com/watch?v=LfyQBUKR8SE", TargetSets = 3, TargetReps = 10 },
-                    new() { Name = "Cable Crossover", MuscleGroup = MuscleGroups.Brust, YouTubeUrl = "https://www.youtube.com/watch?v=taI4XduLpTk", TargetSets = 3, TargetReps = 12 },
+                    new() { Name = "Barbell Bench Press", MuscleGroup = MuscleGroups.Brust, YouTubeUrl = "https://www.youtube.com/watch?v=Blpub1haOj8" },
+                    new() { Name = "Incline Bench Press", MuscleGroup = MuscleGroups.Brust, YouTubeUrl = "https://www.youtube.com/watch?v=R8kRvIzUbUc" },
+                    new() { Name = "Incline Dumbbell Press", MuscleGroup = MuscleGroups.Brust, YouTubeUrl = "https://www.youtube.com/watch?v=8iPEnn-ltC8" },
+                    new() { Name = "Chest Press Machine", MuscleGroup = MuscleGroups.Brust, YouTubeUrl = "https://www.youtube.com/watch?v=sW0BRP315U8" },
+                    new() { Name = "Cable Fly", MuscleGroup = MuscleGroups.Brust, YouTubeUrl = "https://www.youtube.com/watch?v=eozdVDA78K0" },
+                    new() { Name = "Pec Deck (Butterfly)", MuscleGroup = MuscleGroups.Brust, YouTubeUrl = "https://www.youtube.com/watch?v=vSU49q3sXuw" },
+                    new() { Name = "Dips", MuscleGroup = MuscleGroups.Brust, YouTubeUrl = "https://www.youtube.com/watch?v=2z8JmcrW-As" },
+                    new() { Name = "Push-Up", MuscleGroup = MuscleGroups.Brust, YouTubeUrl = "https://www.youtube.com/watch?v=IODxDxX7oi4" },
+                    new() { Name = "Decline Bench Press", MuscleGroup = MuscleGroups.Brust, YouTubeUrl = "https://www.youtube.com/watch?v=LfyQBUKR8SE" },
+                    new() { Name = "Cable Crossover", MuscleGroup = MuscleGroups.Brust, YouTubeUrl = "https://www.youtube.com/watch?v=taI4XduLpTk" },
 
                     // RÜCKEN
-                    new() { Name = "Pull-Up", MuscleGroup = MuscleGroups.Rücken, YouTubeUrl = "https://www.youtube.com/watch?v=eGo4IYlbE5g", TargetSets = 3, TargetReps = 10 },
-                    new() { Name = "Lat Pulldown", MuscleGroup = MuscleGroups.Rücken, YouTubeUrl = "https://www.youtube.com/watch?v=UjVMfCG3H0s", TargetSets = 4, TargetReps = 10 },
-                    new() { Name = "Barbell Row", MuscleGroup = MuscleGroups.Rücken, YouTubeUrl = "https://www.youtube.com/watch?v=vT2GjY_Umpw", TargetSets = 4, TargetReps = 8 },
-                    new() { Name = "Seated Cable Row", MuscleGroup = MuscleGroups.Rücken, YouTubeUrl = "https://www.youtube.com/watch?v=87cYGLj-yE4", TargetSets = 3, TargetReps = 12 },
-                    new() { Name = "Machine Row", MuscleGroup = MuscleGroups.Rücken, YouTubeUrl = "https://www.youtube.com/watch?v=DELI3AMBNuA", TargetSets = 3, TargetReps = 12 },
-                    new() { Name = "T-Bar Row", MuscleGroup = MuscleGroups.Rücken, YouTubeUrl = "https://www.youtube.com/watch?v=j3Igk5nyZE4", TargetSets = 4, TargetReps = 8 },
-                    new() { Name = "One Arm Dumbbell Row", MuscleGroup = MuscleGroups.Rücken, YouTubeUrl = "https://www.youtube.com/watch?v=pYcpY20QaE8", TargetSets = 3, TargetReps = 10 },
-                    new() { Name = "Straight Arm Pulldown", MuscleGroup = MuscleGroups.Rücken, YouTubeUrl = "https://www.youtube.com/watch?v=AJ3j4i9mH4c", TargetSets = 3, TargetReps = 12 },
-                    new() { Name = "Chest Supported Row", MuscleGroup = MuscleGroups.Rücken, YouTubeUrl = "https://www.youtube.com/watch?v=GZbfZ033f74", TargetSets = 3, TargetReps = 12 },
+                    new() { Name = "Pull-Up", MuscleGroup = MuscleGroups.Rücken, YouTubeUrl = "https://www.youtube.com/watch?v=eGo4IYlbE5g" },
+                    new() { Name = "Lat Pulldown", MuscleGroup = MuscleGroups.Rücken, YouTubeUrl = "https://www.youtube.com/watch?v=UjVMfCG3H0s" },
+                    new() { Name = "Barbell Row", MuscleGroup = MuscleGroups.Rücken, YouTubeUrl = "https://www.youtube.com/watch?v=vT2GjY_Umpw" },
+                    new() { Name = "Seated Cable Row", MuscleGroup = MuscleGroups.Rücken, YouTubeUrl = "https://www.youtube.com/watch?v=87cYGLj-yE4" },
+                    new() { Name = "Machine Row", MuscleGroup = MuscleGroups.Rücken, YouTubeUrl = "https://www.youtube.com/watch?v=DELI3AMBNuA" },
+                    new() { Name = "T-Bar Row", MuscleGroup = MuscleGroups.Rücken, YouTubeUrl = "https://www.youtube.com/watch?v=j3Igk5nyZE4" },
+                    new() { Name = "One Arm Dumbbell Row", MuscleGroup = MuscleGroups.Rücken, YouTubeUrl = "https://www.youtube.com/watch?v=pYcpY20QaE8" },
+                    new() { Name = "Straight Arm Pulldown", MuscleGroup = MuscleGroups.Rücken, YouTubeUrl = "https://www.youtube.com/watch?v=AJ3j4i9mH4c" },
+                    new() { Name = "Chest Supported Row", MuscleGroup = MuscleGroups.Rücken, YouTubeUrl = "https://www.youtube.com/watch?v=GZbfZ033f74" },
 
                     // SCHULTERN
-                    new() { Name = "Overhead Press", MuscleGroup = MuscleGroups.Schultern, YouTubeUrl = "https://www.youtube.com/watch?v=7lwrBIu70tY", TargetSets = 4, TargetReps = 8 },
-                    new() { Name = "Lateral Raise", MuscleGroup = MuscleGroups.Schultern, YouTubeUrl = "https://www.youtube.com/watch?v=H_JDx09iftw", TargetSets = 3, TargetReps = 12 },
-                    new() { Name = "Rear Delt Fly", MuscleGroup = MuscleGroups.Schultern, YouTubeUrl = "https://www.youtube.com/watch?v=bB1m4rcTnoE", TargetSets = 3, TargetReps = 12 },
-                    new() { Name = "Face Pull", MuscleGroup = MuscleGroups.Schultern, YouTubeUrl = "https://www.youtube.com/watch?v=rep-qVOkqgk", TargetSets = 3, TargetReps = 15 },
-                    new() { Name = "Shrugs", MuscleGroup = MuscleGroups.Schultern, YouTubeUrl = "https://www.youtube.com/watch?v=cJRVVxmytaM", TargetSets = 3, TargetReps = 12 },
-                    new() { Name = "Arnold Press", MuscleGroup = MuscleGroups.Schultern, YouTubeUrl = "https://www.youtube.com/watch?v=vj2w851ZHRM", TargetSets = 3, TargetReps = 10 },
-                    new() { Name = "Front Raise", MuscleGroup = MuscleGroups.Schultern, YouTubeUrl = "https://www.youtube.com/watch?v=-t7fuZ0KhDA", TargetSets = 3, TargetReps = 12 },
-                    new() { Name = "Cable Lateral Raise", MuscleGroup = MuscleGroups.Schultern, YouTubeUrl = "https://www.youtube.com/watch?v=3VcKaXpzqRo", TargetSets = 3, TargetReps = 12 },
+                    new() { Name = "Overhead Press", MuscleGroup = MuscleGroups.Schultern, YouTubeUrl = "https://www.youtube.com/watch?v=7lwrBIu70tY" },
+                    new() { Name = "Lateral Raise", MuscleGroup = MuscleGroups.Schultern, YouTubeUrl = "https://www.youtube.com/watch?v=H_JDx09iftw" },
+                    new() { Name = "Rear Delt Fly", MuscleGroup = MuscleGroups.Schultern, YouTubeUrl = "https://www.youtube.com/watch?v=bB1m4rcTnoE" },
+                    new() { Name = "Face Pull", MuscleGroup = MuscleGroups.Schultern, YouTubeUrl = "https://www.youtube.com/watch?v=rep-qVOkqgk" },
+                    new() { Name = "Shrugs", MuscleGroup = MuscleGroups.Schultern, YouTubeUrl = "https://www.youtube.com/watch?v=cJRVVxmytaM" },
+                    new() { Name = "Arnold Press", MuscleGroup = MuscleGroups.Schultern, YouTubeUrl = "https://www.youtube.com/watch?v=vj2w851ZHRM" },
+                    new() { Name = "Front Raise", MuscleGroup = MuscleGroups.Schultern, YouTubeUrl = "https://www.youtube.com/watch?v=-t7fuZ0KhDA" },
+                    new() { Name = "Cable Lateral Raise", MuscleGroup = MuscleGroups.Schultern, YouTubeUrl = "https://www.youtube.com/watch?v=3VcKaXpzqRo" },
 
                     // BIZEPS
-                    new() { Name = "Barbell Curl", MuscleGroup = MuscleGroups.Bizeps, YouTubeUrl = "https://www.youtube.com/watch?v=kwG2ipFRgfo", TargetSets = 3, TargetReps = 10 },
-                    new() { Name = "Dumbbell Curl", MuscleGroup = MuscleGroups.Bizeps, YouTubeUrl = "https://www.youtube.com/watch?v=Inv3C3Fh-jQ", TargetSets = 3, TargetReps = 10 },
-                    new() { Name = "Hammer Curl", MuscleGroup = MuscleGroups.Bizeps, YouTubeUrl = "https://www.youtube.com/watch?v=Wfvzm8narGk", TargetSets = 3, TargetReps = 10 },
-                    new() { Name = "Preacher Curl", MuscleGroup = MuscleGroups.Bizeps, YouTubeUrl = "https://www.youtube.com/watch?v=fIWP-FRFNU0", TargetSets = 3, TargetReps = 10 },
-                    new() { Name = "Concentration Curl", MuscleGroup = MuscleGroups.Bizeps, YouTubeUrl = "https://www.youtube.com/watch?v=0AUGkch3tzc", TargetSets = 3, TargetReps = 12 },
-                    new() { Name = "Cable Curl", MuscleGroup = MuscleGroups.Bizeps, YouTubeUrl = "https://www.youtube.com/watch?v=av7-8igSXTs", TargetSets = 3, TargetReps = 12 },
+                    new() { Name = "Barbell Curl", MuscleGroup = MuscleGroups.Bizeps, YouTubeUrl = "https://www.youtube.com/watch?v=kwG2ipFRgfo" },
+                    new() { Name = "Dumbbell Curl", MuscleGroup = MuscleGroups.Bizeps, YouTubeUrl = "https://www.youtube.com/watch?v=Inv3C3Fh-jQ" },
+                    new() { Name = "Hammer Curl", MuscleGroup = MuscleGroups.Bizeps, YouTubeUrl = "https://www.youtube.com/watch?v=Wfvzm8narGk" },
+                    new() { Name = "Preacher Curl", MuscleGroup = MuscleGroups.Bizeps, YouTubeUrl = "https://www.youtube.com/watch?v=fIWP-FRFNU0" },
+                    new() { Name = "Concentration Curl", MuscleGroup = MuscleGroups.Bizeps, YouTubeUrl = "https://www.youtube.com/watch?v=0AUGkch3tzc" },
+                    new() { Name = "Cable Curl", MuscleGroup = MuscleGroups.Bizeps, YouTubeUrl = "https://www.youtube.com/watch?v=av7-8igSXTs" },
 
                     // TRIZEPS
-                    new() { Name = "Triceps Pushdown", MuscleGroup = MuscleGroups.Trizeps, YouTubeUrl = "https://www.youtube.com/watch?v=4I8ZBLj6ViM", TargetSets = 3, TargetReps = 12 },
-                    new() { Name = "Overhead Triceps Extension", MuscleGroup = MuscleGroups.Trizeps, YouTubeUrl = "https://www.youtube.com/watch?v=LNsLtJd47gA", TargetSets = 3, TargetReps = 12 },
-                    new() { Name = "Skullcrusher", MuscleGroup = MuscleGroups.Trizeps, YouTubeUrl = "https://www.youtube.com/watch?v=d_KZxkY_0cM", TargetSets = 3, TargetReps = 10 },
-                    new() { Name = "Close Grip Bench Press", MuscleGroup = MuscleGroups.Trizeps, YouTubeUrl = "https://www.youtube.com/watch?v=nEF0bv2FW94", TargetSets = 3, TargetReps = 10 },
-                    new() { Name = "Triceps Dip Machine", MuscleGroup = MuscleGroups.Trizeps, YouTubeUrl = "https://www.youtube.com/watch?v=6kALZikXxLc", TargetSets = 3, TargetReps = 12 },
+                    new() { Name = "Triceps Pushdown", MuscleGroup = MuscleGroups.Trizeps, YouTubeUrl = "https://www.youtube.com/watch?v=4I8ZBLj6ViM" },
+                    new() { Name = "Overhead Triceps Extension", MuscleGroup = MuscleGroups.Trizeps, YouTubeUrl = "https://www.youtube.com/watch?v=LNsLtJd47gA" },
+                    new() { Name = "Skullcrusher", MuscleGroup = MuscleGroups.Trizeps, YouTubeUrl = "https://www.youtube.com/watch?v=d_KZxkY_0cM" },
+                    new() { Name = "Close Grip Bench Press", MuscleGroup = MuscleGroups.Trizeps, YouTubeUrl = "https://www.youtube.com/watch?v=nEF0bv2FW94" },
+                    new() { Name = "Triceps Dip Machine", MuscleGroup = MuscleGroups.Trizeps, YouTubeUrl = "https://www.youtube.com/watch?v=6kALZikXxLc" },
 
                     // BEINE
-                    new() { Name = "Barbell Squat", MuscleGroup = MuscleGroups.Beine, YouTubeUrl = "https://www.youtube.com/watch?v=Dy28eq2PjcM", TargetSets = 4, TargetReps = 8 },
-                    new() { Name = "Romanian Deadlift", MuscleGroup = MuscleGroups.Beine, YouTubeUrl = "https://www.youtube.com/watch?v=2SHsk9AzdjA", TargetSets = 4, TargetReps = 8 },
-                    new() { Name = "Leg Press", MuscleGroup = MuscleGroups.Beine, YouTubeUrl = "https://www.youtube.com/watch?v=PyBoLzA6tgs", TargetSets = 4, TargetReps = 10 },
-                    new() { Name = "Leg Curl", MuscleGroup = MuscleGroups.Beine, YouTubeUrl = "https://www.youtube.com/watch?v=W4z57p5BB0o", TargetSets = 3, TargetReps = 12 },
-                    new() { Name = "Leg Extension", MuscleGroup = MuscleGroups.Beine, YouTubeUrl = "https://www.youtube.com/watch?v=Fm1ZaCe4Syc", TargetSets = 3, TargetReps = 12 },
-                    new() { Name = "Lunges", MuscleGroup = MuscleGroups.Beine, YouTubeUrl = "https://www.youtube.com/watch?v=QOVaHwm-Q6U", TargetSets = 3, TargetReps = 10 },
-                    new() { Name = "Bulgarian Split Squat", MuscleGroup = MuscleGroups.Beine, YouTubeUrl = "https://www.youtube.com/watch?v=2C-uNgKwPLE", TargetSets = 3, TargetReps = 10 },
-                    new() { Name = "Hip Thrust", MuscleGroup = MuscleGroups.Beine, YouTubeUrl = "https://www.youtube.com/watch?v=LM8XHLYJoYs", TargetSets = 4, TargetReps = 10 },
-                    new() { Name = "Hack Squat Machine", MuscleGroup = MuscleGroups.Beine, YouTubeUrl = "https://www.youtube.com/watch?v=0tn5K9NlCfo", TargetSets = 4, TargetReps = 10 },
-                    new() { Name = "Standing Calf Raise", MuscleGroup = MuscleGroups.Beine, YouTubeUrl = "https://www.youtube.com/watch?v=0QRosgBfK50", TargetSets = 4, TargetReps = 15 },
-                    new() { Name = "Seated Calf Raise", MuscleGroup = MuscleGroups.Beine, YouTubeUrl = "https://www.youtube.com/watch?v=YMmgqO8Jo-k", TargetSets = 4, TargetReps = 15 },
+                    new() { Name = "Barbell Squat", MuscleGroup = MuscleGroups.Beine, YouTubeUrl = "https://www.youtube.com/watch?v=Dy28eq2PjcM" },
+                    new() { Name = "Romanian Deadlift", MuscleGroup = MuscleGroups.Beine, YouTubeUrl = "https://www.youtube.com/watch?v=2SHsk9AzdjA" },
+                    new() { Name = "Leg Press", MuscleGroup = MuscleGroups.Beine, YouTubeUrl = "https://www.youtube.com/watch?v=PyBoLzA6tgs" },
+                    new() { Name = "Leg Curl", MuscleGroup = MuscleGroups.Beine, YouTubeUrl = "https://www.youtube.com/watch?v=W4z57p5BB0o" },
+                    new() { Name = "Leg Extension", MuscleGroup = MuscleGroups.Beine, YouTubeUrl = "https://www.youtube.com/watch?v=Fm1ZaCe4Syc" },
+                    new() { Name = "Lunges", MuscleGroup = MuscleGroups.Beine, YouTubeUrl = "https://www.youtube.com/watch?v=QOVaHwm-Q6U" },
+                    new() { Name = "Bulgarian Split Squat", MuscleGroup = MuscleGroups.Beine, YouTubeUrl = "https://www.youtube.com/watch?v=2C-uNgKwPLE" },
+                    new() { Name = "Hip Thrust", MuscleGroup = MuscleGroups.Beine, YouTubeUrl = "https://www.youtube.com/watch?v=LM8XHLYJoYs" },
+                    new() { Name = "Hack Squat Machine", MuscleGroup = MuscleGroups.Beine, YouTubeUrl = "https://www.youtube.com/watch?v=0tn5K9NlCfo" },
+                    new() { Name = "Standing Calf Raise", MuscleGroup = MuscleGroups.Beine, YouTubeUrl = "https://www.youtube.com/watch?v=0QRosgBfK50" },
+                    new() { Name = "Seated Calf Raise", MuscleGroup = MuscleGroups.Beine, YouTubeUrl = "https://www.youtube.com/watch?v=YMmgqO8Jo-k" },
 
                     // CORE
-                    new() { Name = "Hanging Leg Raise", MuscleGroup = MuscleGroups.Core, YouTubeUrl = "https://www.youtube.com/watch?v=JB2oyawG9KI", TargetSets = 3, TargetReps = 12 },
-                    new() { Name = "Plank", MuscleGroup = MuscleGroups.Core, YouTubeUrl = "https://www.youtube.com/watch?v=pSHjTRCQxIw", TargetSets = 3, TargetReps = 60 },
-                    new() { Name = "Cable Crunch", MuscleGroup = MuscleGroups.Core, YouTubeUrl = "https://www.youtube.com/watch?v=2fjejk9g9fQ", TargetSets = 3, TargetReps = 15 },
-                    new() { Name = "Russian Twist", MuscleGroup = MuscleGroups.Core, YouTubeUrl = "https://www.youtube.com/watch?v=wkD8rjkodUI", TargetSets = 3, TargetReps = 20 },
+                    new() { Name = "Hanging Leg Raise", MuscleGroup = MuscleGroups.Core, YouTubeUrl = "https://www.youtube.com/watch?v=JB2oyawG9KI" },
+                    new() { Name = "Plank", MuscleGroup = MuscleGroups.Core, YouTubeUrl = "https://www.youtube.com/watch?v=pSHjTRCQxIw" },
+                    new() { Name = "Cable Crunch", MuscleGroup = MuscleGroups.Core, YouTubeUrl = "https://www.youtube.com/watch?v=2fjejk9g9fQ" },
+                    new() { Name = "Russian Twist", MuscleGroup = MuscleGroups.Core, YouTubeUrl = "https://www.youtube.com/watch?v=wkD8rjkodUI" },
                 };
 
                 await _db!.InsertAllAsync(defaultExercises);

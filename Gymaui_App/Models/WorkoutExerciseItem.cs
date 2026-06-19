@@ -10,7 +10,6 @@ namespace Gymaui_App.Models
         public Exercise Exercise { get; set; }
 
         public string Name => Exercise?.Name ?? string.Empty;
-        public int TargetReps => Exercise?.TargetReps ?? 0;
         public int Id => Exercise?.Id ?? 0;
 
         public bool IsCompleted

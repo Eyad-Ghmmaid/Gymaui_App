@@ -52,12 +52,6 @@ namespace Gymaui_App.Converters
                 if (!string.IsNullOrEmpty(exercise.MuscleGroup))
                     parts.Add(exercise.MuscleGroup);
 
-                if (exercise.TargetSets > 0)
-                    parts.Add($"{exercise.TargetSets} Sätze");
-
-                if (exercise.TargetReps > 0)
-                    parts.Add($"{exercise.TargetReps} Wdh");
-
                 return string.Join("  •  ", parts);
             }
             return string.Empty;

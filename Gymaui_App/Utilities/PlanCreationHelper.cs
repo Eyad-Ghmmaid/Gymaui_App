@@ -18,9 +18,10 @@ namespace Gymaui_App.Utilities
         public List<int> SelectedTrainingDays { get; set; } = new();
 
         /// <summary>
-        /// Exercises per day: key = day index, value = list of exercise IDs
+        /// Exercises per day with their sets and reps
+        /// key = day index, value = list of (exerciseId, targetSets, targetReps) tuples
         /// </summary>
-        public Dictionary<int, List<int>> ExercisesPerDay { get; set; } = new();
+        public Dictionary<int, List<(int ExerciseId, int TargetSets, int TargetReps)>> ExercisesPerDay { get; set; } = new();
     }
 
     /// <summary>
