@@ -220,9 +220,18 @@ namespace Gymaui_App.Views
             {
                 var exercises = _dayExercises
                     .OrderBy(pe => pe.Order)
-                    .Select(pe => pe.Exercise)
-                    .OfType<Exercise>()
+                    .Select(pe => new Exercise
+                    {
+                        Id = pe.Exercise?.Id ?? 0,
+                        Name = pe.Exercise?.Name ?? string.Empty,
+                        MuscleGroup = pe.Exercise?.MuscleGroup ?? string.Empty,
+                        YouTubeUrl = pe.Exercise?.YouTubeUrl ?? string.Empty,
+                        ImagePath = pe.Exercise?.ImagePath ?? string.Empty,
+                        TargetSets = pe.TargetSets,
+                        TargetReps = pe.TargetReps
+                    })
                     .ToList();
+
 
                 if (exercises.Count == 0)
                 {

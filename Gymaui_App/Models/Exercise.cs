@@ -15,5 +15,10 @@ namespace Gymaui_App.Models
         public string YouTubeUrl { get; set; } = string.Empty;
 
         public string ImagePath { get; set; } = string.Empty;
+
+        // Optional snapshot of plan targets (serialized into WorkoutSession for historical accuracy)
+        public int TargetSets { get; set; } = 0;
+
+        public int TargetReps { get; set; } = 0;
     }
 }

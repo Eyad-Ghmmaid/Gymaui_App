@@ -179,8 +179,21 @@ namespace Gymaui_App.Views
                     var exerciseIds = planExercises.OrderBy(pe => pe.Order).Select(pe => pe.ExerciseId);
                     var exercises = await _db.GetExercisesByIdsAsync(exerciseIds);
 
-                    TodayExercisesCollection.ItemsSource = exercises;
-                    StartTrainingButton.IsEnabled = exercises.Count > 0;
+                    // Create snapshot copies that include plan targets so the WorkoutSession remains historical and offline-safe
+                    var planMap = planExercises.ToDictionary(pe => pe.ExerciseId);
+                    var snapshot = exercises.Select(e => new Exercise
+                    {
+                        Id = e.Id,
+                        Name = e.Name,
+                        MuscleGroup = e.MuscleGroup,
+                        YouTubeUrl = e.YouTubeUrl,
+                        ImagePath = e.ImagePath,
+                        TargetSets = planMap.ContainsKey(e.Id) ? planMap[e.Id].TargetSets : 0,
+                        TargetReps = planMap.ContainsKey(e.Id) ? planMap[e.Id].TargetReps : 0
+                    }).ToList();
+
+                    TodayExercisesCollection.ItemsSource = snapshot;
+                    StartTrainingButton.IsEnabled = snapshot.Count > 0;
                     StartTrainingButton.Text = "Training starten";
                 }
                 else

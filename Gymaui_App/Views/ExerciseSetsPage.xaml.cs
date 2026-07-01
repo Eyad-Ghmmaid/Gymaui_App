@@ -232,6 +232,37 @@ namespace Gymaui_App.Views
                 PreviousNotesCollection.ItemsSource = previousNotes;
             }
 
+            // Determine target sets/reps from the plan (if this session maps to a plan day)
+            try
+            {
+                if (_workoutSessionId > 0)
+                {
+                    var session = await _databaseService.GetWorkoutSessionAsync(_workoutSessionId);
+                    if (session != null)
+                    {
+                        var activePlan = await _databaseService.GetActivePlanAsync();
+                        if (activePlan != null)
+                        {
+                            var planDay = await _databaseService.GetDynamicPlanDayForDateAsync(activePlan, session.Date.ToLocalTime().Date);
+                            if (planDay != null)
+                            {
+                                var planExercises = await _databaseService.GetExercisesForDayAsync(planDay.Id);
+                                var pe = planExercises.FirstOrDefault(p => p.ExerciseId == exerciseId);
+                                if (pe != null)
+                                {
+                                    _targetSets = pe.TargetSets;
+                                    _targetReps = pe.TargetReps;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Could not determine plan targets: {ex.Message}");
+            }
+
             BuildSetInputs(suggestedWeight);
         }
 

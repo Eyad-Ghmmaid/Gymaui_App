@@ -117,7 +117,19 @@ namespace Gymaui_App.Views
 
                     if (exercises.Count > 0)
                     {
-                        _session.Exercises = exercises;
+                        var planMap = planExercises.ToDictionary(pe => pe.ExerciseId);
+                        var snapshot = exercises.Select(e => new Exercise
+                        {
+                            Id = e.Id,
+                            Name = e.Name,
+                            MuscleGroup = e.MuscleGroup,
+                            YouTubeUrl = e.YouTubeUrl,
+                            ImagePath = e.ImagePath,
+                            TargetSets = planMap.ContainsKey(e.Id) ? planMap[e.Id].TargetSets : 0,
+                            TargetReps = planMap.ContainsKey(e.Id) ? planMap[e.Id].TargetReps : 0
+                        }).ToList();
+
+                        _session.Exercises = snapshot;
                         _session.Name = _currentPlanDay.Name;
                         if (_session.Id == 0)
                         {
